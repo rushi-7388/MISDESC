@@ -34,16 +34,8 @@ function PageLoader() {
 function Home() {
   const { user } = useAuth();
   if (!user) return <Navigate to="/login" replace />;
-  const roleHome = {
-    PRESENTING_BANK: "/presenting",
-    DRAWEE_BANK: "/drawee",
-    ADMIN: "/admin",
-    BRANCH_MANAGER: "/branch-manager",
-    IT_STAFF: "/it-monitoring",
-    COMPLIANCE_AUDITOR: "/auditor",
-    SETTLEMENT_OFFICER: "/settlement",
-  };
-  return <Navigate to={roleHome[user.role] || "/login"} replace />;
+  // MISDESC Primary Purpose: Bank MIS & Statutory Reporting Suite
+  return <Navigate to="/reports" replace />;
 }
 
 export default function App() {

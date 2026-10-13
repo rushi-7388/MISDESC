@@ -126,6 +126,15 @@ export default function Navbar() {
 
   const isAdmin = user?.role === "ADMIN";
   const canManageRBAC = user?.role === "BRANCH_MANAGER" || user?.role === "ADMIN";
+  const clearingDeskPath = {
+    PRESENTING_BANK: "/presenting",
+    DRAWEE_BANK: "/drawee",
+    ADMIN: "/admin",
+    BRANCH_MANAGER: "/branch-manager",
+    IT_STAFF: "/it-monitoring",
+    COMPLIANCE_AUDITOR: "/auditor",
+    SETTLEMENT_OFFICER: "/settlement",
+  }[user?.role] || "/admin";
 
   return (
     <>
@@ -243,7 +252,7 @@ export default function Navbar() {
         {/* Right: Actions & User Info */}
         {user && (
           <div className="flex items-center gap-2.5 sm:gap-3 text-xs">
-            {/* MIS & Regulatory Reporting Suite (Accessible to all authenticated bank roles) */}
+            {/* Primary MIS Reporting Desk */}
             <Link
               to="/reports"
               className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 ${
@@ -254,6 +263,19 @@ export default function Navbar() {
               title="Bank MIS & Regulatory Reports"
             >
               <span>MIS Reports</span>
+            </Link>
+
+            {/* CTS Clearing Operations Desk */}
+            <Link
+              to={clearingDeskPath}
+              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 ${
+                location.pathname === clearingDeskPath
+                  ? "bg-slate-700 text-white shadow-xs"
+                  : "bg-slate-800 border border-slate-700 text-slate-300 hover:text-white hover:bg-slate-750"
+              }`}
+              title="CTS Cheque Clearing & Operational Desk"
+            >
+              <span>CTS Operations</span>
             </Link>
 
             {/* RBAC Portal Link for Managers and Admins */}
@@ -267,7 +289,7 @@ export default function Navbar() {
                 }`}
                 title="Manage RBAC, User Roles & Branch Limits"
               >
-                <span>RBAC & Roles</span>
+                <span>RBAC</span>
               </Link>
             )}
 
