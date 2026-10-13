@@ -11,7 +11,7 @@ async function computeSha256(text) {
       const hashArray = Array.from(new Uint8Array(hashBuffer));
       return hashArray.map((b) => b.toString(16).padStart(2, "0")).join("");
     }
-  } catch (err) {}
+  } catch (err) { }
   return "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855";
 }
 
@@ -30,7 +30,7 @@ export async function exportRbiOmbudsmanEvidenceBundle(dispute) {
   const chqAmt = Number(dispute.claimAmount || chq.amount || 0);
 
   // 1. Formal Evidentiary Affidavit under Section 131 NI Act
-  const affidavitContent = `# RESERVE BANK OF INDIA — INTEGRATED BANKING OMBUDSMAN
+  const affidavitContent = `# RESERVE BANK OF INDIA - INTEGRATED BANKING OMBUDSMAN
 ## FORMAL STATUTORY EVIDENTIARY AFFIDAVIT & MISDESC AUDIT BUNDLE
 **Statutory Jurisdiction:** Section 131, Negotiable Instruments Act, 1881 (Amended 2002)  
 **Clearing Regulation:** NPCI MISDESC-2010 Procedural Guidelines & Dispute Resolution Mechanism Rule 32  

@@ -66,7 +66,7 @@ export default function EKuberAdviceModal({ chequeId, onClose }) {
           <div className="flex items-center gap-3">
             <div>
               <div className="flex items-center gap-2">
-                <h3 className="font-bold text-sm">Reserve Bank of India — e-Kuber Settlement Advice</h3>
+                <h3 className="font-bold text-sm">Reserve Bank of India - e-Kuber Settlement Advice</h3>
                 <span className="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-mono text-[10px] font-bold border border-emerald-500/30">
                   T+0 ON-REALISATION
                 </span>
@@ -88,21 +88,19 @@ export default function EKuberAdviceModal({ chequeId, onClose }) {
         <div className="flex border-b border-gray-200 px-6 bg-gray-50 text-xs">
           <button
             onClick={() => setActiveTab("advice")}
-            className={`py-3 px-4 font-bold border-b-2 transition-colors cursor-pointer ${
-              activeTab === "advice"
+            className={`py-3 px-4 font-bold border-b-2 transition-colors cursor-pointer ${activeTab === "advice"
                 ? "border-brand-600 text-brand-700 bg-white"
                 : "border-transparent text-gray-500 hover:text-gray-700"
-            }`}
+              }`}
           >
             Settlement Advice
           </button>
           <button
             onClick={() => setActiveTab("xml")}
-            className={`py-3 px-4 font-bold border-b-2 transition-colors cursor-pointer flex items-center gap-1.5 ${
-              activeTab === "xml"
+            className={`py-3 px-4 font-bold border-b-2 transition-colors cursor-pointer flex items-center gap-1.5 ${activeTab === "xml"
                 ? "border-brand-600 text-brand-700 bg-white"
                 : "border-transparent text-gray-500 hover:text-gray-700"
-            }`}
+              }`}
           >
             ISO 20022 pacs.009 XML
           </button>
@@ -123,7 +121,7 @@ export default function EKuberAdviceModal({ chequeId, onClose }) {
                   RESERVE BANK OF INDIA
                 </h4>
                 <p className="text-[11px] font-semibold text-gray-600">
-                  CENTRAL BANKING SYSTEM — e-KUBER REAL-TIME SETTLEMENT
+                  CENTRAL BANKING SYSTEM - e-KUBER REAL-TIME SETTLEMENT
                 </p>
                 <p className="text-[10px] font-mono text-gray-500">
                   NATIONAL CLEARING GRID · CONTINUOUS CLEARING ON-REALISATION DISPATCH

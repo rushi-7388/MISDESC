@@ -11,7 +11,7 @@ const ROOT_DIR = path.resolve(__dirname, "..");
 const BACKEND_DIR = path.join(ROOT_DIR, "backend");
 
 console.log("==================================================================");
-console.log("   MISDESC NATIONAL CLEARING SYSTEM — MASTER SYSTEM DIAGNOSTIC SUITE  ");
+console.log("   MISDESC NATIONAL CLEARING SYSTEM - MASTER SYSTEM DIAGNOSTIC SUITE  ");
 console.log("==================================================================");
 console.log(`Started At: ${new Date().toISOString()}\n`);
 

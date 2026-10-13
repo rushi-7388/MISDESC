@@ -382,7 +382,7 @@ export default function ReportingHub() {
               Instruments Audited
             </div>
             <div className="text-2xl sm:text-3xl font-black text-slate-900 mt-1">
-              {kpis?.totalInstrumentsAudited?.toLocaleString() || "—"}
+              {kpis?.totalInstrumentsAudited?.toLocaleString() || "-"}
             </div>
             <div className="text-[11px] text-slate-500 mt-0.5">
               CTS Clearing Records
@@ -407,11 +407,10 @@ export default function ReportingHub() {
           <button
             type="button"
             onClick={() => setActiveTab("generate")}
-            className={`px-5 py-2.5 text-xs font-bold rounded-xl transition-all cursor-pointer ${
-              activeTab === "generate"
+            className={`px-5 py-2.5 text-xs font-bold rounded-xl transition-all cursor-pointer ${activeTab === "generate"
                 ? "bg-slate-900 text-white shadow-xs"
                 : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
-            }`}
+              }`}
           >
             Report Generator & Catalog
           </button>
@@ -420,11 +419,10 @@ export default function ReportingHub() {
             type="button"
             onClick={() => setActiveTab("preview")}
             disabled={!currentReport}
-            className={`px-5 py-2.5 text-xs font-bold rounded-xl transition-all cursor-pointer disabled:opacity-40 ${
-              activeTab === "preview"
+            className={`px-5 py-2.5 text-xs font-bold rounded-xl transition-all cursor-pointer disabled:opacity-40 ${activeTab === "preview"
                 ? "bg-blue-700 text-white shadow-xs"
                 : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
-            }`}
+              }`}
           >
             Live Report Ledger {currentReport && `(${currentReport.reportRef})`}
           </button>
@@ -432,11 +430,10 @@ export default function ReportingHub() {
           <button
             type="button"
             onClick={() => setActiveTab("archive")}
-            className={`px-5 py-2.5 text-xs font-bold rounded-xl transition-all cursor-pointer ${
-              activeTab === "archive"
+            className={`px-5 py-2.5 text-xs font-bold rounded-xl transition-all cursor-pointer ${activeTab === "archive"
                 ? "bg-slate-900 text-white shadow-xs"
                 : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
-            }`}
+              }`}
           >
             Report Archive & Audit Ledger ({reports.length})
           </button>
@@ -444,11 +441,10 @@ export default function ReportingHub() {
           <button
             type="button"
             onClick={() => setActiveTab("scheduled")}
-            className={`px-5 py-2.5 text-xs font-bold rounded-xl transition-all cursor-pointer ${
-              activeTab === "scheduled"
+            className={`px-5 py-2.5 text-xs font-bold rounded-xl transition-all cursor-pointer ${activeTab === "scheduled"
                 ? "bg-slate-900 text-white shadow-xs"
                 : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
-            }`}
+              }`}
           >
             Automated EOD Schedules
           </button>
@@ -569,11 +565,10 @@ export default function ReportingHub() {
                     <div
                       key={tpl.id || tpl.type}
                       onClick={() => setSelectedTemplate(tpl)}
-                      className={`p-5 rounded-2xl border transition-all cursor-pointer bg-white relative flex flex-col justify-between ${
-                        isSelected
+                      className={`p-5 rounded-2xl border transition-all cursor-pointer bg-white relative flex flex-col justify-between ${isSelected
                           ? "border-blue-600 ring-2 ring-blue-600/20 shadow-md"
                           : "border-slate-200 hover:border-slate-300 hover:shadow-xs"
-                      }`}
+                        }`}
                     >
                       <div>
                         <div className="flex items-center justify-between mb-2">
@@ -603,11 +598,10 @@ export default function ReportingHub() {
                             setSelectedTemplate(tpl);
                             handleGenerate(tpl);
                           }}
-                          className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
-                            isSelected
+                          className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${isSelected
                               ? "bg-blue-700 text-white hover:bg-blue-800"
                               : "bg-slate-100 text-slate-700 hover:bg-slate-200"
-                          }`}
+                            }`}
                         >
                           Compile & Run
                         </button>
@@ -785,28 +779,26 @@ export default function ReportingHub() {
                             return (
                               <td
                                 key={cIdx}
-                                className={`py-2.5 px-4 whitespace-nowrap ${
-                                  isAmount
+                                className={`py-2.5 px-4 whitespace-nowrap ${isAmount
                                     ? "text-right font-bold text-emerald-800"
                                     : "text-slate-800"
-                                }`}
+                                  }`}
                               >
                                 {isStatus ? (
                                   <span
-                                    className={`px-2 py-0.5 rounded text-[10px] font-bold ${
-                                      val === "CLEARED" || val === "MATCHED" || val === "VERIFIED"
+                                    className={`px-2 py-0.5 rounded text-[10px] font-bold ${val === "CLEARED" || val === "MATCHED" || val === "VERIFIED"
                                         ? "bg-emerald-50 text-emerald-700 border border-emerald-200"
                                         : val === "RETURNED" || val === "FLAGGED"
-                                        ? "bg-rose-50 text-rose-700 border border-rose-200"
-                                        : "bg-slate-100 text-slate-700"
-                                    }`}
+                                          ? "bg-rose-50 text-rose-700 border border-rose-200"
+                                          : "bg-slate-100 text-slate-700"
+                                      }`}
                                   >
                                     {String(val)}
                                   </span>
                                 ) : isAmount && typeof val === "number" ? (
                                   formatCurrency(val)
                                 ) : (
-                                  String(val ?? "—")
+                                  String(val ?? "-")
                                 )}
                               </td>
                             );

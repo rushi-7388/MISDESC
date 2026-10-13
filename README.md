@@ -1,4 +1,4 @@
-# MISDESC-Enterprise — Next-Gen National Cheque Truncation & SRE Clearing Platform
+# MISDESC-Enterprise - Next-Gen National Cheque Truncation & SRE Clearing Platform
 
 [![CI/CD Pipeline](https://github.com/rushi-7388/MISDESC/actions/workflows/ci.yml/badge.svg)](https://github.com/rushi-7388/MISDESC/actions/workflows/ci.yml)
 [![Node.js](https://img.shields.io/badge/Node.js-20.x-339933?logo=node.js&logoColor=white)](https://nodejs.org/)
@@ -18,12 +18,12 @@
 An industry-grade, full-stack simulation of an advanced national **Cheque Truncation System (MISDESC)** conforming to **NPCI MISDESC-2010 Standards**, the **RBI Continuous Clearing & On-Realisation Directive**, and **ISO 20022 Financial Messaging (CBPR+)**.
 
 Beyond legacy cheque processing, **MISDESC-Enterprise** implements **6 revolutionary fintech engines** not yet deployed together by any commercial banking network in the world:
-1. ⚡ **Tarjan Intraday Liquidity Savings Mechanism (LSM)** — Eliminates circular bank gridlock in $O(V+E)$ with zero central bank cash consumed.
-2. 🤖 **Autonomous Multi-Agent Swarm Adjudication** — 4 specialized AI agents providing sub-500ms Straight-Through-Processing (STP).
-3. 🛡️ **NIST FIPS 204 ML-DSA Dilithium / ML-KEM Kyber Post-Quantum Cryptography** — Lattice-based quantum-resistant digital manifests.
-4. 🔐 **Zero-Knowledge Confidential Clearing (zk-MISDESC)** — Groth16 / BN254 zk-SNARKs guaranteeing 100% zero drawer data leakage.
-5. 💎 **Programmable Smart Cheques & CBDC (e-Rupee) Atomic Bridge** — Cryptographic micro-liens, statutory GST withholding & e₹ DvP settlement.
-6. 🌐 **Cross-Border Multi-Currency MISDESC & Sanctions Radar** — ISO 20022 CBPR+ `pacs.009` conversion and sub-100ms OFAC/UN sanctions screening.
+1. ⚡ **Tarjan Intraday Liquidity Savings Mechanism (LSM)** - Eliminates circular bank gridlock in $O(V+E)$ with zero central bank cash consumed.
+2. 🤖 **Autonomous Multi-Agent Swarm Adjudication** - 4 specialized AI agents providing sub-500ms Straight-Through-Processing (STP).
+3. 🛡️ **NIST FIPS 204 ML-DSA Dilithium / ML-KEM Kyber Post-Quantum Cryptography** - Lattice-based quantum-resistant digital manifests.
+4. 🔐 **Zero-Knowledge Confidential Clearing (zk-MISDESC)** - Groth16 / BN254 zk-SNARKs guaranteeing 100% zero drawer data leakage.
+5. 💎 **Programmable Smart Cheques & CBDC (e-Rupee) Atomic Bridge** - Cryptographic micro-liens, statutory GST withholding & e₹ DvP settlement.
+6. 🌐 **Cross-Border Multi-Currency MISDESC & Sanctions Radar** - ISO 20022 CBPR+ `pacs.009` conversion and sub-100ms OFAC/UN sanctions screening.
 
 ---
 
@@ -187,18 +187,18 @@ flowchart TB
 
 ### 1. Prometheus Telemetry (`/metrics`)
 The backend natively instruments Prometheus metrics across all clearing operations and advanced fintech engines:
-- `MISDESC_lsm_gridlock_cycles_resolved_total` — Total Tarjan strongly connected components / cycles cleared.
-- `MISDESC_lsm_liquidity_unlocked_inr_total` — Cumulative liquidity savings unlocked via multilateral netting (INR).
-- `MISDESC_swarm_reviews_total` — Instruments audited by the 4-agent swarm.
-- `MISDESC_swarm_stp_cleared_total` — Cheques straight-through-processed autonomously.
-- `MISDESC_pqc_signatures_verified_total` — Post-quantum ML-DSA-65 signatures verified.
-- `MISDESC_pqc_key_exchanges_total` — ML-KEM-768 quantum key encapsulations.
-- `MISDESC_zkp_proofs_verified_total` — zk-SNARK Groth16 / BN254 proofs verified.
-- `MISDESC_smart_cheque_contraMISDESC_total` — Programmable smart cheque escrow agreements created.
-- `MISDESC_cbdc_settlements_total` — Atomic DvP settlements finalized on RBI Digital Rupee ledger.
-- `MISDESC_crossborder_fx_volume_usd_total` — Cumulative cross-border clearing volume in USD.
-- `MISDESC_sanctions_screened_total` — Transactions screened against OFAC/UN/RBI watchlists.
-- `MISDESC_http_requests_total` / `MISDESC_http_request_duration_seconds` — Request rates and latency histograms.
+- `MISDESC_lsm_gridlock_cycles_resolved_total` - Total Tarjan strongly connected components / cycles cleared.
+- `MISDESC_lsm_liquidity_unlocked_inr_total` - Cumulative liquidity savings unlocked via multilateral netting (INR).
+- `MISDESC_swarm_reviews_total` - Instruments audited by the 4-agent swarm.
+- `MISDESC_swarm_stp_cleared_total` - Cheques straight-through-processed autonomously.
+- `MISDESC_pqc_signatures_verified_total` - Post-quantum ML-DSA-65 signatures verified.
+- `MISDESC_pqc_key_exchanges_total` - ML-KEM-768 quantum key encapsulations.
+- `MISDESC_zkp_proofs_verified_total` - zk-SNARK Groth16 / BN254 proofs verified.
+- `MISDESC_smart_cheque_contraMISDESC_total` - Programmable smart cheque escrow agreements created.
+- `MISDESC_cbdc_settlements_total` - Atomic DvP settlements finalized on RBI Digital Rupee ledger.
+- `MISDESC_crossborder_fx_volume_usd_total` - Cumulative cross-border clearing volume in USD.
+- `MISDESC_sanctions_screened_total` - Transactions screened against OFAC/UN/RBI watchlists.
+- `MISDESC_http_requests_total` / `MISDESC_http_request_duration_seconds` - Request rates and latency histograms.
 
 ### 2. Pre-Provisioned Grafana Dashboard
 Located in `monitoring/grafana/dashboards/MISDESC_national_clearing_dashboard.json`:
@@ -210,10 +210,10 @@ Located in `monitoring/grafana/dashboards/MISDESC_national_clearing_dashboard.js
 
 ### 3. Interactive Chaos Engineering Simulator
 - Inject live controlled faults directly from the DevOps console:
-  - **+1200ms Database Lag Injection** — Evaluates SLO latency degradations.
-  - **500 Error Storms** — Simulates upstream network dropouts.
-  - **Circuit Breaker Trip** — Verifies fallback execution.
-  - **One-Click Restoration** — Instantly recovers nominal baseline performance.
+  - **+1200ms Database Lag Injection** - Evaluates SLO latency degradations.
+  - **500 Error Storms** - Simulates upstream network dropouts.
+  - **Circuit Breaker Trip** - Verifies fallback execution.
+  - **One-Click Restoration** - Instantly recovers nominal baseline performance.
 
 ---
 
@@ -355,49 +355,49 @@ All pre-seeded demo accounts share the password: **`password123`**
 ## API Reference & Real-Time Endpoints
 
 ### Authentication & Users
-- `POST /api/auth/login` — Authenticate and receive JWT access token.
-- `GET /api/auth/me` — Retrieve current authenticated user profile and bank affiliation.
+- `POST /api/auth/login` - Authenticate and receive JWT access token.
+- `GET /api/auth/me` - Retrieve current authenticated user profile and bank affiliation.
 
 ### Cheque Processing & Lifecycle
-- `POST /api/cheques` — Present new cheque (supports multipart image upload).
-- `GET /api/cheques` — Query cheques filtered by bank, status, or clearing session.
-- `GET /api/cheques/:id` — Retrieve full cheque metadata, risk profile, and audit log.
-- `POST /api/clearing/:id/maker-verify` — First-tier Maker verification.
-- `POST /api/clearing/:id/checker-approve` — Second-tier Checker dual authorization.
-- `POST /api/clearing/:id/return` — Return cheque with statutory reason codes.
+- `POST /api/cheques` - Present new cheque (supports multipart image upload).
+- `GET /api/cheques` - Query cheques filtered by bank, status, or clearing session.
+- `GET /api/cheques/:id` - Retrieve full cheque metadata, risk profile, and audit log.
+- `POST /api/clearing/:id/maker-verify` - First-tier Maker verification.
+- `POST /api/clearing/:id/checker-approve` - Second-tier Checker dual authorization.
+- `POST /api/clearing/:id/return` - Return cheque with statutory reason codes.
 
 ### Advanced Fintech Engines
-- `GET /api/lsm/topology` — Retrieve directed interbank exposure graph and cycle metrics.
-- `POST /api/lsm/resolve` — Execute Tarjan SCC cycle cancellation and bilateral netting.
-- `POST /api/lsm/daemon` — Toggle background automated gridlock solver loop.
-- `POST /api/swarm/evaluate/:chequeId` — Evaluate instrument with the 4-Agent Autonomous Swarm.
-- `POST /api/swarm/auto-adjudicate-session` — Run batch autonomous STP across active session.
-- `POST /api/pki/batches/:batchId/pqc-sign` — Sign clearing manifest with NIST FIPS 204 ML-DSA-65.
-- `GET /api/pki/batches/:batchId/pqc-verify` — Verify classical and post-quantum hybrid signatures.
-- `GET /api/pki/quantum-readiness` — Retrieve system-wide algorithm agility and PQC readiness.
-- `POST /api/zkp/generate-proof` — Generate Groth16 / BN254 zero-knowledge solvency proof.
-- `POST /api/zkp/verify-proof` — Verify bilinear pairing equation for confidential clearance.
-- `POST /api/smartcheque/contracts` — Create programmable smart cheque escrow contract.
-- `POST /api/smartcheque/contracts/:id/milestones/:stepId/release` — Release milestone payout.
-- `POST /api/smartcheque/contracts/:id/cbdc-settle` — Execute atomic RBI Wholesale e₹ settlement.
-- `POST /api/crossborder/convert` — Live multi-currency conversion with forward hedging.
-- `POST /api/crossborder/screen-sanctions` — Sub-100ms OFAC, UN & RBI sanctions screening.
-- `GET /api/crossborder/pacs009/:chequeId` — Export ISO 20022 pacs.009.001.08 XML document.
+- `GET /api/lsm/topology` - Retrieve directed interbank exposure graph and cycle metrics.
+- `POST /api/lsm/resolve` - Execute Tarjan SCC cycle cancellation and bilateral netting.
+- `POST /api/lsm/daemon` - Toggle background automated gridlock solver loop.
+- `POST /api/swarm/evaluate/:chequeId` - Evaluate instrument with the 4-Agent Autonomous Swarm.
+- `POST /api/swarm/auto-adjudicate-session` - Run batch autonomous STP across active session.
+- `POST /api/pki/batches/:batchId/pqc-sign` - Sign clearing manifest with NIST FIPS 204 ML-DSA-65.
+- `GET /api/pki/batches/:batchId/pqc-verify` - Verify classical and post-quantum hybrid signatures.
+- `GET /api/pki/quantum-readiness` - Retrieve system-wide algorithm agility and PQC readiness.
+- `POST /api/zkp/generate-proof` - Generate Groth16 / BN254 zero-knowledge solvency proof.
+- `POST /api/zkp/verify-proof` - Verify bilinear pairing equation for confidential clearance.
+- `POST /api/smartcheque/contracts` - Create programmable smart cheque escrow contract.
+- `POST /api/smartcheque/contracts/:id/milestones/:stepId/release` - Release milestone payout.
+- `POST /api/smartcheque/contracts/:id/cbdc-settle` - Execute atomic RBI Wholesale e₹ settlement.
+- `POST /api/crossborder/convert` - Live multi-currency conversion with forward hedging.
+- `POST /api/crossborder/screen-sanctions` - Sub-100ms OFAC, UN & RBI sanctions screening.
+- `GET /api/crossborder/pacs009/:chequeId` - Export ISO 20022 pacs.009.001.08 XML document.
 
 ### Real-Time Streaming & Central Settlement
-- `GET /api/events` — Native Server-Sent Events (SSE) live clearing feed.
-- `GET /api/settlement/summary` — Multilateral net settlement calculations across banks.
-- `GET /api/settlement/ekuber/:id` — RBI e-Kuber central settlement advice and RTGS UTR.
-- `GET /api/cheques/:id/iso20022` — Export ISO 20022 XML (`pacs.008` / `pacs.002` / `pacs.009`).
+- `GET /api/events` - Native Server-Sent Events (SSE) live clearing feed.
+- `GET /api/settlement/summary` - Multilateral net settlement calculations across banks.
+- `GET /api/settlement/ekuber/:id` - RBI e-Kuber central settlement advice and RTGS UTR.
+- `GET /api/cheques/:id/iso20022` - Export ISO 20022 XML (`pacs.008` / `pacs.002` / `pacs.009`).
 
 ### SRE, Observability & Chaos Engineering
-- `GET /metrics` — Prometheus metrics scrape target.
-- `GET /health/live` — Application container liveness probe.
-- `GET /health/ready` — Deep database connectivity readiness probe.
-- `GET /api/devops/sre-stats` — Aggregated SLO availability, error budget, and percentiles.
-- `POST /api/devops/chaos` — Inject synthetic latency, error storms, or circuit breaks.
-- `POST /api/devops/chaos/reset` — Immediately reset chaos monkey to normal operations.
-- `POST /api/devops/telemetry/report` — Client error boundary telemetry collection.
+- `GET /metrics` - Prometheus metrics scrape target.
+- `GET /health/live` - Application container liveness probe.
+- `GET /health/ready` - Deep database connectivity readiness probe.
+- `GET /api/devops/sre-stats` - Aggregated SLO availability, error budget, and percentiles.
+- `POST /api/devops/chaos` - Inject synthetic latency, error storms, or circuit breaks.
+- `POST /api/devops/chaos/reset` - Immediately reset chaos monkey to normal operations.
+- `POST /api/devops/telemetry/report` - Client error boundary telemetry collection.
 
 ---
 
@@ -506,4 +506,4 @@ MISDESC-system/
 
 ## License
 
-This project is licensed under the [MIT License](LICENSE) — free for educational, institutional, and commercial demonstration purposes.
+This project is licensed under the [MIT License](LICENSE) - free for educational, institutional, and commercial demonstration purposes.

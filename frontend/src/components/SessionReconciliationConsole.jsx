@@ -139,7 +139,7 @@ export default function SessionReconciliationConsole() {
           >
             {batches.map((b) => (
               <option key={b.id} value={b.id}>
-                {b.sessionCode} — {b.sessionName}
+                {b.sessionCode} - {b.sessionName}
               </option>
             ))}
           </select>
@@ -161,13 +161,12 @@ export default function SessionReconciliationConsole() {
             <div className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Session Operational Status</div>
             <div className="flex items-center gap-2 mt-2">
               <span
-                className={`px-3 py-1 rounded-full text-xs font-extrabold ${
-                  cutoffStatus.windowStatus === "OPEN"
+                className={`px-3 py-1 rounded-full text-xs font-extrabold ${cutoffStatus.windowStatus === "OPEN"
                     ? "bg-emerald-50 text-emerald-700 border border-emerald-200"
                     : cutoffStatus.windowStatus === "CUTOFF_WARNING"
-                    ? "bg-amber-50 text-amber-700 border border-amber-200 animate-pulse"
-                    : "bg-slate-900 text-white"
-                }`}
+                      ? "bg-amber-50 text-amber-700 border border-amber-200 animate-pulse"
+                      : "bg-slate-900 text-white"
+                  }`}
               >
                 {cutoffStatus.windowStatus}
               </span>

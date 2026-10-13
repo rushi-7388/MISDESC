@@ -314,7 +314,7 @@ async function generateReport({
     id: reportRef,
     reportRef,
     reportType,
-    title: `${template.title} — ${branchName}`,
+    title: `${template.title} - ${branchName}`,
     description: template.description,
     format,
     status: "COMPLETED",
@@ -379,7 +379,7 @@ async function generateReport({
       format,
       status: "SUCCESS",
     });
-  } catch (e) {}
+  } catch (e) { }
 
   return reportPayload;
 }
@@ -441,7 +441,7 @@ async function getReportById(reportId) {
         columns: template ? template.columns : [],
       };
     }
-  } catch (err) {}
+  } catch (err) { }
 
   // Fallback memory store
   const mem = inMemoryReports.get(reportId) || Array.from(inMemoryReports.values()).find((r) => r.reportRef === reportId || r.id === reportId);
@@ -476,7 +476,7 @@ function exportReportToCsv(report) {
   });
 
   const metadataHeaders = [
-    `# SURAT PEOPLES CO OP BANK — OFFICIAL REPORTING & CLEARING LEDGER`,
+    `# SURAT PEOPLES CO OP BANK - OFFICIAL REPORTING & CLEARING LEDGER`,
     `# Report Title: ${report.title}`,
     `# Report Reference: ${report.reportRef}`,
     `# Generated At: ${new Date(report.createdAt).toLocaleString("en-IN")}`,

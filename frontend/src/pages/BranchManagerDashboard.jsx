@@ -84,7 +84,7 @@ export default function BranchManagerDashboard() {
               Branch Operations & Governance · SURAT PEOPLES CO OP BANK
             </div>
             <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900">
-              {summary?.branchName || "Athwa Lines Branch"} — Operations Command
+              {summary?.branchName || "Athwa Lines Branch"} - Operations Command
             </h1>
             <p className="text-xs sm:text-sm text-slate-500 mt-1">
               Teller queue oversight, high-value instrument counter-signature approvals (&gt;₹50,000), and batch dispatch to MISDESC Clearing Switch.
@@ -177,11 +177,10 @@ export default function BranchManagerDashboard() {
           <button
             type="button"
             onClick={() => setActiveTab("counter_signature")}
-            className={`py-3 px-5 font-bold text-xs sm:text-sm transition-all border-b-2 cursor-pointer flex items-center gap-2 ${
-              activeTab === "counter_signature"
+            className={`py-3 px-5 font-bold text-xs sm:text-sm transition-all border-b-2 cursor-pointer flex items-center gap-2 ${activeTab === "counter_signature"
                 ? "border-brand-600 text-brand-700 bg-brand-50/50 rounded-t-xl"
                 : "border-transparent text-slate-500 hover:text-slate-800"
-            }`}
+              }`}
           >
             <span>Counter-Signature Queue</span>
             {awaitingSignatureCheques.length > 0 && (
@@ -194,11 +193,10 @@ export default function BranchManagerDashboard() {
           <button
             type="button"
             onClick={() => setActiveTab("all_instruments")}
-            className={`py-3 px-5 font-bold text-xs sm:text-sm transition-all border-b-2 cursor-pointer flex items-center gap-2 ${
-              activeTab === "all_instruments"
+            className={`py-3 px-5 font-bold text-xs sm:text-sm transition-all border-b-2 cursor-pointer flex items-center gap-2 ${activeTab === "all_instruments"
                 ? "border-brand-600 text-brand-700 bg-brand-50/50 rounded-t-xl"
                 : "border-transparent text-slate-500 hover:text-slate-800"
-            }`}
+              }`}
           >
             <span>All Branch Instruments</span>
             <span className="text-xs text-slate-400 font-mono">({cheques.length})</span>
@@ -207,11 +205,10 @@ export default function BranchManagerDashboard() {
           <button
             type="button"
             onClick={() => setActiveTab("batches")}
-            className={`py-3 px-5 font-bold text-xs sm:text-sm transition-all border-b-2 cursor-pointer flex items-center gap-2 ${
-              activeTab === "batches"
+            className={`py-3 px-5 font-bold text-xs sm:text-sm transition-all border-b-2 cursor-pointer flex items-center gap-2 ${activeTab === "batches"
                 ? "border-brand-600 text-brand-700 bg-brand-50/50 rounded-t-xl"
                 : "border-transparent text-slate-500 hover:text-slate-800"
-            }`}
+              }`}
           >
             <span>Branch Batch Intake</span>
           </button>
@@ -335,13 +332,12 @@ export default function BranchManagerDashboard() {
                       </td>
                       <td className="px-4 py-3 font-mono text-slate-600">{c.draweeBank?.code || "HDB"}</td>
                       <td className="px-4 py-3">
-                        <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
-                          c.status === "CLEARED"
+                        <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${c.status === "CLEARED"
                             ? "bg-emerald-100 text-emerald-800"
                             : c.status === "RETURNED"
-                            ? "bg-rose-100 text-rose-800"
-                            : "bg-amber-100 text-amber-800"
-                        }`}>
+                              ? "bg-rose-100 text-rose-800"
+                              : "bg-amber-100 text-amber-800"
+                          }`}>
                           {c.status}
                         </span>
                       </td>

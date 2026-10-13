@@ -23,7 +23,7 @@ const crossborderService = require(path.join(BACKEND_DIR, "src/services/crossbor
 const { getPrometheusMetrics } = require(path.join(BACKEND_DIR, "src/utils/metrics.util"));
 
 console.log("==================================================================");
-console.log("   MISDESC NATIONAL CLEARING GRID — INTERBANK TRAFFIC SIMULATOR       ");
+console.log("   MISDESC NATIONAL CLEARING GRID - INTERBANK TRAFFIC SIMULATOR       ");
 console.log("==================================================================");
 
 async function simulate() {
@@ -101,7 +101,7 @@ async function simulate() {
   console.log(`- MISDESC_zkp_proofs_verified_total:          ${zkpMetric ? zkpMetric[1] : "Active"}`);
 
   console.log("\n==================================================================");
-  console.log("   🎉 CLEARING SIMULATION COMPLETE — TELEMETRY DISPATCHED!        ");
+  console.log("   🎉 CLEARING SIMULATION COMPLETE - TELEMETRY DISPATCHED!        ");
   console.log("==================================================================");
   process.exit(0);
 }

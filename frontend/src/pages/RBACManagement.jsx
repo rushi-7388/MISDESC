@@ -56,7 +56,7 @@ export default function RBACManagement() {
       setMatrixData(matrixRes.data);
       setBranches(branchesRes.data);
       setUsers(usersRes.data);
-      
+
       const banksList = banksRes.data || [];
       setBanks(banksList);
       if (banksList.length > 0 && !formData.bankId) {
@@ -288,11 +288,10 @@ export default function RBACManagement() {
           <button
             type="button"
             onClick={() => setActiveTab("users")}
-            className={`pb-3 border-b-2 transition-all flex items-center gap-2 cursor-pointer ${
-              activeTab === "users"
+            className={`pb-3 border-b-2 transition-all flex items-center gap-2 cursor-pointer ${activeTab === "users"
                 ? "border-brand-600 text-brand-600"
                 : "border-transparent text-slate-500 hover:text-slate-800"
-            }`}
+              }`}
           >
             <span>User Directory & Provisioning</span>
             <span className="text-[11px] px-2 py-0.5 rounded-full bg-slate-100 text-slate-600">
@@ -303,11 +302,10 @@ export default function RBACManagement() {
           <button
             type="button"
             onClick={() => setActiveTab("matrix")}
-            className={`pb-3 border-b-2 transition-all flex items-center gap-2 cursor-pointer ${
-              activeTab === "matrix"
+            className={`pb-3 border-b-2 transition-all flex items-center gap-2 cursor-pointer ${activeTab === "matrix"
                 ? "border-brand-600 text-brand-600"
                 : "border-transparent text-slate-500 hover:text-slate-800"
-            }`}
+              }`}
           >
             <span>Role-Permission Matrix & Limits</span>
             <span className="text-[11px] px-2 py-0.5 rounded-full bg-brand-50 text-brand-700">
@@ -318,11 +316,10 @@ export default function RBACManagement() {
           <button
             type="button"
             onClick={() => setActiveTab("branches")}
-            className={`pb-3 border-b-2 transition-all flex items-center gap-2 cursor-pointer ${
-              activeTab === "branches"
+            className={`pb-3 border-b-2 transition-all flex items-center gap-2 cursor-pointer ${activeTab === "branches"
                 ? "border-brand-600 text-brand-600"
                 : "border-transparent text-slate-500 hover:text-slate-800"
-            }`}
+              }`}
           >
             <span>Branch Personnel Distribution</span>
           </button>
@@ -524,7 +521,7 @@ export default function RBACManagement() {
                                   YES
                                 </span>
                               ) : (
-                                <span className="text-slate-300 font-mono text-sm">—</span>
+                                <span className="text-slate-300 font-mono text-sm">-</span>
                               )}
                             </td>
                           );

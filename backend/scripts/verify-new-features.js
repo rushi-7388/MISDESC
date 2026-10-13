@@ -29,7 +29,7 @@ function assert(condition, testName) {
 
 async function runTests() {
   console.log("================================================================");
-  console.log("  MISDESC New Enterprise Features — Comprehensive Unit Diagnostic   ");
+  console.log("  MISDESC New Enterprise Features - Comprehensive Unit Diagnostic   ");
   console.log("================================================================\n");
 
   // TEST SUITE 1: Validation Engine
@@ -199,11 +199,11 @@ async function runTests() {
   assert(failoverResult.receipt.droppedTransactions === 0, "Zero dropped transactions during in-flight rerouting");
   assert(failoverResult.topology.primaryActiveDc === "DR_HYDERABAD", "Traffic autonomously routed to DR Hyderabad");
 
-  // TEST SUITE 9: Phase 1 — LSM Real-Time Gridlock Daemon & Bilateral Netting
+  // TEST SUITE 9: Phase 1 - LSM Real-Time Gridlock Daemon & Bilateral Netting
   console.log("\n▶ SUITE 9: ⚡ Phase 1: Real-Time Gridlock Daemon & Bilateral Greedy Offsetting");
   const topologyWithBilateral = await lsmService.getGridlockTopology();
   assert(topologyWithBilateral.bilateralOffsets !== undefined, "Bilateral opposing payment pairs identified");
-  
+
   // Test daemon loop toggle
   const daemonActive = lsmService.toggleAutoDaemon(true, 5000, false);
   assert(daemonActive.enabled === true, "Autonomous background gridlock daemon activated");
@@ -212,10 +212,10 @@ async function runTests() {
   lsmService.toggleAutoDaemon(false); // Stop daemon
   assert(lsmService.getDaemonStatus().enabled === false, "Daemon gracefully stopped");
 
-  // TEST SUITE 10: Phase 2 — Autonomous Multi-Agent Swarm Adjudication Engine
+  // TEST SUITE 10: Phase 2 - Autonomous Multi-Agent Swarm Adjudication Engine
   console.log("\n▶ SUITE 10: 🤖 Phase 2: Autonomous 4-Agent Swarm Adjudication & Forensic Docket");
   const swarmService = require("../src/services/swarm.service");
-  
+
   // Test 1: Clean, authentic cheque -> Autonomous STP (<500ms)
   const cleanCheque = {
     id: "test-clean-01",
@@ -251,7 +251,7 @@ async function runTests() {
   assert(suspectDocket.consensus.criticalFlagsCount > 0, "Critical flags raised for FFT diffusion & Stale instrument");
   assert(suspectDocket.consensus.recommendation.includes("REJECT") || suspectDocket.consensus.recommendation.includes("SENIOR_CHECKER"), "Arbiter directs human escalation");
 
-  // TEST SUITE 11: Phase 3 — NIST Post-Quantum Cryptography (FIPS 204 ML-DSA & FIPS 203 ML-KEM)
+  // TEST SUITE 11: Phase 3 - NIST Post-Quantum Cryptography (FIPS 204 ML-DSA & FIPS 203 ML-KEM)
   console.log("\n▶ SUITE 11: 🛡️ Phase 3: NIST FIPS 204 ML-DSA (Dilithium) & FIPS 203 ML-KEM (Kyber)");
   const pqcService = require("../src/services/pqc.service");
 
@@ -298,7 +298,7 @@ async function runTests() {
   assert(zkProof.proof.pi_b.length === 3, "Groth16 G2 vector pi_b generated over BN254");
   assert(zkProof.zeroKnowledgeGuarantees.drawerBalanceDisclosed === false, "Zero-Knowledge Guarantee: Drawer balance remains concealed");
   assert(zkProof.status === "VERIFIED_VALID", "Solvency witness satisfied without revealing private balance");
-  
+
   // Fast Verifier Test
   const zkVerify = zkpService.verifySolvencyProof(zkProof);
   assert(zkVerify.verified === true, "Clearing House bilinear pairing check e(A,B)==e(alpha,beta)... verified true");
@@ -307,7 +307,7 @@ async function runTests() {
   // TEST SUITE 13: Programmable Smart Cheques, Micro-Liens & CBDC (e-Rupee)
   console.log("\n▶ SUITE 13: ⚡ Programmable Smart Cheques, Cryptographic Micro-Liens & CBDC (e-Rupee)");
   const smartService = require("../src/services/smartcheque.service");
-  
+
   // Micro-Lien Earmarking
   const lien = smartService.earmarkMicroLien("chq-smart-01", 150000, "123456789012");
   assert(lien.earmarkedAmount === 150000, "Micro-lien accurately holds ₹1,50,000 in drawer CBS escrow");
@@ -403,7 +403,7 @@ async function runTests() {
   });
   assert(
     testContract.milestones.find((m) => m.stepId === "M2_DELIVERY_SIGN_OFF").status ===
-      "PENDING_IOT_CONFIRMATION",
+    "PENDING_IOT_CONFIRMATION",
     "Milestone 2 initiates in PENDING_IOT_CONFIRMATION status"
   );
 
