@@ -39,7 +39,7 @@ async function configureBatchCutoff(batchId, { windowType, minutesToCutoff = 30 
 }
 
 /**
- * InspeMISDESC real-time cutoff status of an active clearing session.
+ * Inspects real-time cutoff status of an active clearing session.
  */
 async function getSessionCutoffStatus(batchId) {
   const batch = await prisma.batch.findUnique({

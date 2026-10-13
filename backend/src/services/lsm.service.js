@@ -583,7 +583,7 @@ function resetTopology() {
 }
 
 /**
- * InjeMISDESC an interbank clearing shock or liquidity stress event into the active network topology.
+ * Injects an interbank clearing shock or liquidity stress event into the active network topology.
  */
 async function injectLiquidityShock(options = {}) {
   if (!activeLsmState) {

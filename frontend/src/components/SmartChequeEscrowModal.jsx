@@ -11,7 +11,7 @@ export default function SmartChequeEscrowModal({ cheque, onClose }) {
   const loadContract = async () => {
     try {
       setLoading(true);
-      const res = await client.get(`/smart-cheques/contraMISDESC/${cheque.id}`);
+      const res = await client.get(`/smart-cheques/contracts/${cheque.id}`);
       setContractData(res.data.contract);
       setLienData(res.data.lien);
     } catch (err) {
@@ -46,7 +46,7 @@ export default function SmartChequeEscrowModal({ cheque, onClose }) {
   const handleReleaseMilestone = async (stepId) => {
     try {
       setActing(true);
-      const res = await client.post(`/smart-cheques/contraMISDESC/${cheque.id}/release-milestone`, { stepId });
+      const res = await client.post(`/smart-cheques/contracts/${cheque.id}/release-milestone`, { stepId });
       setContractData(res.data.contract);
     } catch (err) {
       alert("Milestone release failed: " + (err.response?.data?.error || err.message));

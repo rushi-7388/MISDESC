@@ -12,7 +12,7 @@ const SAMPLE_PAYEES = [
   "Infosys Technologies Ltd",
   "Reliance Retail Ventures Pvt Ltd",
   "Tata Steel Processing & Distribution",
-  "Godrej Consumer ProduMISDESC Ltd",
+  "Godrej Consumer Products Ltd",
   "Zomato Hyperpure Logistics Ltd",
   "Sun Pharmaceuticals Industries",
   "Bharat Electronics Ltd (BEL)",

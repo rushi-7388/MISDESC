@@ -18,7 +18,11 @@ router.use(authenticate);
 
 // Programmable Smart Cheques & Micro-Lien Endpoints
 router.post("/lien/earmark", earmarkLien);
+router.get("/contracts/:chequeId", getContract);
+router.get("/contract/:chequeId", getContract);
 router.get("/contraMISDESC/:chequeId", getContract);
+router.post("/contracts/:chequeId/release-milestone", releaseMilestone);
+router.post("/contract/:chequeId/release-milestone", releaseMilestone);
 router.post("/contraMISDESC/:chequeId/release-milestone", releaseMilestone);
 router.post("/cbdc/settle", settleCbdc);
 

@@ -172,7 +172,7 @@ ceremony_vault/
 m-of-n-shards/
 
 # ------------------------------------------------------------------------------
-# 13. Zero-Knowledge Proof (ZKP) Circuits & Prover ArtifaMISDESC
+# 13. Zero-Knowledge Proof (ZKP) Circuits & Prover Artifacts
 # ------------------------------------------------------------------------------
 *.zkey
 *.ptau

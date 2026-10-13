@@ -1,7 +1,7 @@
 const crypto = require("crypto");
 const prisma = require("../config/prisma");
 const { broadcastEvent } = require("../utils/sse.util");
-const { smartChequeContraMISDESCTotal, cbdcSettlementsTotal } = require("../utils/metrics.util");
+const { smartChequeContractsTotal, cbdcSettlementsTotal } = require("../utils/metrics.util");
 
 /**
  * Programmable "Smart Cheque" & Central Bank Digital Currency (CBDC e-Rupee) Service
@@ -190,7 +190,7 @@ function createSmartContract(chequeId, options = {}) {
   persistSmartContractToDb(chequeId, contract);
 
   try {
-    smartChequeContraMISDESCTotal.inc({ condition_type: "MILESTONE_ORACLE", state: contract.programmableState });
+    smartChequeContractsTotal.inc({ condition_type: "MILESTONE_ORACLE", state: contract.programmableState });
   } catch (err) {}
 
   return contract;

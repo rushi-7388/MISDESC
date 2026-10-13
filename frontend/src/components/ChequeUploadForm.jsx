@@ -344,7 +344,7 @@ export default function ChequeUploadForm({ onCreated }) {
                   className={`px-2.5 py-1 rounded-md font-semibold transition-all cursor-pointer ${
                     canvasFilter === "sobel" ? "bg-purple-600 text-white" : "text-slate-600 hover:text-slate-900"
                   }`}
-                  title="Sobel Edge Operator deteMISDESC ink boundaries and stroke contours"
+                  title="Sobel Edge Operator detects ink boundaries and stroke contours"
                 >
                   Sobel Edges
                 </button>

@@ -267,7 +267,7 @@
     },
     {
       "id": 11,
-      "title": "Autonomous Swarm Adjudication VerdiMISDESC",
+      "title": "Autonomous Swarm Adjudication Verdicts",
       "type": "barchart",
       "gridPos": { "h": 7, "w": 12, "x": 12, "y": 23 },
       "targets": [
@@ -363,9 +363,9 @@
       "gridPos": { "h": 6, "w": 10, "x": 6, "y": 31 },
       "targets": [
         {
-          "expr": "sum(rate(MISDESC_smart_cheque_contraMISDESC_total[1m])) or vector(0)",
+          "expr": "sum(rate(MISDESC_smart_cheque_contracts_total[1m])) or vector(0)",
           "refId": "A",
-          "legendFormat": "Escrow ContraMISDESC / sec"
+          "legendFormat": "Escrow Contracts / sec"
         },
         {
           "expr": "sum(rate(MISDESC_cbdc_settlements_total[1m])) or vector(0)",

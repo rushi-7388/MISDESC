@@ -248,7 +248,7 @@ async function runTests() {
   const suspectDocket = await swarmService.evaluateChequeWithSwarm("test-suspect-02", suspectCheque);
   assert(suspectDocket.consensus.autoCleared === false, "Suspect instrument correctly blocks autonomous STP");
   assert(suspectDocket.consensus.criticalFlagsCount > 0, "Critical flags raised for FFT diffusion & Stale instrument");
-  assert(suspectDocket.consensus.recommendation.includes("REJECT") || suspectDocket.consensus.recommendation.includes("SENIOR_CHECKER"), "Arbiter direMISDESC human escalation");
+  assert(suspectDocket.consensus.recommendation.includes("REJECT") || suspectDocket.consensus.recommendation.includes("SENIOR_CHECKER"), "Arbiter directs human escalation");
 
   // TEST SUITE 11: Phase 3 — NIST Post-Quantum Cryptography (FIPS 204 ML-DSA & FIPS 203 ML-KEM)
   console.log("\n▶ SUITE 11: 🛡️ Phase 3: NIST FIPS 204 ML-DSA (Dilithium) & FIPS 203 ML-KEM (Kyber)");
@@ -373,7 +373,7 @@ async function runTests() {
   assert(meta1 === meta2, "Double-Metaphone maps 'Al-Faisal' and 'Al Fayzal' to identical phonetic signature");
 
   const fuzzyHit = crossService.screenSanctions({ drawerName: "Al Fayzal Logistics", payeeName: "Standard Corp" });
-  assert(fuzzyHit.matchedSanctions.length > 0, "Fuzzy radar deteMISDESC spelling variant alias 'Al Fayzal Logistics'");
+  assert(fuzzyHit.matchedSanctions.length > 0, "Fuzzy radar detects spelling variant alias 'Al Fayzal Logistics'");
   assert(fuzzyHit.status === "BLOCKED", "Enforces statutory block on critical fuzzy alias match");
 
   const hawalaFuzzy = crossService.screenSanctions({ drawerName: "Havala Remittance Network", payeeName: "Apex" });
@@ -386,11 +386,11 @@ async function runTests() {
     null,
     "CHEQUE NO: 000456 MICR: 395024002 A/C: 987654321012 IFSC: SBIN0001234 TC: 10 ₹125,000 PAY TO: Acme Steel Corp"
   );
-  assert(ocrResult.extracted.chequeNumber === "000456", "E-13B OCR extraMISDESC 6-digit cheque number");
-  assert(ocrResult.extracted.micrCode === "395024002", "E-13B OCR extraMISDESC 9-digit MICR routing code");
-  assert(ocrResult.extracted.accountNumber === "987654321012", "E-13B OCR extraMISDESC 12-digit drawer account number");
-  assert(ocrResult.extracted.ifsc === "SBIN0001234", "OCR extraMISDESC 11-character Indian Bank IFSC");
-  assert(ocrResult.extracted.suggestedAmount === 125000, "OCR extraMISDESC courtesy box numeric amount (₹1,25,000)");
+  assert(ocrResult.extracted.chequeNumber === "000456", "E-13B OCR extracts 6-digit cheque number");
+  assert(ocrResult.extracted.micrCode === "395024002", "E-13B OCR extracts 9-digit MICR routing code");
+  assert(ocrResult.extracted.accountNumber === "987654321012", "E-13B OCR extracts 12-digit drawer account number");
+  assert(ocrResult.extracted.ifsc === "SBIN0001234", "OCR extracts 11-character Indian Bank IFSC");
+  assert(ocrResult.extracted.suggestedAmount === 125000, "OCR extracts courtesy box numeric amount (₹1,25,000)");
   assert(ocrResult.boundingBoxes.micrBand !== undefined, "Calculates MISDESC-2010 bounding box coordinates");
 
   // TEST SUITE 18: IoT / e-Way Bill Webhook Trigger & Milestone 2 Auto-Disbursement (Phase 3)
@@ -444,7 +444,7 @@ async function runTests() {
     amount: 500000000,
     targetBank: "bank-srt",
   });
-  assert(shockRes.success === true, "InjeMISDESC ₹50 Crore inward clearing surge into topology");
+  assert(shockRes.success === true, "Injects ₹50 Crore inward clearing surge into topology");
   assert(shockRes.shock.injectedAmount === 500000000, "Shock metadata records ₹50 Cr volume spike");
   assert(shockRes.topology.metrics.isGridlocked === true, "Network triggers gridlock detection under shock");
 
@@ -452,7 +452,7 @@ async function runTests() {
     shockType: "COLLATERAL_FREEZE",
     targetBank: "bank-srt",
   });
-  assert(freezeRes.success === true, "InjeMISDESC participant bank collateral freeze shock");
+  assert(freezeRes.success === true, "Injects participant bank collateral freeze shock");
   const srtNode = freezeRes.topology.nodes.find((n) => n.id === "bank-srt");
   assert(srtNode && srtNode.availableHeadroom <= 100000, "Bank SRT headroom restricted to near zero");
   assert(srtNode.status === "GRIDLOCK_RESTRICTED", "Bank SRT flagged as GRIDLOCK_RESTRICTED");
@@ -587,7 +587,7 @@ async function runTests() {
   assert(isValidSig === true, "Constant-time HMAC verification passes for authentic signature");
 
   const isInvalidSig = webhookService.verifyHmacSignature(hmacSecret, { ...cbsTestPayload, amount: 999999 }, `sha256=${hmacSig}`);
-  assert(isInvalidSig === false, "HMAC verification rejeMISDESC tampered payload");
+  assert(isInvalidSig === false, "HMAC verification rejects tampered payload");
 
   // Test dispatching real-time event
   const dispatchResult = await webhookService.dispatchWebhookEvent("CHEQUE_PRESENTED", cbsTestPayload);

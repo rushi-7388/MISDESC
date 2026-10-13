@@ -235,12 +235,13 @@ const zkpProofsVerifiedTotal = new client.Counter({
 });
 
 // 11. Option 2: Programmable Smart Cheques & CBDC (e-Rupee) Bridge
-const smartChequeContraMISDESCTotal = new client.Counter({
-  name: "MISDESC_smart_cheque_contraMISDESC_total",
+const smartChequeContractsTotal = new client.Counter({
+  name: "MISDESC_smart_cheque_contracts_total",
   help: "Total programmable smart cheque escrow agreements created and executed",
   labelNames: ["condition_type", "state"], // MILESTONE_ORACLE, TIME_LOCKED, RELEASED, REFUNDED
   registers: [register],
 });
+const smartChequeContraMISDESCTotal = smartChequeContractsTotal;
 
 const cbdcSettlementsTotal = new client.Counter({
   name: "MISDESC_cbdc_settlements_total",
@@ -292,6 +293,7 @@ module.exports = {
   pqcSignaturesVerifiedTotal,
   pqcKeyExchangesTotal,
   zkpProofsVerifiedTotal,
+  smartChequeContractsTotal,
   smartChequeContraMISDESCTotal,
   cbdcSettlementsTotal,
   crossborderFxVolumeTotal,

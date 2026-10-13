@@ -1,0 +1,400 @@
+{
+  "annotations": { "list": [] },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 1,
+  "id": null,
+  "links": [],
+  "liveNow": true,
+  "panels": [
+    {
+      "collapsed": false,
+      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 0 },
+      "id": 100,
+      "title": "National MISDESC: Continuous Clearing & e-Kuber Real-Time Pulse",
+      "type": "row"
+    },
+    {
+      "id": 1,
+      "title": "RBI e-Kuber Real-Time Realizations",
+      "type": "stat",
+      "gridPos": { "h": 4, "w": 6, "x": 0, "y": 1 },
+      "targets": [
+        {
+          "expr": "sum(MISDESC_ekuber_realizations_total) or vector(0)",
+          "refId": "A",
+          "legendFormat": "Realizations"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "thresholds" },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "blue", "value": null },
+              { "color": "green", "value": 1 }
+            ]
+          },
+          "unit": "short"
+        }
+      }
+    },
+    {
+      "id": 2,
+      "title": "Continuous Cleared Volume (₹ INR)",
+      "type": "stat",
+      "gridPos": { "h": 4, "w": 6, "x": 6, "y": 1 },
+      "targets": [
+        {
+          "expr": "sum(MISDESC_settlement_volume_inr_total) or vector(0)",
+          "refId": "A",
+          "legendFormat": "INR Cleared"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "thresholds" },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "purple", "value": null },
+              { "color": "emerald", "value": 100000 }
+            ]
+          },
+          "unit": "currencyINR"
+        }
+      }
+    },
+    {
+      "id": 3,
+      "title": "Instruments Cleared (T+0)",
+      "type": "stat",
+      "gridPos": { "h": 4, "w": 6, "x": 12, "y": 1 },
+      "targets": [
+        {
+          "expr": "sum(MISDESC_cheques_cleared_total) or vector(0)",
+          "refId": "A",
+          "legendFormat": "Cleared"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "thresholds" },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "blue", "value": null },
+              { "color": "green", "value": 1 }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": 4,
+      "title": "System HTTP Request Rate (req/s)",
+      "type": "stat",
+      "gridPos": { "h": 4, "w": 6, "x": 18, "y": 1 },
+      "targets": [
+        {
+          "expr": "sum(rate(MISDESC_http_requests_total[1m])) or vector(0)",
+          "refId": "A",
+          "legendFormat": "Throughput"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "palette-classic" },
+          "unit": "reqps"
+        }
+      }
+    },
+    {
+      "collapsed": false,
+      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 5 },
+      "id": 101,
+      "title": "Real-Time Clearing Velocity & Interbank Liquidity",
+      "type": "row"
+    },
+    {
+      "id": 5,
+      "title": "Continuous Clearing Velocity (Instruments/sec)",
+      "type": "timeseries",
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 6 },
+      "targets": [
+        {
+          "expr": "sum(rate(MISDESC_cheques_cleared_total[1m])) by (drawee_bank)",
+          "refId": "A",
+          "legendFormat": "Cleared: {{drawee_bank}}"
+        },
+        {
+          "expr": "sum(rate(MISDESC_cheques_presented_total[1m])) by (presenting_bank)",
+          "refId": "B",
+          "legendFormat": "Presented: {{presenting_bank}}"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "title": "Interbank Intraday Liquidity Stress (85% Regulatory Threshold)",
+      "type": "gauge",
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 6 },
+      "targets": [
+        {
+          "expr": "MISDESC_liquidity_utilization_ratio or vector(0.48)",
+          "refId": "A",
+          "legendFormat": "{{bank_code}}"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "min": 0,
+          "max": 1,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "green", "value": 0 },
+              { "color": "yellow", "value": 0.6 },
+              { "color": "red", "value": 0.85 }
+            ]
+          },
+          "unit": "percentunit"
+        }
+      }
+    },
+    {
+      "collapsed": false,
+      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 14 },
+      "id": 102,
+      "title": "Fraud Defense & SRE API Latency P95/P99",
+      "type": "row"
+    },
+    {
+      "id": 7,
+      "title": "Positive Pay System (PPS) Reconciliations",
+      "type": "barchart",
+      "gridPos": { "h": 7, "w": 12, "x": 0, "y": 15 },
+      "targets": [
+        {
+          "expr": "sum(MISDESC_pps_verification_total) by (result)",
+          "refId": "A",
+          "legendFormat": "{{result}}"
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "title": "API Latency P95 / P99 (Seconds)",
+      "type": "timeseries",
+      "gridPos": { "h": 7, "w": 12, "x": 12, "y": 15 },
+      "targets": [
+        {
+          "expr": "histogram_quantile(0.95, sum(rate(MISDESC_http_request_duration_seconds_bucket[1m])) by (le))",
+          "refId": "A",
+          "legendFormat": "P95 Latency"
+        },
+        {
+          "expr": "histogram_quantile(0.99, sum(rate(MISDESC_http_request_duration_seconds_bucket[1m])) by (le))",
+          "refId": "B",
+          "legendFormat": "P99 Latency"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "s"
+        }
+      }
+    },
+    {
+      "collapsed": false,
+      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 22 },
+      "id": 103,
+      "title": "Next-Gen Fintech Pillars: Tarjan LSM Gridlock Solver & Swarm STP",
+      "type": "row"
+    },
+    {
+      "id": 9,
+      "title": "Tarjan LSM Gridlock Cycles Cleared",
+      "type": "stat",
+      "gridPos": { "h": 4, "w": 6, "x": 0, "y": 23 },
+      "targets": [
+        {
+          "expr": "sum(MISDESC_lsm_gridlock_cycles_resolved_total) or vector(0)",
+          "refId": "A",
+          "legendFormat": "SCC Cycles Resolved"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "thresholds" },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "blue", "value": null },
+              { "color": "emerald", "value": 1 }
+            ]
+          },
+          "unit": "short"
+        }
+      }
+    },
+    {
+      "id": 10,
+      "title": "LSM Liquidity Unlocked (₹ INR)",
+      "type": "stat",
+      "gridPos": { "h": 4, "w": 6, "x": 6, "y": 23 },
+      "targets": [
+        {
+          "expr": "sum(MISDESC_lsm_liquidity_unlocked_inr_total) or vector(0)",
+          "refId": "A",
+          "legendFormat": "Liquidity Saved"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "thresholds" },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "purple", "value": null },
+              { "color": "green", "value": 1000000 }
+            ]
+          },
+          "unit": "currencyINR"
+        }
+      }
+    },
+    {
+      "id": 11,
+      "title": "Autonomous Swarm Adjudication Verdicts",
+      "type": "barchart",
+      "gridPos": { "h": 7, "w": 12, "x": 12, "y": 23 },
+      "targets": [
+        {
+          "expr": "sum(MISDESC_swarm_reviews_total) by (verdict)",
+          "refId": "A",
+          "legendFormat": "{{verdict}}"
+        }
+      ]
+    },
+    {
+      "id": 12,
+      "title": "NIST FIPS 204 Quantum-Safe Signatures (ML-DSA / Dilithium)",
+      "type": "stat",
+      "gridPos": { "h": 3, "w": 6, "x": 0, "y": 27 },
+      "targets": [
+        {
+          "expr": "sum(MISDESC_pqc_signatures_verified_total) or vector(0)",
+          "refId": "A",
+          "legendFormat": "PQC Signatures"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "palette-classic" },
+          "unit": "short"
+        }
+      }
+    },
+    {
+      "id": 13,
+      "title": "ML-KEM-768 Quantum Key Encapsulations",
+      "type": "stat",
+      "gridPos": { "h": 3, "w": 6, "x": 6, "y": 27 },
+      "targets": [
+        {
+          "expr": "sum(MISDESC_pqc_key_exchanges_total) or vector(0)",
+          "refId": "A",
+          "legendFormat": "KEM Tunnels"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "thresholds" },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "blue", "value": null },
+              { "color": "cyan", "value": 1 }
+            ]
+          },
+          "unit": "short"
+        }
+      }
+    },
+    {
+      "collapsed": false,
+      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 30 },
+      "id": 104,
+      "title": "Zero-Knowledge Prover, CBDC e-Rupee & Cross-Border Sanctions Radar",
+      "type": "row"
+    },
+    {
+      "id": 14,
+      "title": "zk-SNARK Groth16 / BN254 Confidential Solvency Proofs",
+      "type": "stat",
+      "gridPos": { "h": 6, "w": 6, "x": 0, "y": 31 },
+      "targets": [
+        {
+          "expr": "sum(MISDESC_zkp_proofs_verified_total) by (result)",
+          "refId": "A",
+          "legendFormat": "zk-MISDESC Proofs: {{result}}"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "thresholds" },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "purple", "value": null },
+              { "color": "green", "value": 1 }
+            ]
+          },
+          "unit": "short"
+        }
+      }
+    },
+    {
+      "id": 15,
+      "title": "Programmable Smart Cheques & CBDC (e₹) Settlements",
+      "type": "timeseries",
+      "gridPos": { "h": 6, "w": 10, "x": 6, "y": 31 },
+      "targets": [
+        {
+          "expr": "sum(rate(MISDESC_smart_cheque_contracts_total[1m])) or vector(0)",
+          "refId": "A",
+          "legendFormat": "Escrow Contracts / sec"
+        },
+        {
+          "expr": "sum(rate(MISDESC_cbdc_settlements_total[1m])) or vector(0)",
+          "refId": "B",
+          "legendFormat": "CBDC e-Rupee Finality / sec"
+        }
+      ]
+    },
+    {
+      "id": 16,
+      "title": "Cross-Border Sanctions Screening & OFAC Compliance",
+      "type": "barchart",
+      "gridPos": { "h": 6, "w": 8, "x": 16, "y": 31 },
+      "targets": [
+        {
+          "expr": "sum(MISDESC_sanctions_screened_total) by (verdict)",
+          "refId": "A",
+          "legendFormat": "Watchlist Scan: {{verdict}}"
+        }
+      ]
+    }
+  ],
+  "refresh": "5s",
+  "schemaVersion": 38,
+  "style": "dark",
+  "tags": ["MISDESC", "clearing", "ekuber", "rbi", "fintech"],
+  "time": { "from": "now-1h", "to": "now" },
+  "timepicker": { "refresh_intervals": ["5s", "10s", "30s", "1m"] },
+  "timezone": "browser",
+  "title": "MISDESC National Clearing Grid: Continuous e-Kuber Executive Dashboard",
+  "uid": "MISDESC-national-clearing"
+}

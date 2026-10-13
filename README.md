@@ -172,10 +172,10 @@ flowchart TB
 ## Core Banking & Forensic Features
 
 - **AI Optical Character Recognition (OCR):** Automatically parses high-resolution scans to extract the 6-digit Cheque Number, 9-digit MICR Code, Bank Account Number, IFSC, and Transaction Code.
-- **Forensic UV Blacklight & Inverted MICR Clear Band:** Simulated 365nm ultraviolet inspection reveals fluorescent security fibers and anti-alteration stains; inverted grayscale inspeMISDESC E-13B magnetic ink font geometry.
+- **Forensic UV Blacklight & Inverted MICR Clear Band:** Simulated 365nm ultraviolet inspection reveals fluorescent security fibers and anti-alteration stains; inverted grayscale inspects E-13B magnetic ink font geometry.
 - **RBI Positive Pay System (PPS):** 5-point automated pre-verification against drawer-submitted records (Payee, Amount, Date, Cheque Number, Stale cutoff).
 - **Maker-Checker Dual Authorization (4-Eyes Principle):** Strict segregation of duties mandated for high-value (>₹1,00,000) or high-risk instruments. Self-authorization is programmatically blocked.
-- **Cryptographic SHA-256 Hash-Chained Audit Ledger:** Immutable hash-linked blocks (`previousHash` + `currentHash`). Real-time ledger scanner deteMISDESC manual tampering instantly.
+- **Cryptographic SHA-256 Hash-Chained Audit Ledger:** Immutable hash-linked blocks (`previousHash` + `currentHash`). Real-time ledger scanner detects manual tampering instantly.
 - **Continuous T+0 Clearing & RBI e-Kuber Settlement:** Produces official central bank transaction references (`EKUBER/MISDESC3/YYYYMMDD/<seq>`) and 22-character RTGS UTR codes (`RBIR5...`).
 - **ISO 20022 Financial Messaging:** Exports compliant `pacs.008` (Customer Credit Transfer), `pacs.002` (Statutory Return Memo), and `pacs.009` (Cross-Border Financial Institution Transfer) XML documents.
 - **Printable Clearance Certificates:** Official bank-sealed certificates with QR codes and cryptographic signatures.
@@ -209,7 +209,7 @@ Located in `monitoring/grafana/dashboards/MISDESC_national_clearing_dashboard.js
 - **Row 104:** Zero-Knowledge Prover, CBDC e-Rupee & Cross-Border Sanctions Radar.
 
 ### 3. Interactive Chaos Engineering Simulator
-- InjeMISDESC live controlled faults directly from the DevOps console:
+- Inject live controlled faults directly from the DevOps console:
   - **+1200ms Database Lag Injection** — Evaluates SLO latency degradations.
   - **500 Error Storms** — Simulates upstream network dropouts.
   - **Circuit Breaker Trip** — Verifies fallback execution.
@@ -377,9 +377,9 @@ All pre-seeded demo accounts share the password: **`password123`**
 - `GET /api/pki/quantum-readiness` — Retrieve system-wide algorithm agility and PQC readiness.
 - `POST /api/zkp/generate-proof` — Generate Groth16 / BN254 zero-knowledge solvency proof.
 - `POST /api/zkp/verify-proof` — Verify bilinear pairing equation for confidential clearance.
-- `POST /api/smartcheque/contraMISDESC` — Create programmable smart cheque escrow contract.
-- `POST /api/smartcheque/contraMISDESC/:id/milestones/:stepId/release` — Release milestone payout.
-- `POST /api/smartcheque/contraMISDESC/:id/cbdc-settle` — Execute atomic RBI Wholesale e₹ settlement.
+- `POST /api/smartcheque/contracts` — Create programmable smart cheque escrow contract.
+- `POST /api/smartcheque/contracts/:id/milestones/:stepId/release` — Release milestone payout.
+- `POST /api/smartcheque/contracts/:id/cbdc-settle` — Execute atomic RBI Wholesale e₹ settlement.
 - `POST /api/crossborder/convert` — Live multi-currency conversion with forward hedging.
 - `POST /api/crossborder/screen-sanctions` — Sub-100ms OFAC, UN & RBI sanctions screening.
 - `GET /api/crossborder/pacs009/:chequeId` — Export ISO 20022 pacs.009.001.08 XML document.

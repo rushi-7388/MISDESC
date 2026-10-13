@@ -44,7 +44,7 @@ export default function ChequeViewerModal({ cheque, onClose, onUpdated }) {
     },
   };
 
-  const isSuspeMISDESCig = signatureData && signatureData.metrics?.matchScore < 80;
+  const isSuspectSig = signatureData && signatureData.metrics?.matchScore < 80;
 
   return (
     <div
@@ -115,10 +115,10 @@ export default function ChequeViewerModal({ cheque, onClose, onUpdated }) {
                 type="button"
                 onClick={() => setActiveTab("signature")}
                 className={`px-3 py-1 rounded transition-colors flex items-center gap-1.5 cursor-pointer ${activeTab === "signature"
-                    ? isSuspeMISDESCig
+                    ? isSuspectSig
                       ? "bg-rose-600 text-white shadow-xs"
                       : "bg-brand-700 text-white shadow-xs"
-                    : isSuspeMISDESCig
+                    : isSuspectSig
                       ? "text-rose-700 hover:text-rose-900"
                       : "text-gray-600 hover:text-gray-900"
                   }`}

@@ -195,7 +195,7 @@ function runLegalRegulatoryAgent(cheque) {
     flags.push({
       type: "PPS_MANDATE_MISMATCH",
       severity: "HIGH",
-      description: "Drawer positive pay registration confliMISDESC with presented instrument payee or amount",
+      description: "Drawer positive pay registration conflicts with presented instrument payee or amount",
     });
   } else if (isPpsMandatory && cheque.ppsStatus === "PPS_NOT_REGISTERED") {
     agentConfidence -= 15;
@@ -583,7 +583,7 @@ function simulateAdversarialAttack(options = {}) {
       agent: "AML Sanctions Agent",
       code: "PPS_MANDATE_DEFICIT",
       severity: "CRITICAL",
-      message: `Presented amount (₹${Number(alteredAmount).toLocaleString("en-IN")}) confliMISDESC with Positive Pay System registration (₹${Number(originalAmount).toLocaleString("en-IN")}).`,
+      message: `Presented amount (₹${Number(alteredAmount).toLocaleString("en-IN")}) conflicts with Positive Pay System registration (₹${Number(originalAmount).toLocaleString("en-IN")}).`,
     });
     flags.push({
       agent: "Network Graph Agent",
@@ -602,7 +602,7 @@ function simulateAdversarialAttack(options = {}) {
       agent: "Spectral Vision Agent",
       code: "UV_BLEACH_HALO_FLUORESCENCE",
       severity: "CRITICAL",
-      message: `Multi-spectral UV-A (365nm) imaging deteMISDESC severe chemical washing solvent halo. Protective fugitive security ink dissolved across Payee field.`,
+      message: `Multi-spectral UV-A (365nm) imaging detects severe chemical washing solvent halo. Protective fugitive security ink dissolved across Payee field.`,
     });
     flags.push({
       agent: "Spectral Vision Agent",
