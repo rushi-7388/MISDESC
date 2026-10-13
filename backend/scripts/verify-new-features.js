@@ -471,8 +471,8 @@ async function runTests() {
     settlement: {
       id: "settl-iso-test-01",
       netAmount: 45000000,
-      bankA: { name: "Surat Bank", ifsc: "SBIN0001234" },
-      bankB: { name: "Horizon Digital Bank", ifsc: "HDFC0005678" },
+      bankA: { name: "SURAT PEOPLES CO OP BANK", ifsc: "SBIN0001234" },
+      bankB: { name: "SURAT PEOPLES CO OP BANK", ifsc: "HDFC0005678" },
     },
     cheques: [
       {
@@ -481,8 +481,8 @@ async function runTests() {
         amount: 25000000,
         accountNumber: "987654321012",
         payeeName: "Tata Consultancy Services",
-        presentingBank: { name: "Surat Bank", ifsc: "SBIN0001234" },
-        draweeBank: { name: "Horizon Digital Bank", ifsc: "HDFC0005678" },
+        presentingBank: { name: "SURAT PEOPLES CO OP BANK", ifsc: "SBIN0001234" },
+        draweeBank: { name: "SURAT PEOPLES CO OP BANK", ifsc: "HDFC0005678" },
       },
       {
         id: "chq-iso-002",
@@ -490,8 +490,8 @@ async function runTests() {
         amount: 20000000,
         accountNumber: "987654321013",
         payeeName: "Reliance Retail Ltd",
-        presentingBank: { name: "Surat Bank", ifsc: "SBIN0001234" },
-        draweeBank: { name: "Horizon Digital Bank", ifsc: "HDFC0005678" },
+        presentingBank: { name: "SURAT PEOPLES CO OP BANK", ifsc: "SBIN0001234" },
+        draweeBank: { name: "SURAT PEOPLES CO OP BANK", ifsc: "HDFC0005678" },
       },
     ],
   });
@@ -508,8 +508,8 @@ async function runTests() {
       chequeNumber: "000993",
       amount: 1500000,
       returnReason: "Insufficient funds",
-      presentingBank: { name: "Surat Bank", ifsc: "SBIN0001234" },
-      draweeBank: { name: "Horizon Digital Bank", ifsc: "HDFC0005678" },
+      presentingBank: { name: "SURAT PEOPLES CO OP BANK", ifsc: "SBIN0001234" },
+      draweeBank: { name: "SURAT PEOPLES CO OP BANK", ifsc: "HDFC0005678" },
     },
   });
 

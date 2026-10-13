@@ -15,7 +15,7 @@ const { lsmCyclesResolvedTotal, lsmLiquidityUnlockedInrTotal } = require("../uti
  */
 
 const DEFAULT_PARTICIPATING_BANKS = [
-  { id: "bank-srt", code: "SRT", name: "Surat National Bank", collateral: 12000000, creditLine: 3000000, currentHeadroom: 1500000 },
+  { id: "bank-srt", code: "SRT", name: "SURAT PEOPLES CO OP BANK", collateral: 12000000, creditLine: 3000000, currentHeadroom: 1500000 },
   { id: "bank-sbi", code: "SBI", name: "State Bank of India", collateral: 50000000, creditLine: 10000000, currentHeadroom: 2200000 },
   { id: "bank-hdfc", code: "HDFC", name: "HDFC Bank Ltd", collateral: 40000000, creditLine: 8000000, currentHeadroom: 1800000 },
   { id: "bank-icici", code: "ICICI", name: "ICICI Bank Ltd", collateral: 35000000, creditLine: 7000000, currentHeadroom: 2500000 },

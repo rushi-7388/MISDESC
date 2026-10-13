@@ -111,7 +111,7 @@ export default function SettlementSummary() {
 
         {/* Real-time Bilateral Exposure Cards Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {/* Surat Bank Card */}
+          {/* SURAT PEOPLES CO OP BANK Card */}
           {primaryBank && (
             <div
               className={`p-4 rounded-xl border transition-all ${primaryBank.liquidityWarning
@@ -210,7 +210,7 @@ export default function SettlementSummary() {
             </div>
           )}
 
-          {/* Horizon Digital Bank Card */}
+          {/* SURAT PEOPLES CO OP BANK Card */}
           {counterpartyBank && (
             <div
               className={`p-4 rounded-xl border transition-all ${counterpartyBank.liquidityWarning

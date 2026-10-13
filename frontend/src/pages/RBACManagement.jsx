@@ -424,7 +424,7 @@ export default function RBACManagement() {
                                 {user.branchName || "Main Branch"}
                               </div>
                               <div className="text-[11px] text-slate-500 mt-0.5">
-                                {user.bank?.name || "State National Bank"}
+                                {user.bank?.name || "SURAT PEOPLES CO OP BANK"}
                               </div>
                             </td>
                             <td className="py-3.5 px-4 max-w-[260px]">
@@ -701,7 +701,7 @@ export default function RBACManagement() {
                     className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-900 focus:outline-none focus:ring-1 focus:ring-brand-500"
                   >
                     {banks.length === 0 ? (
-                      <option value={currentUser?.bank?.id || ""}>{currentUser?.bank?.name || "State National Bank"}</option>
+                      <option value={currentUser?.bank?.id || ""}>{currentUser?.bank?.name || "SURAT PEOPLES CO OP BANK"}</option>
                     ) : (
                       banks.map((b) => (
                         <option key={b.id} value={b.id}>

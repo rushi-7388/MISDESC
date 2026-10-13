@@ -304,11 +304,11 @@ All pre-seeded demo accounts share the password: **`password123`**
 
 | Role | Email | Bank Organization | Portal Path | Access & Responsibilities |
 |---|---|---|---|---|
-| **Presenting Bank Clerk** | `presenting@snb.com` | Surat Bank (SNB) | `/presenting` | Cheque scanning, OCR extraction, presentation, Positive Pay validation |
-| **Drawee Bank (Maker)** | `drawee@hdb.com` | Horizon Digital Bank (HDB) | `/drawee` | Inward clearing queue, UV blacklight inspection, initial verification, zk-Proof generation |
-| **Drawee Bank (Checker)**| `checker@hdb.com` | Horizon Digital Bank (HDB) | `/drawee` | **Maker-Checker 4-Eyes** dual authorization, high-risk approval, PQC signing |
+| **Presenting Bank Clerk** | `presenting@snb.com` | SURAT PEOPLES CO OP BANK (SNB) | `/presenting` | Cheque scanning, OCR extraction, presentation, Positive Pay validation |
+| **Drawee Bank (Maker)** | `drawee@hdb.com` | SURAT PEOPLES CO OP BANK (HDB) | `/drawee` | Inward clearing queue, UV blacklight inspection, initial verification, zk-Proof generation |
+| **Drawee Bank (Checker)**| `checker@hdb.com` | SURAT PEOPLES CO OP BANK (HDB) | `/drawee` | **Maker-Checker 4-Eyes** dual authorization, high-risk approval, PQC signing |
 | **Clearing House Admin**| `admin@MISDESC.com` | National Clearing House | `/admin` | Universal oversight, SRE Console, Chaos Simulator, ISO 20022 export |
-| **Branch Operations Manager**| `manager@snb.com` | Surat Bank (Athwa Branch) | `/branch-manager` | Branch batch oversight, high-value counter-signature (>₹50,000), batch dispatch |
+| **Branch Operations Manager**| `manager@snb.com` | SURAT PEOPLES CO OP BANK (Athwa Branch) | `/branch-manager` | Branch batch oversight, high-value counter-signature (>₹50,000), batch dispatch |
 | **Core SRE & IT Staff**| `itops@MISDESC.com` | MISDESC Core Switch Infrastructure | `/it-monitoring` | Switch telemetry, Prometheus scraper, Chaos Engineering, database health |
 | **Compliance & Audit Officer**| `auditor@rbi.org.in` | Regulatory Oversight Wing (RBI) | `/auditor` | Cryptographic SHA-256 ledger verification, Positive Pay & AML audit |
 | **Settlement & Treasury Officer**| `treasury@MISDESC.com` | National Treasury Settlement Desk | `/settlement` | Multilateral Net Settlement (MNS) grid, Tarjan LSM cycle solver, e-Kuber & CBDC |

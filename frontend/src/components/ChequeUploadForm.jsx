@@ -243,8 +243,8 @@ export default function ChequeUploadForm({ onCreated }) {
           ? "/cheque-000123.jpg"
           : "/sample-cheque.jpg",
     createdAt: new Date(),
-    presentingBank: { name: "Surat Bank" },
-    draweeBank: { name: "Horizon Digital Bank" },
+    presentingBank: { name: "SURAT PEOPLES CO OP BANK" },
+    draweeBank: { name: "SURAT PEOPLES CO OP BANK" },
   };
 
   return (

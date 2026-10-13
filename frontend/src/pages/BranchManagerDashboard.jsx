@@ -81,7 +81,7 @@ export default function BranchManagerDashboard() {
           <div>
             <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-brand-50 text-brand-700 border border-brand-200/70 mb-2">
               <span className="w-1.5 h-1.5 rounded-full bg-brand-600" />
-              Branch Operations & Governance · Surat Bank
+              Branch Operations & Governance · SURAT PEOPLES CO OP BANK
             </div>
             <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900">
               {summary?.branchName || "Athwa Lines Branch"} — Operations Command

@@ -90,7 +90,7 @@ export default function LiveSettlementTicker() {
     clearedCount: 0,
     clearedVolume: 0,
     netPosition: 0,
-    direction: "Surat Bank ↔ Horizon Digital Bank",
+    direction: "SURAT PEOPLES CO OP BANK ↔ SURAT PEOPLES CO OP BANK",
     lsmUnlocked: 12500000,
     activeCycleCount: 2,
   });

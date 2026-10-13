@@ -10,14 +10,14 @@ async function main() {
 
   const bankA = await prisma.bank.upsert({
     where: { ifsc: "SBIN0001234" },
-    update: { name: "Surat Bank" },
-    create: { name: "Surat Bank", ifsc: "SBIN0001234", code: "SNB" },
+    update: { name: "SURAT PEOPLES CO OP BANK" },
+    create: { name: "SURAT PEOPLES CO OP BANK", ifsc: "SBIN0001234", code: "SNB" },
   });
 
   const bankB = await prisma.bank.upsert({
     where: { ifsc: "HDFC0005678" },
-    update: {},
-    create: { name: "Horizon Digital Bank", ifsc: "HDFC0005678", code: "HDB" },
+    update: { name: "SURAT PEOPLES CO OP BANK" },
+    create: { name: "SURAT PEOPLES CO OP BANK", ifsc: "HDFC0005678", code: "HDB" },
   });
 
   await prisma.user.upsert({
@@ -233,13 +233,15 @@ async function main() {
   // Seed X.509 PKI Digital Signature Certificates
   await prisma.digitalCertificate.upsert({
     where: { certThumbprint: "a1b2c3d4e5f60718293a4b5c6d7e8f90123456789abcdef0123456789abcdef0" },
-    update: {},
+    update: {
+      subject: "CN=SURAT PEOPLES CO OP BANK MISDESC Presentation Signer, OU=Digital Clearing, O=SURAT PEOPLES CO OP BANK, C=IN",
+    },
     create: {
       bankId: bankA.id,
       certThumbprint: "a1b2c3d4e5f60718293a4b5c6d7e8f90123456789abcdef0123456789abcdef0",
       serialNumber: "MISDESC-PKI-SNB-2026-001",
       issuer: "MISDESC National PKI Root Trust CA",
-      subject: "CN=Surat Bank MISDESC Presentation Signer, OU=Digital Clearing, O=Surat Bank, C=IN",
+      subject: "CN=SURAT PEOPLES CO OP BANK MISDESC Presentation Signer, OU=Digital Clearing, O=SURAT PEOPLES CO OP BANK, C=IN",
       validFrom: new Date(),
       validTo: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000),
       status: "ACTIVE",
@@ -249,13 +251,15 @@ async function main() {
 
   await prisma.digitalCertificate.upsert({
     where: { certThumbprint: "f0e1d2c3b4a5968778695a4b3c2d1e0f0123456789abcdef0123456789abcdef1" },
-    update: {},
+    update: {
+      subject: "CN=SURAT PEOPLES CO OP BANK MISDESC Authorization Signer, OU=Inward Operations, O=SURAT PEOPLES CO OP BANK, C=IN",
+    },
     create: {
       bankId: bankB.id,
       certThumbprint: "f0e1d2c3b4a5968778695a4b3c2d1e0f0123456789abcdef0123456789abcdef1",
       serialNumber: "MISDESC-PKI-HDB-2026-002",
       issuer: "MISDESC National PKI Root Trust CA",
-      subject: "CN=Horizon Digital Bank MISDESC Authorization Signer, OU=Inward Operations, O=Horizon Digital Bank, C=IN",
+      subject: "CN=SURAT PEOPLES CO OP BANK MISDESC Authorization Signer, OU=Inward Operations, O=SURAT PEOPLES CO OP BANK, C=IN",
       validFrom: new Date(),
       validTo: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000),
       status: "ACTIVE",

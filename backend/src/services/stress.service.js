@@ -21,7 +21,7 @@ const SAMPLE_PAYEES = [
 ];
 
 const SAMPLE_BANKS = [
-  { ifsc: "SBIN0001234", name: "State Bank of India", micr: "395002001" },
+  { ifsc: "SBIN0001234", name: "SURAT PEOPLES CO OP BANK", micr: "395002001" },
   { ifsc: "HDFC0005678", name: "HDFC Bank Ltd", micr: "400240018" },
   { ifsc: "ICIC0000456", name: "ICICI Bank Ltd", micr: "110229003" },
   { ifsc: "PUNB0000789", name: "Punjab National Bank", micr: "395024002" },

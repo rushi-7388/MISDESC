@@ -49,7 +49,7 @@ export default function DraweeVerificationCard({
         </div>
 
         <div className="text-[11px] text-gray-500 flex items-center gap-1.5">
-          <span className="font-semibold text-gray-700">{cheque.presentingBank?.name || "Surat Bank"}</span>
+          <span className="font-semibold text-gray-700">{cheque.presentingBank?.name || "SURAT PEOPLES CO OP BANK"}</span>
           <span>→</span>
           <span className="text-gray-400 font-mono text-[10px]">{cheque.draweeBank?.ifsc || "HDFC0005678"}</span>
         </div>

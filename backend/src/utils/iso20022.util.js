@@ -104,9 +104,9 @@ function generatePacs008Xml({ settlement, cheques = [] }) {
   const totalAmount = Number(settlement.netAmount || 150000).toFixed(2);
   const nbOfTxs = cheques.length || 1;
 
-  const bankAName = settlement.bankA?.name || "Surat Bank";
+  const bankAName = settlement.bankA?.name || "SURAT PEOPLES CO OP BANK";
   const bankAIfsc = settlement.bankA?.ifsc || "SBIN0001234";
-  const bankBName = settlement.bankB?.name || "Horizon Digital Bank";
+  const bankBName = settlement.bankB?.name || "SURAT PEOPLES CO OP BANK";
   const bankBIfsc = settlement.bankB?.ifsc || "HDFC0005678";
 
   let txListXml = "";
@@ -249,13 +249,13 @@ function generatePacs002Xml({ cheque }) {
           <DbtrAgt>
             <FinInstnId>
               <ClrSysMmbId><ClrSysId><Cd>INIFSC</Cd></ClrSysId><MmbId>${cheque.draweeBank?.ifsc || "HDFC0005678"}</MmbId></ClrSysMmbId>
-              <Nm>${escapeXml(cheque.draweeBank?.name || "Horizon Digital Bank")}</Nm>
+              <Nm>${escapeXml(cheque.draweeBank?.name || "SURAT PEOPLES CO OP BANK")}</Nm>
             </FinInstnId>
           </DbtrAgt>
           <CdtrAgt>
             <FinInstnId>
               <ClrSysMmbId><ClrSysId><Cd>INIFSC</Cd></ClrSysId><MmbId>${cheque.presentingBank?.ifsc || "SBIN0001234"}</MmbId></ClrSysMmbId>
-              <Nm>${escapeXml(cheque.presentingBank?.name || "Surat Bank")}</Nm>
+              <Nm>${escapeXml(cheque.presentingBank?.name || "SURAT PEOPLES CO OP BANK")}</Nm>
             </FinInstnId>
           </CdtrAgt>
         </OrgnlTxRef>

@@ -174,7 +174,7 @@ async function getLiquidityMonitor(req, res) {
       };
     });
 
-    // Bilateral netting summary between Surat Bank and Horizon Digital Bank
+    // Bilateral netting summary for SURAT PEOPLES CO OP BANK
     const bankA = banks.find((b) => b.ifsc === "SBIN0001234") || banks[0];
     const bankB = banks.find((b) => b.ifsc === "HDFC0005678") || banks[1];
 

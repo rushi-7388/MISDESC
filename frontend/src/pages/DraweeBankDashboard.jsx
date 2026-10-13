@@ -277,7 +277,7 @@ export default function DraweeBankDashboard() {
                 Inward Clearing & Verification Workbench
               </h1>
               <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-purple-50 text-purple-700 border border-purple-200">
-                Horizon Digital Bank (HDFC0005678)
+                SURAT PEOPLES CO OP BANK (HDFC0005678)
               </span>
             </div>
             <p className="text-xs text-slate-500">

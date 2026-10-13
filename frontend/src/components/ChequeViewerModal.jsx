@@ -244,7 +244,7 @@ export default function ChequeViewerModal({ cheque, onClose, onUpdated }) {
                     <div className="flex justify-between items-start relative z-10">
                       <div>
                         <div className="font-bold text-lg tracking-wide text-brand-900 uppercase">
-                          {cheque.draweeBank?.name || "Surat Bank"}
+                          {cheque.draweeBank?.name || "SURAT PEOPLES CO OP BANK"}
                         </div>
                         <div className="text-[11px] text-gray-600 font-mono">IFSC: {cheque.ifsc}</div>
                       </div>

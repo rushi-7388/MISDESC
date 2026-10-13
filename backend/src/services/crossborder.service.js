@@ -354,13 +354,13 @@ function generatePacs009Xml(cheque, fxDetails) {
       <InstgAgt>
         <FinInstnId>
           <BICFI>SNBINBB395</BICFI>
-          <Nm>Surat National Bank</Nm>
+          <Nm>SURAT PEOPLES CO OP BANK</Nm>
         </FinInstnId>
       </InstgAgt>
       <InstdAgt>
         <FinInstnId>
           <BICFI>HDFCINBB001</BICFI>
-          <Nm>Horizon Digital Bank</Nm>
+          <Nm>SURAT PEOPLES CO OP BANK</Nm>
         </FinInstnId>
       </InstdAgt>
       <Cdtr>

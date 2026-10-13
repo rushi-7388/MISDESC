@@ -9,21 +9,21 @@ const DEMO_ROLES = [
   {
     role: "PRESENTING_BANK",
     label: "Presenting Bank Clerk",
-    sublabel: "Surat Bank (SNB)",
+    sublabel: "SURAT PEOPLES CO OP BANK (SNB)",
     email: "presenting@snb.com",
     path: "/presenting",
   },
   {
     role: "DRAWEE_BANK",
     label: "Drawee Bank Verifier (Maker)",
-    sublabel: "Horizon Digital Bank (HDB)",
+    sublabel: "SURAT PEOPLES CO OP BANK (HDB)",
     email: "drawee@hdb.com",
     path: "/drawee",
   },
   {
     role: "DRAWEE_BANK",
     label: "Senior Approver (Checker)",
-    sublabel: "Horizon Digital Bank (HDB)",
+    sublabel: "SURAT PEOPLES CO OP BANK (HDB)",
     email: "checker@hdb.com",
     path: "/drawee",
   },
@@ -37,7 +37,7 @@ const DEMO_ROLES = [
   {
     role: "BRANCH_MANAGER",
     label: "Branch Operations Manager",
-    sublabel: "Surat Bank (Athwa Branch)",
+    sublabel: "SURAT PEOPLES CO OP BANK (Athwa Branch)",
     email: "manager@snb.com",
     path: "/branch-manager",
   },
