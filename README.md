@@ -1,6 +1,6 @@
 # MISDESC-Enterprise — Next-Gen National Cheque Truncation & SRE Clearing Platform
 
-[![CI/CD Pipeline](https://github.com/rushi-7388/MISDESC-system/actions/workflows/ci.yml/badge.svg)](https://github.com/rushi-7388/MISDESC-system/actions/workflows/ci.yml)
+[![CI/CD Pipeline](https://github.com/rushi-7388/MISDESC/actions/workflows/ci.yml/badge.svg)](https://github.com/rushi-7388/MISDESC/actions/workflows/ci.yml)
 [![Node.js](https://img.shields.io/badge/Node.js-20.x-339933?logo=node.js&logoColor=white)](https://nodejs.org/)
 [![React](https://img.shields.io/badge/React-18.3-61DAFB?logo=react&logoColor=black)](https://reactjs.org/)
 [![Vite](https://img.shields.io/badge/Vite-5.4-646CFF?logo=vite&logoColor=white)](https://vitejs.dev/)
@@ -241,8 +241,8 @@ Spin up the complete ecosystem (PostgreSQL, Backend API, Frontend Web App, Prome
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/rushi-7388/MISDESC-system.git
-cd MISDESC-system
+git clone https://github.com/rushi-7388/MISDESC.git
+cd MISDESC
 
 # 2. Launch all services with Docker Compose
 docker compose up --build

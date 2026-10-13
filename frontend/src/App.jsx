@@ -15,6 +15,7 @@ const ITStaffDashboard = lazy(() => import("./pages/ITStaffDashboard"));
 const ComplianceAuditorDashboard = lazy(() => import("./pages/ComplianceAuditorDashboard"));
 const SettlementOfficerDashboard = lazy(() => import("./pages/SettlementOfficerDashboard"));
 const RBACManagement = lazy(() => import("./pages/RBACManagement"));
+const ReportingHub = lazy(() => import("./pages/ReportingHub"));
 
 function PageLoader() {
   return (
@@ -117,6 +118,24 @@ export default function App() {
               element={
                 <ProtectedRoute roles={["BRANCH_MANAGER", "ADMIN"]}>
                   <RBACManagement />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/reports"
+              element={
+                <ProtectedRoute
+                  roles={[
+                    "ADMIN",
+                    "BRANCH_MANAGER",
+                    "PRESENTING_BANK",
+                    "DRAWEE_BANK",
+                    "IT_STAFF",
+                    "COMPLIANCE_AUDITOR",
+                    "SETTLEMENT_OFFICER",
+                  ]}
+                >
+                  <ReportingHub />
                 </ProtectedRoute>
               }
             />

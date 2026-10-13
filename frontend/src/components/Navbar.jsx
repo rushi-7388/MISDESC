@@ -143,10 +143,10 @@ export default function Navbar() {
             />
             <div className="flex flex-col">
               <div className="font-bold tracking-tight text-sm sm:text-base leading-none flex items-center gap-2">
-                <span className="text-white">MISDESC</span>
+                <span className="text-white font-extrabold">SURAT PEOPLES CO OP BANK</span>
                 <span className="text-slate-600 font-light hidden sm:inline">|</span>
                 <span className="text-xs font-semibold text-slate-300 hidden sm:inline tracking-normal">
-                  Cheque Truncation System
+                  MISDESC Reporting & CTS Portal
                 </span>
               </div>
             </div>
@@ -219,6 +219,15 @@ export default function Navbar() {
                 Settlement
               </Link>
               <Link
+                to="/reports"
+                className={`px-2 py-0.5 rounded-md transition-colors ${location.pathname === "/reports"
+                    ? "bg-blue-600 text-white font-semibold"
+                    : "text-blue-300 hover:text-white"
+                  }`}
+              >
+                Reports
+              </Link>
+              <Link
                 to="/rbac"
                 className={`px-2 py-0.5 rounded-md transition-colors ${location.pathname === "/rbac"
                     ? "bg-purple-600 text-white font-semibold"
@@ -234,6 +243,19 @@ export default function Navbar() {
         {/* Right: Actions & User Info */}
         {user && (
           <div className="flex items-center gap-2.5 sm:gap-3 text-xs">
+            {/* MIS & Regulatory Reporting Suite (Accessible to all authenticated bank roles) */}
+            <Link
+              to="/reports"
+              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 ${
+                location.pathname === "/reports"
+                  ? "bg-blue-600 text-white shadow-xs"
+                  : "bg-slate-800 border border-slate-700 text-blue-300 hover:text-white hover:bg-slate-750"
+              }`}
+              title="Bank MIS & Regulatory Reports"
+            >
+              <span>MIS Reports</span>
+            </Link>
+
             {/* RBAC Portal Link for Managers and Admins */}
             {canManageRBAC && (
               <Link

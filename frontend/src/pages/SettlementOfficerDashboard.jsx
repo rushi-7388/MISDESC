@@ -31,6 +31,15 @@ export default function SettlementOfficerDashboard() {
               Continuous T+0 realization, multilateral net clearing obligations, interbank liquidity limits, and central bank RTGS UTR generation.
             </p>
           </div>
+
+          <div className="flex items-center gap-2.5">
+            <a
+              href="/reports"
+              className="bg-blue-700 hover:bg-blue-800 text-white px-4 py-2.5 rounded-xl font-bold text-xs transition-all shadow-xs cursor-pointer inline-flex items-center gap-1.5"
+            >
+              <span>Treasury & MNS Reports</span>
+            </a>
+          </div>
         </div>
 
         {/* Tab Switcher */}

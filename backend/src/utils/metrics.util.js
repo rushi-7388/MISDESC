@@ -265,6 +265,14 @@ const sanctionsScreenedTotal = new client.Counter({
   registers: [register],
 });
 
+// 13. Bank MIS & Statutory Regulatory Reporting Engine
+const reportsGeneratedTotal = new client.Counter({
+  name: "MISDESC_reports_generated_total",
+  help: "Total bank MIS and regulatory reports generated",
+  labelNames: ["report_type", "format", "status"],
+  registers: [register],
+});
+
 module.exports = {
   register,
   getPrometheusMetrics,
@@ -298,4 +306,5 @@ module.exports = {
   cbdcSettlementsTotal,
   crossborderFxVolumeTotal,
   sanctionsScreenedTotal,
+  reportsGeneratedTotal,
 };

@@ -27,6 +27,7 @@ const smartchequeRoutes = require("./routes/smartcheque.routes");
 const crossborderRoutes = require("./routes/crossborder.routes");
 const stressRoutes = require("./routes/stress.routes");
 const webhookRoutes = require("./routes/webhook.routes");
+const reportRoutes = require("./routes/report.routes");
 
 const app = express();
 
@@ -72,6 +73,7 @@ app.use("/api/smart-cheques", smartchequeRoutes);
 app.use("/api/crossborder", crossborderRoutes);
 app.use("/api/stress", stressRoutes);
 app.use("/api/webhooks", webhookRoutes);
+app.use("/api/reports", reportRoutes);
 
 
 

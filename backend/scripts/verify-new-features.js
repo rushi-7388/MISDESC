@@ -11,6 +11,7 @@ const liquidityService = require("../src/services/liquidity.service");
 const disputeService = require("../src/services/dispute.service");
 const pkiService = require("../src/services/pki.service");
 const reconciliationService = require("../src/services/reconciliation.service");
+const reportService = require("../src/services/report.service");
 const { validateRequired, validatePositiveNumber, validateEnum } = require("../src/validators/schemas");
 
 let passed = 0;
@@ -599,6 +600,60 @@ async function runTests() {
   assert(OPENAPI_SPEC.openapi === "3.0.3", "Exports valid OpenAPI 3.0.3 specification");
   assert(OPENAPI_SPEC.paths["/cheques"] !== undefined, "Documents /cheques clearing endpoint");
   assert(OPENAPI_SPEC.paths["/webhooks"] !== undefined, "Documents /webhooks Core Banking API");
+
+  // TEST SUITE: Bank MIS & Regulatory Reporting Engine (SURAT PEOPLES CO OP BANK)
+  console.log("\n▶ SUITE 11: Bank MIS & Regulatory Reporting System");
+  assert(Array.isArray(reportService.REPORT_TEMPLATES), "Exports institutional report templates catalog");
+  assert(reportService.REPORT_TEMPLATES.length >= 6, "Supports at least 6 RBI/NPCI statutory templates");
+
+  const adminTemplates = reportService.getAvailableTemplates("ADMIN");
+  assert(adminTemplates.length >= 6, "Admin has access to all institutional reporting templates");
+
+  const branchTemplates = reportService.getAvailableTemplates("BRANCH_MANAGER");
+  assert(branchTemplates.length > 0 && branchTemplates.length <= adminTemplates.length, "Branch Manager templates adhere to RBAC boundaries");
+
+  // Test 1: Daily Clearing Summary Generation
+  const testUser = {
+    name: "Audit Clerk",
+    role: "ADMIN",
+    email: "audit@snb.com",
+    bank: { name: "SURAT PEOPLES CO OP BANK" },
+  };
+
+  const dailyReport = await reportService.generateReport({
+    reportType: "DAILY_CLEARING_SUMMARY",
+    format: "CSV",
+    filters: { dateRange: "all" },
+    user: testUser,
+  });
+
+  assert(dailyReport && typeof dailyReport.reportRef === "string", "Generates report with unique institutional reportRef");
+  assert(dailyReport.reportRef.startsWith("SPCB-MIS-01-"), "Report reference uses bank acronym and template code");
+  assert(dailyReport.bankName === "SURAT PEOPLES CO OP BANK", "Identifies SURAT PEOPLES CO OP BANK as issuing institution");
+  assert(Array.isArray(dailyReport.records), "Report dataset compiled as tabular record collection");
+  assert(typeof dailyReport.summary === "object", "Includes summary audit metrics");
+
+  // Test 2: RBI Statutory Return Generation
+  const rbiReport = await reportService.generateReport({
+    reportType: "RBI_STATUTORY_RETURN",
+    format: "CSV",
+    filters: {},
+    user: testUser,
+  });
+  assert(rbiReport.reportRef.startsWith("SPCB-RBI-STR-02-"), "RBI statutory report uses RBI-STR-02 code");
+
+  // Test 3: RFC-4180 CSV Exporter
+  const csvData = reportService.exportReportToCsv(dailyReport);
+  assert(typeof csvData === "string" && csvData.length > 0, "Exports report to RFC-4180 compliant CSV string");
+  assert(csvData.includes("SURAT PEOPLES CO OP BANK"), "CSV includes bank institutional title header");
+  assert(csvData.includes("Report Reference"), "CSV includes metadata rows");
+
+  // Test 4: Report Listing and Lookup
+  const listedReports = await reportService.listReports({ limit: 10, user: testUser });
+  assert(Array.isArray(listedReports) && listedReports.length >= 2, "Lists generated reports in archive");
+
+  const fetchedReport = await reportService.getReportById(dailyReport.id);
+  assert(fetchedReport && fetchedReport.reportRef === dailyReport.reportRef, "Fetches generated report by identifier");
 
   // TEST SUMMARY
   console.log("\n================================================================");

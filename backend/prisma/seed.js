@@ -9,9 +9,9 @@ async function main() {
   const hash = await bcrypt.hash("password123", 10);
 
   const bankA = await prisma.bank.upsert({
-    where: { ifsc: "SBIN0001234" },
+    where: { ifsc: "SPCB0001234" },
     update: { name: "SURAT PEOPLES CO OP BANK" },
-    create: { name: "SURAT PEOPLES CO OP BANK", ifsc: "SBIN0001234", code: "SNB" },
+    create: { name: "SURAT PEOPLES CO OP BANK", ifsc: "SPCB0001234", code: "SPCB" },
   });
 
   const bankB = await prisma.bank.upsert({

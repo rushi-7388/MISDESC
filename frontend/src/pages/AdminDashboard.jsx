@@ -17,24 +17,27 @@ const OpenBankingWebhookPortal = lazy(() => import("../components/OpenBankingWeb
 
 function TabLoader() {
   return (
-    <div className="p-12 flex flex-col items-center justify-center text-slate-400 bg-white rounded-2xl border border-gray-100 shadow-xs">
-      <div className="w-8 h-8 rounded-full border-2 border-indigo-600 border-t-transparent animate-spin mb-3" />
-      <span className="text-xs font-semibold uppercase tracking-wider text-slate-500">Loading module...</span>
+    <div className="p-12 flex flex-col items-center justify-center text-slate-400 bg-white rounded-2xl border border-slate-200 shadow-xs">
+      <div className="w-8 h-8 rounded-full border-2 border-blue-600 border-t-transparent animate-spin mb-3" />
+      <span className="text-xs font-semibold uppercase tracking-wider text-slate-500">
+        Loading module...
+      </span>
     </div>
   );
 }
 
 function StatCard({ label, value, color }) {
   return (
-    <div className="bg-white rounded-xl shadow-xs border border-gray-100 p-4">
-      <div className="text-[11px] font-semibold text-gray-500 uppercase tracking-wider">{label}</div>
-      <div className={`text-2xl font-bold mt-1 ${color || "text-gray-900"}`}>{value}</div>
+    <div className="bg-white rounded-xl shadow-xs border border-slate-200 p-4">
+      <div className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">{label}</div>
+      <div className={`text-2xl font-bold mt-1 ${color || "text-slate-900"}`}>{value}</div>
     </div>
   );
 }
 
 export default function AdminDashboard() {
-  const [activeTab, setActiveTab] = useState("operations"); // "operations", "batches", "analytics", "ledger", "war_room", "hsm", "devops"
+  const [activeTab, setActiveTab] = useState("operations"); // "operations", "batches", "analytics", "ledger", "utilities"
+  const [utilitySubTab, setUtilitySubTab] = useState("devops"); // "devops", "war_room", "hsm", "stress", "webhooks", "swarm"
   const [stats, setStats] = useState(null);
   const [events, setEvents] = useState([]);
 
@@ -56,156 +59,128 @@ export default function AdminDashboard() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gray-50 pb-12">
+    <div className="min-h-screen bg-slate-50 pb-16 text-slate-900">
       <Navbar />
       <div className="max-w-6xl mx-auto p-6 space-y-6">
-        {/* Navigation Tabs Header */}
-        <div className="flex flex-wrap items-center justify-between gap-4 border-b border-gray-200 pb-3">
+        {/* Clean Bank Header */}
+        <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
-            <h1 className="text-2xl font-extrabold text-gray-900 tracking-tight">Enterprise Administration</h1>
-            <p className="text-xs text-gray-500 mt-0.5">
-              Cheque Truncation Operations, Continuous Clearing Engine, and SRE Observability Platform
+            <div className="flex items-center gap-2 mb-1">
+              <span className="px-2 py-0.5 rounded text-[10px] font-bold tracking-wider uppercase bg-blue-50 text-blue-800 border border-blue-200">
+                SURAT PEOPLES CO OP BANK
+              </span>
+              <span className="text-xs text-slate-400 font-mono">Central Clearing Admin</span>
+            </div>
+            <h1 className="text-2xl font-bold text-slate-900 tracking-tight">
+              Administrative & Clearing Operations
+            </h1>
+            <p className="text-xs text-slate-500 mt-0.5">
+              Cheque Truncation System (CTS), RBI e-Kuber Multilateral Net Settlement & Regulatory Audit
             </p>
           </div>
 
-          <div className="flex flex-wrap items-center gap-2 bg-gray-200/70 p-1 rounded-xl">
+          {/* Clean Segmented Tab Controller */}
+          <div className="flex items-center gap-1.5 bg-slate-100 p-1.5 rounded-xl border border-slate-200 text-xs">
             <button
               type="button"
               onClick={() => setActiveTab("operations")}
-              className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${activeTab === "operations"
-                  ? "bg-white text-gray-900 shadow-xs"
-                  : "text-gray-600 hover:text-gray-900"
-                }`}
+              className={`px-3 py-1.5 rounded-lg font-semibold transition-all cursor-pointer ${
+                activeTab === "operations"
+                  ? "bg-white text-slate-900 shadow-xs"
+                  : "text-slate-600 hover:text-slate-900"
+              }`}
             >
               Operations
             </button>
             <button
               type="button"
               onClick={() => setActiveTab("batches")}
-              className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${activeTab === "batches"
-                  ? "bg-white text-gray-900 shadow-xs"
-                  : "text-gray-600 hover:text-gray-900"
-                }`}
+              className={`px-3 py-1.5 rounded-lg font-semibold transition-all cursor-pointer ${
+                activeTab === "batches"
+                  ? "bg-white text-slate-900 shadow-xs"
+                  : "text-slate-600 hover:text-slate-900"
+              }`}
             >
               Sessions
             </button>
             <button
               type="button"
-              onClick={() => setActiveTab("war_room")}
-              className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${activeTab === "war_room"
-                  ? "bg-cyan-700 text-white shadow-xs font-bold"
-                  : "text-gray-600 hover:text-gray-900"
-                }`}
-            >
-              🌐 War Room (DC Failover)
-            </button>
-            <button
-              type="button"
-              onClick={() => setActiveTab("hsm")}
-              className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${activeTab === "hsm"
-                  ? "bg-purple-700 text-white shadow-xs font-bold"
-                  : "text-gray-600 hover:text-gray-900"
-                }`}
-            >
-              🛡️ Virtual HSM
-            </button>
-            <button
-              type="button"
               onClick={() => setActiveTab("analytics")}
-              className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${activeTab === "analytics"
-                  ? "bg-white text-gray-900 shadow-xs"
-                  : "text-gray-600 hover:text-gray-900"
-                }`}
+              className={`px-3 py-1.5 rounded-lg font-semibold transition-all cursor-pointer ${
+                activeTab === "analytics"
+                  ? "bg-white text-slate-900 shadow-xs"
+                  : "text-slate-600 hover:text-slate-900"
+              }`}
             >
               Analytics
             </button>
             <button
               type="button"
               onClick={() => setActiveTab("ledger")}
-              className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${activeTab === "ledger"
-                  ? "bg-white text-gray-900 shadow-xs"
-                  : "text-gray-600 hover:text-gray-900"
-                }`}
+              className={`px-3 py-1.5 rounded-lg font-semibold transition-all cursor-pointer ${
+                activeTab === "ledger"
+                  ? "bg-white text-slate-900 shadow-xs"
+                  : "text-slate-600 hover:text-slate-900"
+              }`}
             >
-              Audit Ledger
+              Ledger
             </button>
             <button
               type="button"
-              onClick={() => setActiveTab("swarm")}
-              className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${activeTab === "swarm"
-                  ? "bg-purple-700 text-white shadow-xs font-bold"
-                  : "text-gray-600 hover:text-gray-900"
-                }`}
+              onClick={() => setActiveTab("utilities")}
+              className={`px-3 py-1.5 rounded-lg font-semibold transition-all cursor-pointer ${
+                activeTab === "utilities"
+                  ? "bg-blue-700 text-white shadow-xs"
+                  : "text-slate-600 hover:text-slate-900"
+              }`}
             >
-              🤖 AI Swarm Sandbox
-            </button>
-            <button
-              type="button"
-              onClick={() => setActiveTab("stress")}
-              className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${activeTab === "stress"
-                  ? "bg-rose-700 text-white shadow-xs font-bold"
-                  : "text-gray-600 hover:text-gray-900"
-                }`}
-            >
-              🚀 Stress Engine (1k+ TPS)
-            </button>
-            <button
-              type="button"
-              onClick={() => setActiveTab("webhooks")}
-              className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${activeTab === "webhooks"
-                  ? "bg-indigo-700 text-white shadow-xs font-bold"
-                  : "text-gray-600 hover:text-gray-900"
-                }`}
-            >
-              📡 CBS Webhooks & Open Banking
-            </button>
-            <button
-              type="button"
-              onClick={() => setActiveTab("devops")}
-              className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${activeTab === "devops"
-                  ? "bg-brand-600 text-white shadow-xs"
-                  : "text-gray-600 hover:text-gray-900"
-                }`}
-            >
-              DevOps / SRE
+              System Utilities
             </button>
           </div>
         </div>
 
         {/* Tab 1: Clearing Operations */}
         {activeTab === "operations" && (
-          <div className="space-y-6 animate-in fade-in duration-150">
+          <div className="space-y-6">
             {stats && (
               <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-                <StatCard label="Total cheques" value={stats.total} />
-                <StatCard label="Presented" value={stats.byStatus.PRESENTED} color="text-yellow-600" />
-                <StatCard label="Verified" value={stats.byStatus.VERIFIED} color="text-blue-600" />
-                <StatCard label="Cleared" value={stats.byStatus.CLEARED} color="text-emerald-600" />
-                <StatCard label="Returned" value={stats.byStatus.RETURNED} color="text-rose-600" />
+                <StatCard label="Total instruments" value={stats.total} />
+                <StatCard label="Presented" value={stats.byStatus.PRESENTED} color="text-amber-700" />
+                <StatCard label="Verified" value={stats.byStatus.VERIFIED} color="text-blue-700" />
+                <StatCard label="Cleared" value={stats.byStatus.CLEARED} color="text-emerald-700" />
+                <StatCard label="Returned" value={stats.byStatus.RETURNED} color="text-rose-700" />
               </div>
             )}
 
-            {/* India Next-Gen MISDESC 3.0: Continuous Clearing & e-Kuber Real-Time Console */}
+            {/* Continuous Clearing & e-Kuber Console */}
             <ContinuousClearingConsole />
 
             <FraudFlagsPanel />
 
             <SettlementSummary />
 
-            <div className="bg-white rounded-xl shadow p-6 border border-gray-100">
-              <h2 className="font-bold text-base text-gray-900 mb-4">Regulatory Clearing Audit Trail</h2>
+            {/* Audit Trail */}
+            <div className="bg-white rounded-xl shadow-xs p-6 border border-slate-200">
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="font-bold text-sm text-slate-900 uppercase tracking-wider">
+                  Regulatory Clearing Audit Trail
+                </h2>
+                <span className="text-xs text-slate-400 font-mono">
+                  {events.length} Event Logs
+                </span>
+              </div>
               <div className="space-y-2 max-h-96 overflow-y-auto pr-1">
                 {events.map((e) => (
-                  <div key={e.id} className="text-xs border-b border-gray-100 pb-2.5">
-                    <span className="font-mono text-[11px] text-gray-400">
+                  <div key={e.id} className="text-xs border-b border-slate-100 pb-2.5">
+                    <span className="font-mono text-[11px] text-slate-400">
                       {new Date(e.createdAt).toLocaleString()}
                     </span>{" "}
-                    - Cheque <span className="font-mono font-semibold">{e.cheque?.chequeNumber}</span>{" "}
-                    <span className="font-medium text-gray-700">
+                    - Cheque <span className="font-mono font-semibold text-slate-800">{e.cheque?.chequeNumber}</span>{" "}
+                    <span className="font-medium text-slate-700">
                       {e.fromStatus ? `${e.fromStatus} → ${e.toStatus}` : `created as ${e.toStatus}`}
                     </span>
-                    {e.actor && <span className="text-gray-400"> by {e.actor.name}</span>}
-                    {e.remarks && <div className="text-[11px] text-gray-500 mt-0.5">{e.remarks}</div>}
+                    {e.actor && <span className="text-slate-400"> by {e.actor.name}</span>}
+                    {e.remarks && <div className="text-[11px] text-slate-500 mt-0.5">{e.remarks}</div>}
                   </div>
                 ))}
               </div>
@@ -214,66 +189,62 @@ export default function AdminDashboard() {
         )}
 
         <Suspense fallback={<TabLoader />}>
-          {/* Tab 2: Clearing Sessions & Batches */}
+          {/* Tab 2: Sessions */}
           {activeTab === "batches" && (
-            <div className="animate-in fade-in duration-150">
+            <div>
               <BatchManagementPanel />
             </div>
           )}
 
-          {/* Tab 3: Financial Intelligence & Velocity Analytics */}
+          {/* Tab 3: Analytics */}
           {activeTab === "analytics" && (
-            <div className="animate-in fade-in duration-150">
+            <div>
               <AnalyticsDashboard />
             </div>
           )}
 
-          {/* Tab 4: Cryptographic Blockchain Audit Ledger */}
+          {/* Tab 4: Ledger & Integrity */}
           {activeTab === "ledger" && (
-            <div className="animate-in fade-in duration-150">
+            <div>
               <LedgerIntegrityPanel />
             </div>
           )}
 
-          {/* Tab 5: National War Room & DC Failover */}
-          {activeTab === "war_room" && (
-            <div className="animate-in fade-in duration-150">
-              <CyberneticWarRoomConsole />
-            </div>
-          )}
+          {/* Tab 5: Clean System Utilities Sub-Console */}
+          {activeTab === "utilities" && (
+            <div className="space-y-6">
+              <div className="bg-white border border-slate-200 rounded-xl p-3 flex flex-wrap gap-2 text-xs">
+                {[
+                  { id: "devops", label: "DevOps & SRE Diagnostics" },
+                  { id: "war_room", label: "DC Failover / War Room" },
+                  { id: "hsm", label: "Virtual HSM Key Ceremony" },
+                  { id: "stress", label: "TPS Stress Testing" },
+                  { id: "webhooks", label: "CBS Webhooks & API" },
+                  { id: "swarm", label: "AI Swarm Deliberation" },
+                ].map((item) => (
+                  <button
+                    key={item.id}
+                    type="button"
+                    onClick={() => setUtilitySubTab(item.id)}
+                    className={`px-3 py-1.5 rounded-lg font-medium transition-all cursor-pointer ${
+                      utilitySubTab === item.id
+                        ? "bg-slate-900 text-white"
+                        : "bg-slate-50 text-slate-600 hover:bg-slate-100 hover:text-slate-900 border border-slate-200"
+                    }`}
+                  >
+                    {item.label}
+                  </button>
+                ))}
+              </div>
 
-          {/* Tab 6: Virtual HSM & M-of-N Key Ceremony */}
-          {activeTab === "hsm" && (
-            <div className="animate-in fade-in duration-150">
-              <VirtualHSMEnclavePanel />
-            </div>
-          )}
-
-          {/* Tab 7: Autonomous 4-Agent Swarm Deliberation Sandbox */}
-          {activeTab === "swarm" && (
-            <div className="animate-in fade-in duration-150">
-              <SwarmDeliberationSandbox />
-            </div>
-          )}
-
-          {/* Tab 8: High-Throughput Stress Engine (1k+ TPS) */}
-          {activeTab === "stress" && (
-            <div className="animate-in fade-in duration-150">
-              <HighThroughputStressEngine />
-            </div>
-          )}
-
-          {/* Tab 9: Core Banking Webhooks & OpenAPI 3.0 Explorer */}
-          {activeTab === "webhooks" && (
-            <div className="animate-in fade-in duration-150">
-              <OpenBankingWebhookPortal />
-            </div>
-          )}
-
-          {/* Tab 10: DevOps & SRE Console */}
-          {activeTab === "devops" && (
-            <div className="animate-in fade-in duration-150">
-              <DevOpsConsole />
+              <div>
+                {utilitySubTab === "devops" && <DevOpsConsole />}
+                {utilitySubTab === "war_room" && <CyberneticWarRoomConsole />}
+                {utilitySubTab === "hsm" && <VirtualHSMEnclavePanel />}
+                {utilitySubTab === "stress" && <HighThroughputStressEngine />}
+                {utilitySubTab === "webhooks" && <OpenBankingWebhookPortal />}
+                {utilitySubTab === "swarm" && <SwarmDeliberationSandbox />}
+              </div>
             </div>
           )}
         </Suspense>

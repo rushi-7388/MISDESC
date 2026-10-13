@@ -93,6 +93,13 @@ export default function BranchManagerDashboard() {
 
           <div className="flex items-center gap-3">
             <Link
+              to="/reports"
+              className="bg-blue-700 hover:bg-blue-800 text-white px-4 py-2.5 rounded-xl font-bold text-xs transition-all shadow-xs cursor-pointer"
+            >
+              Branch MIS Reports
+            </Link>
+
+            <Link
               to="/rbac"
               className="bg-purple-50 hover:bg-purple-100 text-purple-700 border border-purple-200 px-4 py-2.5 rounded-xl font-bold text-xs transition-all shadow-xs cursor-pointer"
             >

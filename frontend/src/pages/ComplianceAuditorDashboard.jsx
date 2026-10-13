@@ -55,6 +55,12 @@ export default function ComplianceAuditorDashboard() {
           </div>
 
           <div className="flex items-center gap-2.5">
+            <a
+              href="/reports"
+              className="bg-blue-700 hover:bg-blue-800 text-white px-4 py-2.5 rounded-xl font-bold text-xs transition-all shadow-xs cursor-pointer inline-flex items-center gap-1.5"
+            >
+              <span>Regulatory MIS Reports</span>
+            </a>
             <button
               type="button"
               onClick={() => setShowPpsModal(true)}

@@ -386,6 +386,45 @@
           "legendFormat": "Watchlist Scan: {{verdict}}"
         }
       ]
+    },
+    {
+      "id": 17,
+      "title": "Bank MIS & Regulatory Reports Generated",
+      "type": "stat",
+      "gridPos": { "h": 4, "w": 8, "x": 0, "y": 37 },
+      "targets": [
+        {
+          "expr": "sum(MISDESC_reports_generated_total) or vector(0)",
+          "refId": "A",
+          "legendFormat": "Total Reports"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "thresholds" },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "blue", "value": null },
+              { "color": "green", "value": 1 }
+            ]
+          },
+          "unit": "short"
+        }
+      }
+    },
+    {
+      "id": 18,
+      "title": "Reports Generation Velocity by Regulatory Standard",
+      "type": "timeseries",
+      "gridPos": { "h": 4, "w": 16, "x": 8, "y": 37 },
+      "targets": [
+        {
+          "expr": "sum(rate(MISDESC_reports_generated_total[5m])) by (report_type)",
+          "refId": "A",
+          "legendFormat": "{{report_type}}"
+        }
+      ]
     }
   ],
   "refresh": "5s",
