@@ -1,5 +1,5 @@
 /**
- * Web Audio API chime synthesizer for real-time CTS notifications
+ * Web Audio API chime synthesizer for real-time MISDESC notifications
  * Requires zero external audio files and works across all modern browsers
  */
 export function playNotificationChime(type = "presentation") {

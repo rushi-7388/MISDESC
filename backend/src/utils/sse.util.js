@@ -8,7 +8,7 @@ function initSse(req, res) {
   res.flushHeaders?.();
 
   // Send initial connection handshake
-  res.write(`event: CONNECTED\ndata: ${JSON.stringify({ message: "Connected to CTS Real-Time Event Stream", timestamp: new Date().toISOString() })}\n\n`);
+  res.write(`event: CONNECTED\ndata: ${JSON.stringify({ message: "Connected to MISDESC Real-Time Event Stream", timestamp: new Date().toISOString() })}\n\n`);
 
   clients.add(res);
 

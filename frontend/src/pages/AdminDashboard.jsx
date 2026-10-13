@@ -11,6 +11,9 @@ const AnalyticsDashboard = lazy(() => import("../components/AnalyticsDashboard")
 const LedgerIntegrityPanel = lazy(() => import("../components/LedgerIntegrityPanel"));
 const VirtualHSMEnclavePanel = lazy(() => import("../components/VirtualHSMEnclavePanel"));
 const CyberneticWarRoomConsole = lazy(() => import("../components/CyberneticWarRoomConsole"));
+const SwarmDeliberationSandbox = lazy(() => import("../components/SwarmDeliberationSandbox"));
+const HighThroughputStressEngine = lazy(() => import("../components/HighThroughputStressEngine"));
+const OpenBankingWebhookPortal = lazy(() => import("../components/OpenBankingWebhookPortal"));
 
 function TabLoader() {
   return (
@@ -128,6 +131,36 @@ export default function AdminDashboard() {
             </button>
             <button
               type="button"
+              onClick={() => setActiveTab("swarm")}
+              className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${activeTab === "swarm"
+                  ? "bg-purple-700 text-white shadow-xs font-bold"
+                  : "text-gray-600 hover:text-gray-900"
+                }`}
+            >
+              🤖 AI Swarm Sandbox
+            </button>
+            <button
+              type="button"
+              onClick={() => setActiveTab("stress")}
+              className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${activeTab === "stress"
+                  ? "bg-rose-700 text-white shadow-xs font-bold"
+                  : "text-gray-600 hover:text-gray-900"
+                }`}
+            >
+              🚀 Stress Engine (1k+ TPS)
+            </button>
+            <button
+              type="button"
+              onClick={() => setActiveTab("webhooks")}
+              className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${activeTab === "webhooks"
+                  ? "bg-indigo-700 text-white shadow-xs font-bold"
+                  : "text-gray-600 hover:text-gray-900"
+                }`}
+            >
+              📡 CBS Webhooks & Open Banking
+            </button>
+            <button
+              type="button"
               onClick={() => setActiveTab("devops")}
               className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${activeTab === "devops"
                   ? "bg-brand-600 text-white shadow-xs"
@@ -152,7 +185,7 @@ export default function AdminDashboard() {
               </div>
             )}
 
-            {/* India Next-Gen CTS 3.0: Continuous Clearing & e-Kuber Real-Time Console */}
+            {/* India Next-Gen MISDESC 3.0: Continuous Clearing & e-Kuber Real-Time Console */}
             <ContinuousClearingConsole />
 
             <FraudFlagsPanel />
@@ -216,7 +249,28 @@ export default function AdminDashboard() {
             </div>
           )}
 
-          {/* Tab 7: DevOps & SRE Console */}
+          {/* Tab 7: Autonomous 4-Agent Swarm Deliberation Sandbox */}
+          {activeTab === "swarm" && (
+            <div className="animate-in fade-in duration-150">
+              <SwarmDeliberationSandbox />
+            </div>
+          )}
+
+          {/* Tab 8: High-Throughput Stress Engine (1k+ TPS) */}
+          {activeTab === "stress" && (
+            <div className="animate-in fade-in duration-150">
+              <HighThroughputStressEngine />
+            </div>
+          )}
+
+          {/* Tab 9: Core Banking Webhooks & OpenAPI 3.0 Explorer */}
+          {activeTab === "webhooks" && (
+            <div className="animate-in fade-in duration-150">
+              <OpenBankingWebhookPortal />
+            </div>
+          )}
+
+          {/* Tab 10: DevOps & SRE Console */}
           {activeTab === "devops" && (
             <div className="animate-in fade-in duration-150">
               <DevOpsConsole />

@@ -1,6 +1,6 @@
 /**
  * Automated Multi-Role RBAC & Health Verification Diagnostic
- * Validates authentication, JWT signing, and route authorization across all 7 CTS roles.
+ * Validates authentication, JWT signing, and route authorization across all 7 MISDESC roles.
  */
 const BASE_URL = process.env.BACKEND_URL || "http://localhost:5000";
 
@@ -25,7 +25,7 @@ const TEST_ROLES = [
   },
   {
     role: "ADMIN",
-    email: "admin@cts.com",
+    email: "admin@MISDESC.com",
     expectedRoute: "/api/admin/stats",
     forbiddenRoute: null, // Admin has universal access
   },
@@ -37,7 +37,7 @@ const TEST_ROLES = [
   },
   {
     role: "IT_STAFF",
-    email: "itops@cts.com",
+    email: "itops@MISDESC.com",
     expectedRoute: "/api/devops/sre-stats",
     forbiddenRoute: "/api/branch/summary",
   },
@@ -49,7 +49,7 @@ const TEST_ROLES = [
   },
   {
     role: "SETTLEMENT_OFFICER",
-    email: "treasury@cts.com",
+    email: "treasury@MISDESC.com",
     expectedRoute: "/api/settlements/continuous/status",
     forbiddenRoute: "/api/branch/summary",
   },
@@ -80,7 +80,7 @@ async function testEndpoint(url, token) {
 
 async function run() {
   console.log("==================================================");
-  console.log("   CTS Multi-Role RBAC & Security Diagnostic      ");
+  console.log("   MISDESC Multi-Role RBAC & Security Diagnostic      ");
   console.log("==================================================");
   console.log(`Target Switch Backend: ${BASE_URL}\n`);
 
@@ -147,7 +147,7 @@ async function run() {
     console.log(`>>> ${failedTests} diagnostic test(s) FAILED!`);
     process.exit(1);
   } else {
-    console.log(">>> ALL 7 CTS ROLES & SRE PROBES FULLY VERIFIED.");
+    console.log(">>> ALL 7 MISDESC ROLES & SRE PROBES FULLY VERIFIED.");
     process.exit(0);
   }
 }

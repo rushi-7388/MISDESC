@@ -15,7 +15,7 @@ async function scanOcrCheque(req, res) {
     const filePath = req.file ? req.file.path : null;
     const { hintText } = req.body;
 
-    const result = scanChequeOCR(filePath, hintText);
+    const result = await scanChequeOCR(filePath, hintText);
     return res.json(result);
   } catch (err) {
     console.error("OCR scan error:", err);
@@ -49,7 +49,7 @@ async function createCheque(req, res) {
       if (parsed.chequeNumber === "000102") imageUrl = "/cheque-000102.jpg";
       else if (parsed.chequeNumber === "000123") imageUrl = "/cheque-000123.jpg";
       else imageUrl = "/sample-cheque.jpg";
-      imageHash = `sha256_cts2010_${parsed.chequeNumber}_${Date.now()}`;
+      imageHash = `sha256_MISDESC2010_${parsed.chequeNumber}_${Date.now()}`;
     }
 
     // 1. Dynamic Risk Evaluation (0 - 100) with Positive Pay Cross-Match
@@ -321,12 +321,12 @@ async function bulkIngestCheques(req, res) {
           results.push({
             success: false,
             chequeNumber,
-            error: `Drawee bank IFSC ${draweeIfsc} not registered in CTS network`,
+            error: `Drawee bank IFSC ${draweeIfsc} not registered in MISDESC network`,
           });
           continue;
         }
 
-        // Standardized CTS-2010 MICR line
+        // Standardized MISDESC-2010 MICR line
         const micrLine = item.micrLine || `C${chequeNumber}C 395002002A ${accountNumber}C 10`;
 
         // 1. Risk Evaluation & Positive Pay System Cross-Match

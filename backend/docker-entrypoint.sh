@@ -20,5 +20,5 @@ if [ "$SEED_DB" != "false" ]; then
   node prisma/seed.js || echo "Seed step failed or already applied, continuing."
 fi
 
-echo "Starting CTS backend..."
+echo "Starting MISDESC backend..."
 exec node src/server.js

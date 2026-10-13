@@ -32,7 +32,7 @@ async function del(url, token) {
 }
 
 async function runTest() {
-  console.log("=== CTS RBAC Module Diagnostic Suite ===");
+  console.log("=== MISDESC RBAC Module Diagnostic Suite ===");
 
   try {
     // 1. Manager Login

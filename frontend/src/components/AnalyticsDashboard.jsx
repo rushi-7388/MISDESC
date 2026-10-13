@@ -92,7 +92,7 @@ export default function AnalyticsDashboard() {
         <div className="bg-white rounded-xl shadow border border-gray-100 p-6">
           <h3 className="font-bold text-sm text-gray-900 mb-1">Cheque Return Reasons Breakdown</h3>
           <p className="text-xs text-gray-500 mb-5">
-            Distribution of return codes issued under Section 138 / CTS-2010 rules.
+            Distribution of return codes issued under Section 138 / MISDESC-2010 rules.
           </p>
 
           <div className="space-y-3">

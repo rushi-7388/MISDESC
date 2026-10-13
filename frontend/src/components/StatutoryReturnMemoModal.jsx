@@ -181,14 +181,14 @@ export default function StatutoryReturnMemoModal({ chequeId, onClose }) {
                     Session: {memo.session} · Date: {new Date(memo.dateOfReturn).toLocaleString()}
                   </div>
                   <div className="text-[10px] text-gray-400 font-mono break-all max-w-sm">
-                    CTS Digital Seal: {memo.digitalSeal.verificationDigest}
+                    MISDESC Digital Seal: {memo.digitalSeal.verificationDigest}
                   </div>
                 </div>
 
                 <div className="flex items-center gap-3">
                   <div className="text-right">
                     <div className="text-[10px] font-bold uppercase tracking-wider text-rose-800">
-                      OFFICIAL CTS
+                      OFFICIAL MISDESC
                     </div>
                     <div className="text-[9px] text-gray-500">DIGITAL BANK SEAL</div>
                   </div>

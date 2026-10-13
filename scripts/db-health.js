@@ -1,20 +1,20 @@
 #!/usr/bin/env node
 // ==============================================================================
-// CTS Database Health & Diagnostic Tool
+// MISDESC Database Health & Diagnostic Tool
 // ==============================================================================
 const { PrismaClient } = require("../backend/node_modules/@prisma/client");
 
 const prisma = new PrismaClient({
   datasources: {
     db: {
-      url: process.env.DATABASE_URL || "postgresql://cts:cts_password@localhost:5432/cts_system?schema=public",
+      url: process.env.DATABASE_URL || "postgresql://MISDESC:MISDESC_password@localhost:5432/MISDESC_system?schema=public",
     },
   },
 });
 
 async function main() {
   console.log("==================================================");
-  console.log("   CTS PostgreSQL Health & Reliability Monitor    ");
+  console.log("   MISDESC PostgreSQL Health & Reliability Monitor    ");
   console.log("==================================================");
 
   const start = Date.now();
@@ -56,7 +56,7 @@ async function main() {
     console.log(`- Clearing Audit Events:   ${clearingEvents}`);
     console.log(`- Telemetry SRE Events:    ${telemetry}`);
 
-    console.log("\n>>> PostgreSQL CTS Health check PASSED with 0 errors.");
+    console.log("\n>>> PostgreSQL MISDESC Health check PASSED with 0 errors.");
     process.exit(0);
   } catch (err) {
     console.error("\n>>> Health check FAILED:", err.message);

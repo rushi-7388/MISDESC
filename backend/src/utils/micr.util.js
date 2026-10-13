@@ -1,7 +1,7 @@
 /**
  * Simulated MICR band parser.
  *
- * Real CTS systems read the MICR line (E-13B font) off the physical cheque via
+ * Real MISDESC systems read the MICR line (E-13B font) off the physical cheque via
  * a scanner. For this simulation we accept a MICR-style string typed/entered
  * at upload time, in the simplified layout:
  *

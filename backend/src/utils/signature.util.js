@@ -46,7 +46,7 @@ function generateSignatureVectors(accountNumber) {
       verdict,
       recommendation:
         matchScore >= 80
-          ? "Specimen signature aligns within standard CTS-2010 biometric tolerance. Authorized for clearance."
+          ? "Specimen signature aligns within standard MISDESC-2010 biometric tolerance. Authorized for clearance."
           : "Disparity exceeds 15% threshold. Potential signature forgery detected. Route to Senior Checker or Return Code 02.",
     },
   };

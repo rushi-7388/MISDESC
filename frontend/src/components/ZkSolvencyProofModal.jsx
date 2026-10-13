@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from "react";
 import client from "../api/client";
+import { verifyGroth16ProofClientWasm } from "../utils/zkSnarkVerifier";
 
 export default function ZkSolvencyProofModal({ cheque, onClose }) {
   const [loading, setLoading] = useState(true);
   const [proofPackage, setProofPackage] = useState(null);
   const [verifying, setVerifying] = useState(false);
   const [verificationResult, setVerificationResult] = useState(null);
+  const [verificationMode, setVerificationMode] = useState("wasm"); // "wasm" (Client) or "server" (Switch)
+  const [wasmTrace, setWasmTrace] = useState(null);
 
   useEffect(() => {
     async function fetchOrGenerateProof() {
@@ -27,14 +30,33 @@ export default function ZkSolvencyProofModal({ cheque, onClose }) {
     }
   }, [cheque]);
 
-  const handleVerify = async () => {
+  // Client-Side WASM Verification
+  const handleVerifyClientWasm = async () => {
     if (!proofPackage) return;
     try {
       setVerifying(true);
+      setVerificationMode("wasm");
+      const result = await verifyGroth16ProofClientWasm(proofPackage);
+      setVerificationResult(result);
+      setWasmTrace(result.trace);
+    } catch (err) {
+      alert("Client WASM verification failed: " + err.message);
+    } finally {
+      setVerifying(false);
+    }
+  };
+
+  // Server-Side Central Clearing Switch Verification
+  const handleVerifyServer = async () => {
+    if (!proofPackage) return;
+    try {
+      setVerifying(true);
+      setVerificationMode("server");
       const res = await client.post("/zkp/verify", proofPackage);
       setVerificationResult(res.data);
+      setWasmTrace(null);
     } catch (err) {
-      alert("Verification failed: " + (err.response?.data?.error || err.message));
+      alert("Server verification failed: " + (err.response?.data?.error || err.message));
     } finally {
       setVerifying(false);
     }
@@ -42,7 +64,7 @@ export default function ZkSolvencyProofModal({ cheque, onClose }) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
-      <div className="bg-slate-950 border border-slate-800 rounded-3xl w-full max-w-3xl max-h-[90vh] overflow-hidden flex flex-col shadow-2xl text-white">
+      <div className="bg-slate-950 border border-slate-800 rounded-3xl w-full max-w-3xl max-h-[92vh] overflow-hidden flex flex-col shadow-2xl text-white">
         {/* Header */}
         <div className="p-5 border-b border-slate-800/80 flex items-center justify-between bg-gradient-to-r from-slate-900 to-slate-950">
           <div className="flex items-center gap-3">
@@ -70,7 +92,7 @@ export default function ZkSolvencyProofModal({ cheque, onClose }) {
         </div>
 
         {/* Content Body */}
-        <div className="p-6 overflow-y-auto flex-1 space-y-6 text-xs">
+        <div className="p-6 overflow-y-auto flex-1 space-y-5 text-xs">
           {loading ? (
             <div className="py-20 flex flex-col items-center justify-center space-y-3">
               <div className="w-10 h-10 border-3 border-teal-500 border-t-transparent rounded-full animate-spin" />
@@ -140,26 +162,45 @@ export default function ZkSolvencyProofModal({ cheque, onClose }) {
                   <div className="truncate"><span className="text-teal-400">pi_a[1]:</span> {proofPackage.proof.pi_a[1]}</div>
                   <div className="truncate"><span className="text-indigo-400">pi_b[0][0]:</span> {proofPackage.proof.pi_b[0][0]}</div>
                   <div className="truncate"><span className="text-purple-400">pi_c[0]:</span> {proofPackage.proof.pi_c[0]}</div>
-                  <div className="text-[10px] text-slate-500 pt-1 border-t border-slate-800">
-                    Curve: {proofPackage.curve}
+                  <div className="text-[10px] text-slate-500 pt-1 border-t border-slate-800 flex justify-between">
+                    <span>Curve: {proofPackage.curve}</span>
+                    <span className="text-teal-400">snarkjs WASM Binary Support Ready</span>
                   </div>
                 </div>
               </div>
 
               {/* Verification Outcome Box */}
               {verificationResult && (
-                <div className="p-4 rounded-xl bg-emerald-950/60 border border-emerald-600 space-y-2">
+                <div className="p-4 rounded-xl bg-emerald-950/60 border border-emerald-600 space-y-3">
                   <div className="flex items-center justify-between">
-                    <span className="font-bold text-emerald-300 text-xs">
-                      ✓ Groth16 Bilinear Pairing Validated in {verificationResult.verificationTimeMs} ms
+                    <span className="font-bold text-emerald-300 text-xs flex items-center gap-2">
+                      <span>✓</span>
+                      {verificationMode === "wasm"
+                        ? `Client-Side WASM snarkjs Bilinear Pairing Validated in ${verificationResult.executionTimeMs} ms`
+                        : `Clearing Switch Bilinear Pairing Validated in ${verificationResult.verificationTimeMs} ms`}
                     </span>
                     <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-900 text-emerald-200">
-                      PAIRING SUCCESS
+                      {verificationMode === "wasm" ? "WASM CLIENT SUCCESS" : "SWITCH SERVER SUCCESS"}
                     </span>
                   </div>
                   <p className="text-slate-300 text-[11px]">
-                    The Clearing House pairing equation <code className="text-teal-300">e(A, B) == e(α, β) · e(x, γ) · e(C, δ)</code> evaluated to true. Clearing approved without data exposure.
+                    The Bilinear Pairing equation <code className="text-teal-300 font-mono">e(pi_A, pi_B) == e(α, β) · e(x, γ) · e(pi_C, δ)</code> evaluated to true. Clearing approved without drawer data exposure.
                   </p>
+
+                  {/* WASM Trace Steps */}
+                  {wasmTrace && (
+                    <div className="bg-slate-950/80 rounded-lg p-3 border border-emerald-900/60 space-y-1.5 font-mono text-[10px]">
+                      <div className="text-emerald-400 font-bold mb-1">WebAssembly Runtime Execution Trace:</div>
+                      {wasmTrace.map((t) => (
+                        <div key={t.step} className="flex items-start gap-2 text-slate-300">
+                          <span className="text-teal-400 font-bold">[{t.step}/6]</span>
+                          <span className="text-slate-400">{t.title}:</span>
+                          <span className="text-white truncate">{t.detail}</span>
+                          <span className="ml-auto text-emerald-400 font-bold shrink-0">✓ {t.status}</span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
               )}
             </>
@@ -168,20 +209,31 @@ export default function ZkSolvencyProofModal({ cheque, onClose }) {
           )}
         </div>
 
-        {/* Footer */}
-        <div className="p-4 border-t border-slate-800/80 bg-slate-900/80 flex items-center justify-between">
+        {/* Footer with Dual Verification Controls */}
+        <div className="p-4 border-t border-slate-800/80 bg-slate-900/80 flex flex-wrap items-center justify-between gap-3">
           <span className="text-[11px] text-slate-400 font-mono">
             Security: 128-bit BN254 Pairing · Section 29A Privacy Mandate
           </span>
 
-          <button
-            type="button"
-            onClick={handleVerify}
-            disabled={verifying || !proofPackage}
-            className="px-4 py-2 rounded-xl text-xs font-bold bg-gradient-to-r from-teal-600 to-cyan-500 hover:from-teal-500 hover:to-cyan-400 text-white shadow-lg transition-all cursor-pointer disabled:opacity-50 flex items-center gap-2"
-          >
-            {verifying ? "Executing Bilinear Pairing..." : "⚡ Verify zk-Proof on Clearing Switch"}
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={handleVerifyClientWasm}
+              disabled={verifying || !proofPackage}
+              className="px-3.5 py-2 rounded-xl text-xs font-bold bg-gradient-to-r from-teal-600 to-emerald-600 hover:from-teal-500 hover:to-emerald-500 text-white shadow-lg transition-all cursor-pointer disabled:opacity-50 flex items-center gap-1.5"
+            >
+              {verifying && verificationMode === "wasm" ? "Executing WASM Pairing..." : "⚡ Run Client-Side WASM Verifier"}
+            </button>
+
+            <button
+              type="button"
+              onClick={handleVerifyServer}
+              disabled={verifying || !proofPackage}
+              className="px-3 py-2 rounded-xl text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition-all cursor-pointer disabled:opacity-50 flex items-center gap-1.5"
+            >
+              {verifying && verificationMode === "server" ? "Verifying..." : "Central Switch Verify"}
+            </button>
+          </div>
         </div>
       </div>
     </div>

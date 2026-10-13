@@ -5,21 +5,21 @@ const AuthContext = createContext(null);
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(() => {
-    const stored = localStorage.getItem("cts_user");
+    const stored = localStorage.getItem("MISDESC_user");
     return stored ? JSON.parse(stored) : null;
   });
 
   async function login(email, password) {
     const { data } = await client.post("/auth/login", { email, password });
-    localStorage.setItem("cts_token", data.token);
-    localStorage.setItem("cts_user", JSON.stringify(data.user));
+    localStorage.setItem("MISDESC_token", data.token);
+    localStorage.setItem("MISDESC_user", JSON.stringify(data.user));
     setUser(data.user);
     return data.user;
   }
 
   function logout() {
-    localStorage.removeItem("cts_token");
-    localStorage.removeItem("cts_user");
+    localStorage.removeItem("MISDESC_token");
+    localStorage.removeItem("MISDESC_user");
     setUser(null);
   }
 

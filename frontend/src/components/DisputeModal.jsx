@@ -57,7 +57,7 @@ export default function DisputeModal({ cheque, onClose, onSubmitted }) {
         <div className="flex items-center justify-between border-b border-slate-100 pb-3">
           <div>
             <div className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[10px] font-bold bg-amber-50 text-amber-800 border border-amber-200">
-              NPCI CTS DRM · Rule 32
+              NPCI MISDESC DRM · Rule 32
             </div>
             <h3 className="font-bold text-slate-900 text-base mt-1">
               File Clearing Dispute & Chargeback

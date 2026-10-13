@@ -249,27 +249,30 @@ async function quickDb(fn) {
   }
 }
 
+const trackedLiveChequeIds = new Set();
+
 /**
  * Returns current interbank gridlock topology, cycle analysis, and bilateral offset opportunities.
  */
 async function getGridlockTopology() {
   if (!activeLsmState) {
     activeLsmState = initializeDefaultTopology();
+    trackedLiveChequeIds.clear();
   }
 
-  // Gracefully incorporate real database pending cheques if available
+  // Incorporate real database cheques in PRESENTED / AWAITING_CHECKER status
   const dbPendingCheques = await quickDb(() =>
     prisma.cheque.findMany({
       where: {
-        status: { in: ["PRESENTED", "VERIFIED", "AWAITING_CHECKER"] },
+        status: { in: ["PRESENTED", "AWAITING_CHECKER"] },
       },
       select: {
         id: true,
         amount: true,
         presentingBankId: true,
         draweeBankId: true,
-        presentingBank: { select: { code: true, name: true } },
-        draweeBank: { select: { code: true, name: true } },
+        presentingBank: { select: { id: true, code: true, name: true } },
+        draweeBank: { select: { id: true, code: true, name: true } },
       },
     })
   );
@@ -278,15 +281,60 @@ async function getGridlockTopology() {
     dbPendingCheques.forEach((chq) => {
       const pCode = chq.presentingBank?.code || "SRT";
       const dCode = chq.draweeBank?.code || "HDB";
-      const existingEdge = activeLsmState.edges.find(
-        (e) => (e.sourceCode === dCode && e.targetCode === pCode) || (e.source === chq.draweeBankId && e.target === chq.presentingBankId)
-      );
-      if (existingEdge) {
-        existingEdge.txCount += 1;
+      const sourceId = chq.draweeBankId || `bank-${dCode.toLowerCase()}`;
+      const targetId = chq.presentingBankId || `bank-${pCode.toLowerCase()}`;
+
+      // Register bank nodes if not present
+      if (!activeLsmState.nodes.some((n) => n.id === sourceId || n.code === dCode)) {
+        activeLsmState.nodes.push({
+          id: sourceId,
+          code: dCode,
+          name: chq.draweeBank?.name || dCode,
+          collateral: 30000000,
+          creditLine: 5000000,
+          availableHeadroom: 2000000,
+          totalCapacity: 35000000,
+          status: "HEALTHY",
+        });
+      }
+      if (!activeLsmState.nodes.some((n) => n.id === targetId || n.code === pCode)) {
+        activeLsmState.nodes.push({
+          id: targetId,
+          code: pCode,
+          name: chq.presentingBank?.name || pCode,
+          collateral: 30000000,
+          creditLine: 5000000,
+          availableHeadroom: 2000000,
+          totalCapacity: 35000000,
+          status: "HEALTHY",
+        });
+      }
+
+      // Add to edge volume only if this specific cheque instance hasn't been added yet
+      if (!trackedLiveChequeIds.has(chq.id)) {
+        trackedLiveChequeIds.add(chq.id);
+        const existingEdge = activeLsmState.edges.find(
+          (e) => (e.sourceCode === dCode && e.targetCode === pCode) || (e.source === sourceId && e.target === targetId)
+        );
+        if (existingEdge) {
+          existingEdge.txCount += 1;
+          existingEdge.amount += Number(chq.amount || 0);
+        } else {
+          activeLsmState.edges.push({
+            id: `edge-${dCode.toLowerCase()}-${pCode.toLowerCase()}-${Date.now().toString().slice(-4)}`,
+            source: sourceId,
+            sourceCode: dCode,
+            target: targetId,
+            targetCode: pCode,
+            amount: Number(chq.amount || 0),
+            txCount: 1,
+            priority: "HIGH",
+            isInGridlock: false,
+          });
+        }
       }
     });
   }
-
 
   const { nodes, edges } = activeLsmState;
   const detectedCycles = findDirectedCycles(nodes, edges);
@@ -414,6 +462,50 @@ async function resolveGridlock(options = {}) {
     }
   } catch (err) {}
 
+  // Multi-Cheque Atomic Realization via Prisma Transaction
+  let realizedCheques = [];
+  if (prisma && prisma.cheque) {
+    try {
+      await prisma.$transaction(async (tx) => {
+        const eligibleCheques = await tx.cheque.findMany({
+          where: {
+            status: { in: ["PRESENTED", "AWAITING_CHECKER"] },
+          },
+          select: {
+            id: true,
+            chequeNumber: true,
+            amount: true,
+            presentingBankId: true,
+            draweeBankId: true,
+          },
+        });
+
+        if (eligibleCheques && eligibleCheques.length > 0) {
+          const dateStr = new Date().toISOString().slice(0, 10).replace(/-/g, "");
+          for (const chq of eligibleCheques) {
+            const utr = `UTR-LSM-${dateStr}-${crypto.randomBytes(4).toString("hex").toUpperCase()}`;
+            await tx.cheque.update({
+              where: { id: chq.id },
+              data: {
+                status: "CLEARED",
+                settlementMode: "LSM_TARJAN_NETTING",
+                settledAt: new Date(),
+                ekuberUtr: utr,
+                beneficiaryCreditStatus: "CREDITED_MULTILATERAL_OFFSET",
+              },
+            });
+            realizedCheques.push({
+              chequeId: chq.id,
+              chequeNumber: chq.chequeNumber,
+              amount: chq.amount,
+              utr,
+            });
+          }
+        }
+      });
+    } catch (err) {}
+  }
+
   const receipt = {
     resolutionId: `LSM-${Date.now()}-${crypto.randomBytes(3).toString("hex").toUpperCase()}`,
     algorithm: "Tarjan Strongly Connected Component Cycle Cancellation + Bilateral Greedy Max-Flow",
@@ -425,27 +517,14 @@ async function resolveGridlock(options = {}) {
     centralBankReservesConsumed: 0.0, // Zero central bank cash required!
     liquiditySavingsRatio: "100.0%",
     regulatoryAuthority: "Reserve Bank of India / Clearing Corporation of India (CCIL)",
+    realizedChequesCount: realizedCheques.length,
+    realizedCheques,
     sha256CertificateHash: crypto
       .createHash("sha256")
       .update(JSON.stringify(resolutionDetails) + Date.now())
       .digest("hex"),
     cyclesResolved: resolutionDetails,
   };
-
-  // Attempt to settle matching live cheques in database if DB is online
-  await quickDb(() =>
-    prisma.cheque.updateMany({
-      where: {
-        status: "AWAITING_CHECKER",
-      },
-      data: {
-        status: "CLEARED",
-        settlementMode: "LSM_GRIDLOCK_CYCLE",
-        settledAt: new Date(),
-        beneficiaryCreditStatus: "CREDITED_LSM",
-      },
-    })
-  );
 
   broadcastEvent("LSM_GRIDLOCK_RESOLVED", {
     receipt,
@@ -458,6 +537,7 @@ async function resolveGridlock(options = {}) {
     topology: await getGridlockTopology(),
   };
 }
+
 
 /**
  * Toggles continuous background gridlock daemon loop
@@ -498,7 +578,74 @@ function getDaemonStatus() {
 
 function resetTopology() {
   activeLsmState = initializeDefaultTopology();
+  trackedLiveChequeIds.clear();
   return getGridlockTopology();
+}
+
+/**
+ * InjeMISDESC an interbank clearing shock or liquidity stress event into the active network topology.
+ */
+async function injectLiquidityShock(options = {}) {
+  if (!activeLsmState) {
+    activeLsmState = initializeDefaultTopology();
+    trackedLiveChequeIds.clear();
+  }
+
+  const {
+    shockType = "SURGE",
+    amount = 500000000, // ₹50 Crore
+    targetBank = "bank-srt",
+  } = options;
+
+  const shockId = `SHOCK-${Date.now()}-${crypto.randomBytes(3).toString("hex").toUpperCase()}`;
+  const timestamp = new Date().toISOString();
+
+  if (shockType === "COLLATERAL_FREEZE") {
+    const node = activeLsmState.nodes.find((n) => n.id === targetBank || n.code === targetBank);
+    if (node) {
+      node.availableHeadroom = 100000;
+      node.collateral = Math.max(1000000, node.collateral - 10000000);
+      node.status = "GRIDLOCK_RESTRICTED";
+    }
+  } else {
+    const surgePerLeg = Math.round(Number(amount) / 3);
+    const affectedEdgeIds = ["edge-srt-sbi", "edge-sbi-hdfc", "edge-hdfc-srt"];
+
+    activeLsmState.edges.forEach((edge) => {
+      if (affectedEdgeIds.includes(edge.id)) {
+        edge.amount += surgePerLeg;
+        edge.isInGridlock = true;
+        edge.txCount += 120;
+      }
+    });
+
+    activeLsmState.nodes.forEach((node) => {
+      if (["bank-srt", "bank-sbi", "bank-hdfc"].includes(node.id)) {
+        node.availableHeadroom = Math.max(100000, node.availableHeadroom - 1000000);
+        node.status = "GRIDLOCK_RESTRICTED";
+      }
+    });
+  }
+
+  const shockEvent = {
+    shockId,
+    shockType,
+    injectedAmount: Number(amount),
+    targetBank,
+    timestamp,
+    narrative:
+      shockType === "COLLATERAL_FREEZE"
+        ? `Simulated critical collateral impairment on ${targetBank}. Headroom restricted to near zero.`
+        : `Simulated sudden ₹${(Number(amount) / 10000000).toFixed(0)} Crore inward clearing volume surge across national gridlock corridor.`,
+  };
+
+  broadcastEvent("LSM_SHOCK_INJECTED", shockEvent);
+
+  return {
+    success: true,
+    shock: shockEvent,
+    topology: await getGridlockTopology(),
+  };
 }
 
 module.exports = {
@@ -507,4 +654,6 @@ module.exports = {
   resetTopology,
   toggleAutoDaemon,
   getDaemonStatus,
+  injectLiquidityShock,
 };
+

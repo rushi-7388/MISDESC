@@ -215,7 +215,7 @@ async function getReturnMemo(req, res) {
     }
 
     const returnEvent = cheque.events[0];
-    const memoRef = `CTS/DISHONOUR/${cheque.chequeNumber}/${new Date().getFullYear()}/${cheque.id.slice(0, 6).toUpperCase()}`;
+    const memoRef = `MISDESC/DISHONOUR/${cheque.chequeNumber}/${new Date().getFullYear()}/${cheque.id.slice(0, 6).toUpperCase()}`;
 
     let matchedCode = "99";
     for (const [code, desc] of Object.entries(RETURN_REASON_CODES)) {
@@ -227,7 +227,7 @@ async function getReturnMemo(req, res) {
 
     return res.json({
       memoRef,
-      statutoryAct: "Section 138 of the Negotiable Instruments Act, 1881 & CTS Rule 31",
+      statutoryAct: "Section 138 of the Negotiable Instruments Act, 1881 & MISDESC Rule 31",
       clearingHouse: "National Payments Corporation & Interbank Clearing House",
       dateOfReturn: returnEvent?.createdAt || cheque.updatedAt,
       session: cheque.batch?.sessionName || "Standard Morning Clearing Cycle",
@@ -253,9 +253,9 @@ async function getReturnMemo(req, res) {
         returnedByOfficer: returnEvent?.actor?.name || "Senior Clearing Officer",
       },
       legalNoticeClause:
-        "TAKE NOTICE that the above-mentioned cheque presented for payment through the Cheque Truncation System (CTS) has been returned UNPAID for the reason specified herein. Under Section 138 of the Negotiable Instruments Act, 1881, this memo constitutes statutory proof of dishonour of the instrument upon presentation.",
+        "TAKE NOTICE that the above-mentioned cheque presented for payment through the Cheque Truncation System (MISDESC) has been returned UNPAID for the reason specified herein. Under Section 138 of the Negotiable Instruments Act, 1881, this memo constitutes statutory proof of dishonour of the instrument upon presentation.",
       digitalSeal: {
-        algorithm: "SHA-256 with CTS PKI Root Certificate",
+        algorithm: "SHA-256 with MISDESC PKI Root Certificate",
         verificationDigest: cheque.imageHash || "0000000000000000000000000000000000000000",
         issuedAt: new Date().toISOString(),
       },

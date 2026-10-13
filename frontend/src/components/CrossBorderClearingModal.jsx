@@ -70,7 +70,7 @@ export default function CrossBorderClearingModal({ cheque, onClose }) {
             <div>
               <div className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-bold bg-cyan-950 text-cyan-300 border border-cyan-800/60 mb-0.5">
                 <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-ping" />
-                Cross-Border Multi-Currency CTS · ISO 20022 CBPR+
+                Cross-Border Multi-Currency MISDESC · ISO 20022 CBPR+
               </div>
               <h2 className="text-base font-bold text-white flex items-center gap-2">
                 International Clearing & Sanctions Radar · Cheque #{cheque.chequeNumber}

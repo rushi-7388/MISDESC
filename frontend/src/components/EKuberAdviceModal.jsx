@@ -141,7 +141,7 @@ export default function EKuberAdviceModal({ chequeId, onClose }) {
                 <div>
                   <span className="text-[10px] text-gray-500 block">e-Kuber Clearing Ref</span>
                   <span className="font-bold text-gray-800">
-                    {cheque?.ekuberRef || "EKUBER/CTS3/SETTL"}
+                    {cheque?.ekuberRef || "EKUBER/MISDESC3/SETTL"}
                   </span>
                 </div>
                 <div>
@@ -187,7 +187,7 @@ export default function EKuberAdviceModal({ chequeId, onClose }) {
               {/* Instrument & Beneficiary Dispatch Card */}
               <div className="bg-white p-3 rounded-lg border border-gray-200 space-y-2 text-xs">
                 <div className="flex justify-between items-center border-b border-gray-100 pb-2">
-                  <span className="text-gray-600 font-semibold">Underlying CTS Instrument:</span>
+                  <span className="text-gray-600 font-semibold">Underlying MISDESC Instrument:</span>
                   <span className="font-mono font-bold text-gray-900">
                     Cheque #{cheque?.chequeNumber} · A/C {cheque?.accountNumber}
                   </span>

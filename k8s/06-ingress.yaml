@@ -1,8 +1,8 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: cts-ingress
-  namespace: cts-system
+  name: MISDESC-ingress
+  namespace: MISDESC-system
   annotations:
     nginx.ingress.kubernetes.io/proxy-body-size: "25m"
     nginx.ingress.kubernetes.io/ssl-redirect: "false"

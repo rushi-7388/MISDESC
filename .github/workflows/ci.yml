@@ -1,4 +1,4 @@
-name: CTS Full-Stack & DevOps CI/CD Pipeline
+name: MISDESC Full-Stack & DevOps CI/CD Pipeline
 
 on:
   push:
@@ -15,9 +15,9 @@ jobs:
       postgres:
         image: postgres:16-alpine
         env:
-          POSTGRES_USER: cts
-          POSTGRES_PASSWORD: cts_password
-          POSTGRES_DB: cts_system
+          POSTGRES_USER: MISDESC
+          POSTGRES_PASSWORD: MISDESC_password
+          POSTGRES_DB: MISDESC_system
         ports:
           - 5432:5432
         options: >-
@@ -49,7 +49,7 @@ jobs:
       - name: Generate Prisma Client & Push Schema
         working-directory: ./backend
         env:
-          DATABASE_URL: "postgresql://cts:cts_password@localhost:5432/cts_system?schema=public"
+          DATABASE_URL: "postgresql://MISDESC:MISDESC_password@localhost:5432/MISDESC_system?schema=public"
         run: |
           npx prisma generate
           npx prisma db push --skip-generate
@@ -57,7 +57,7 @@ jobs:
       - name: Run Database Seeding Test
         working-directory: ./backend
         env:
-          DATABASE_URL: "postgresql://cts:cts_password@localhost:5432/cts_system?schema=public"
+          DATABASE_URL: "postgresql://MISDESC:MISDESC_password@localhost:5432/MISDESC_system?schema=public"
         run: node prisma/seed.js
 
       - name: Run Core Features Unit Diagnostic (84-Test Suite)
@@ -66,13 +66,13 @@ jobs:
 
       - name: Execute Standalone DB Health Diagnostic
         env:
-          DATABASE_URL: "postgresql://cts:cts_password@localhost:5432/cts_system?schema=public"
+          DATABASE_URL: "postgresql://MISDESC:MISDESC_password@localhost:5432/MISDESC_system?schema=public"
         run: node scripts/db-health.js
 
       - name: Verify Multi-Role RBAC & SRE Health Diagnostic
         working-directory: ./backend
         env:
-          DATABASE_URL: "postgresql://cts:cts_password@localhost:5432/cts_system?schema=public"
+          DATABASE_URL: "postgresql://MISDESC:MISDESC_password@localhost:5432/MISDESC_system?schema=public"
           JWT_SECRET: "ci_secret_test_key_12345678901234567890"
           PORT: 5000
         run: |
@@ -94,7 +94,7 @@ jobs:
 
       - name: Validate Grafana Dashboard JSON Syntax
         run: |
-          node -e "JSON.parse(require('fs').readFileSync('monitoring/grafana/dashboards/cts_national_clearing_dashboard.json')); console.log('✓ Grafana Dashboard JSON is valid');"
+          node -e "JSON.parse(require('fs').readFileSync('monitoring/grafana/dashboards/MISDESC_national_clearing_dashboard.json')); console.log('✓ Grafana Dashboard JSON is valid');"
 
       - name: Validate Kubernetes Manifests Syntax
         run: |
@@ -131,7 +131,7 @@ jobs:
         working-directory: ./frontend
         run: npm run build
 
-      - name: Verify Distribution Artifacts
+      - name: Verify Distribution ArtifaMISDESC
         working-directory: ./frontend
         run: |
           test -f dist/index.html || exit 1

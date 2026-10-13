@@ -98,6 +98,15 @@ async function getLsmDaemonStatus(req, res, next) {
   }
 }
 
+async function simulateLsmShock(req, res, next) {
+  try {
+    const result = await lsmService.injectLiquidityShock(req.body);
+    return res.json(result);
+  } catch (err) {
+    next(err);
+  }
+}
+
 module.exports = {
   getBankLiquidity,
   getSystemSummary,
@@ -107,6 +116,8 @@ module.exports = {
   resetLsmTopology,
   toggleLsmDaemon,
   getLsmDaemonStatus,
+  simulateLsmShock,
 };
+
 
 

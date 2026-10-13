@@ -3,12 +3,12 @@ global:
   evaluation_interval: 5s
 
 scrape_configs:
-  - job_name: "cts-backend"
+  - job_name: "MISDESC-backend"
     metrics_path: "/metrics"
     static_configs:
       - targets: ["backend:5000"]
         labels:
-          application: "cts-system"
+          application: "MISDESC-system"
           environment: "production"
           region: "in-west-1"
           grid: "national-clearing-grid"

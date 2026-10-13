@@ -373,7 +373,7 @@ async function deleteUser(req, res, next) {
     }
 
     // Prevent deleting the primary admin account
-    if (targetUser.email === "admin@cts.com") {
+    if (targetUser.email === "admin@MISDESC.com") {
       return res.status(403).json({ error: "Primary system administrator account cannot be deleted." });
     }
 

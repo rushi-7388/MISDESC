@@ -24,7 +24,7 @@ function PageLoader() {
         <div className="absolute inset-0 rounded-full border-4 border-indigo-600 border-t-transparent animate-spin" />
       </div>
       <p className="mt-4 text-xs font-semibold text-slate-500 uppercase tracking-widest animate-pulse">
-        Loading CTS Portal...
+        Loading MISDESC Portal...
       </p>
     </div>
   );

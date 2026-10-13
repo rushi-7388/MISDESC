@@ -54,7 +54,7 @@ export default function Login() {
         err.response?.data?.error ||
         err.response?.data?.message ||
         (err.code === "ERR_NETWORK"
-          ? "Unable to connect to CTS backend server. Verify service status."
+          ? "Unable to connect to MISDESC backend server. Verify service status."
           : "Invalid email or password. Please verify credentials.");
       setError(message);
     } finally {
@@ -77,18 +77,18 @@ export default function Login() {
         <div className="flex items-center gap-3">
           <img
             src={logo}
-            alt="CTS Emblem"
+            alt="MISDESC Emblem"
             className="w-8 h-8 rounded-lg object-cover ring-1 ring-slate-700/80 shadow-md shadow-brand-950/40"
           />
           <div>
             <div className="flex items-center gap-2">
-              <span className="font-extrabold tracking-tight text-white text-base">CTS</span>
+              <span className="font-extrabold tracking-tight text-white text-base">MISDESC</span>
               <span className="text-slate-600 text-xs">|</span>
               <span className="text-xs font-semibold text-slate-200 tracking-wide">
                 Cheque Truncation System
               </span>
               <span className="hidden md:inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-mono font-medium bg-brand-950/80 border border-brand-800/70 text-brand-300">
-                CTS-2010
+                MISDESC-2010
               </span>
             </div>
             <p className="text-[10px] text-slate-400 font-mono tracking-wider uppercase">
@@ -197,12 +197,12 @@ export default function Login() {
             </div>
           </div>
 
-          {/* Right Side: CTS Emblem & Institutional Details */}
+          {/* Right Side: MISDESC Emblem & Institutional Details */}
           <div className="md:col-span-5 bg-slate-950 border-t md:border-t-0 md:border-l border-slate-800 p-6 sm:p-8 flex flex-col items-center justify-center text-center">
             <div className="mb-4">
               <img
                 src={logo}
-                alt="CTS Emblem"
+                alt="MISDESC Emblem"
                 className="w-24 h-24 sm:w-28 sm:h-28 object-cover rounded-xl border border-slate-700 shadow-md"
               />
             </div>
@@ -216,7 +216,7 @@ export default function Login() {
 
             <div className="flex flex-wrap items-center justify-center gap-1.5 mt-4 text-[10px] font-mono">
               <span className="px-2 py-0.5 rounded bg-slate-900 border border-slate-700 text-slate-300">
-                CTS-2010
+                MISDESC-2010
               </span>
               <span className="px-2 py-0.5 rounded bg-slate-900 border border-slate-700 text-slate-300">
                 ISO 20022
@@ -235,7 +235,7 @@ export default function Login() {
 
       {/* Institutional Legal & Regulatory Footer */}
       <footer className="relative z-10 px-5 sm:px-8 py-2 border-t border-slate-800 text-[11px] text-slate-500 bg-slate-950 flex-shrink-0 flex flex-wrap items-center justify-between gap-2">
-        <span>Cheque Truncation System (CTS) · National Clearing Gateway</span>
+        <span>Cheque Truncation System (MISDESC) · National Clearing Gateway</span>
         <div className="flex items-center gap-2 sm:gap-3 text-[10px] font-mono text-slate-400">
           <span>SHA-256 Ledger</span>
           <span>•</span>

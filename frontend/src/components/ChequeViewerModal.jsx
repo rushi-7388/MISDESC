@@ -44,7 +44,7 @@ export default function ChequeViewerModal({ cheque, onClose, onUpdated }) {
     },
   };
 
-  const isSuspectSig = signatureData && signatureData.metrics?.matchScore < 80;
+  const isSuspeMISDESCig = signatureData && signatureData.metrics?.matchScore < 80;
 
   return (
     <div
@@ -63,7 +63,7 @@ export default function ChequeViewerModal({ cheque, onClose, onUpdated }) {
                 Cheque Inspector #{cheque.chequeNumber}
               </span>
               <span className="px-2 py-0.5 rounded text-[11px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
-                CTS-2010 Standard
+                MISDESC-2010 Standard
               </span>
               <span className="px-2 py-0.5 rounded text-[11px] font-semibold bg-purple-50 text-purple-700 border border-purple-200">
                 PKI X.509 Verified
@@ -115,10 +115,10 @@ export default function ChequeViewerModal({ cheque, onClose, onUpdated }) {
                 type="button"
                 onClick={() => setActiveTab("signature")}
                 className={`px-3 py-1 rounded transition-colors flex items-center gap-1.5 cursor-pointer ${activeTab === "signature"
-                    ? isSuspectSig
+                    ? isSuspeMISDESCig
                       ? "bg-rose-600 text-white shadow-xs"
                       : "bg-brand-700 text-white shadow-xs"
-                    : isSuspectSig
+                    : isSuspeMISDESCig
                       ? "text-rose-700 hover:text-rose-900"
                       : "text-gray-600 hover:text-gray-900"
                   }`}
@@ -207,7 +207,7 @@ export default function ChequeViewerModal({ cheque, onClose, onUpdated }) {
               {filterMode === "uv" && (
                 <div className="absolute top-3 left-3 bg-purple-900/90 border border-purple-500 text-purple-200 text-[11px] px-3 py-1 rounded-full backdrop-blur-xs font-medium z-10 flex items-center gap-1.5 shadow-lg">
                   <span className="w-2 h-2 rounded-full bg-purple-400 animate-pulse"></span>
-                  <span>UV Blacklight Active: Inspecting CTS-2010 Paper Fibers & Void Pantograph</span>
+                  <span>UV Blacklight Active: Inspecting MISDESC-2010 Paper Fibers & Void Pantograph</span>
                 </div>
               )}
 
@@ -486,7 +486,7 @@ export default function ChequeViewerModal({ cheque, onClose, onUpdated }) {
         {/* Footer */}
         <div className="px-6 py-3 bg-gray-50 border-t flex flex-wrap items-center justify-between text-xs text-gray-600 gap-2">
           <div className="flex items-center gap-4">
-            <span className="font-semibold text-gray-700">CTS-2010 Compliance:</span>
+            <span className="font-semibold text-gray-700">MISDESC-2010 Compliance:</span>
             <span className="text-emerald-700 font-medium">
               [OK] Paper Fibers Verified
             </span>
@@ -518,7 +518,7 @@ export default function ChequeViewerModal({ cheque, onClose, onUpdated }) {
           cheque={cheque}
           onClose={() => setShowDisputeModal(false)}
           onSubmitted={() => {
-            alert("Dispute claim successfully lodged with Clearing House under NPCI CTS DRM Rule 32.");
+            alert("Dispute claim successfully lodged with Clearing House under NPCI MISDESC DRM Rule 32.");
           }}
         />
       )}

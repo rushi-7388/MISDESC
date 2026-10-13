@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // ==============================================================================
-// CTS Master System Diagnostic Runner
+// MISDESC Master System Diagnostic Runner
 // Executes full-spectrum health checks: DB Health, 84-Test Unit Suite & RBAC
 // ==============================================================================
 
@@ -11,7 +11,7 @@ const ROOT_DIR = path.resolve(__dirname, "..");
 const BACKEND_DIR = path.join(ROOT_DIR, "backend");
 
 console.log("==================================================================");
-console.log("   CTS NATIONAL CLEARING SYSTEM — MASTER SYSTEM DIAGNOSTIC SUITE  ");
+console.log("   MISDESC NATIONAL CLEARING SYSTEM — MASTER SYSTEM DIAGNOSTIC SUITE  ");
 console.log("==================================================================");
 console.log(`Started At: ${new Date().toISOString()}\n`);
 
@@ -44,20 +44,20 @@ try {
   console.log("  (Database offline, skipped)");
 }
 
-// 2. Core 84-Test Suite (LSM, Swarm, PQC, zk-CTS, Smart Cheques, FX Sanctions)
+// 2. Core 84-Test Suite (LSM, Swarm, PQC, zk-MISDESC, Smart Cheques, FX Sanctions)
 runStep("84-Test Core Engines Diagnostic Suite", "node scripts/verify-new-features.js", BACKEND_DIR);
 
 // 3. Prometheus Metrics Registry Verification
 runStep(
   "Prometheus Metrics Registry Validation",
-  'node -e "const { getPrometheusMetrics } = require(\'./src/utils/metrics.util\'); getPrometheusMetrics().then(m => { if (!m.includes(\'cts_lsm_gridlock_cycles_resolved_total\')) throw new Error(\'Missing LSM metric\'); console.log(\'✓ Prometheus metrics registered successfully\'); });"',
+  'node -e "const { getPrometheusMetrics } = require(\'./src/utils/metrics.util\'); getPrometheusMetrics().then(m => { if (!m.includes(\'MISDESC_lsm_gridlock_cycles_resolved_total\')) throw new Error(\'Missing LSM metric\'); console.log(\'✓ Prometheus metrics registered successfully\'); });"',
   BACKEND_DIR
 );
 
 // 4. Grafana Dashboard Schema Integrity
 runStep(
   "Grafana National Clearing Dashboard Integrity",
-  "node -e \"JSON.parse(require('fs').readFileSync('monitoring/grafana/dashboards/cts_national_clearing_dashboard.json')); console.log('✓ Grafana JSON Schema Valid');\""
+  "node -e \"JSON.parse(require('fs').readFileSync('monitoring/grafana/dashboards/MISDESC_national_clearing_dashboard.json')); console.log('✓ Grafana JSON Schema Valid');\""
 );
 
 // 5. Kubernetes Production Manifests Validation

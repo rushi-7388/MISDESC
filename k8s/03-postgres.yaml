@@ -2,7 +2,7 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: postgres-pvc
-  namespace: cts-system
+  namespace: MISDESC-system
 spec:
   accessModes:
     - ReadWriteOnce
@@ -14,7 +14,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: postgres-deployment
-  namespace: cts-system
+  namespace: MISDESC-system
 spec:
   replicas: 1
   selector:
@@ -32,7 +32,7 @@ spec:
             - containerPort: 5432
           envFrom:
             - secretRef:
-                name: cts-secret
+                name: MISDESC-secret
           volumeMounts:
             - name: postgres-storage
               mountPath: /var/lib/postgresql/data
@@ -48,9 +48,9 @@ spec:
               command:
                 - pg_isready
                 - -U
-                - cts
+                - MISDESC
                 - -d
-                - cts_system
+                - MISDESC_system
             initialDelaySeconds: 15
             periodSeconds: 10
           readinessProbe:
@@ -58,9 +58,9 @@ spec:
               command:
                 - pg_isready
                 - -U
-                - cts
+                - MISDESC
                 - -d
-                - cts_system
+                - MISDESC_system
             initialDelaySeconds: 5
             periodSeconds: 5
       volumes:
@@ -72,7 +72,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: postgres-service
-  namespace: cts-system
+  namespace: MISDESC-system
 spec:
   selector:
     app: postgres

@@ -58,7 +58,7 @@ export default function PKICertificatesPanel() {
     try {
       setSubmitting(true);
       await client.post("/pki/certificates", formData);
-      setSuccessMsg("X.509 PKI Digital Certificate successfully registered with CTS Root CA.");
+      setSuccessMsg("X.509 PKI Digital Certificate successfully registered with MISDESC Root CA.");
       setShowRegisterModal(false);
       setTimeout(() => setSuccessMsg(null), 5000);
       await loadData();
@@ -197,7 +197,7 @@ export default function PKICertificatesPanel() {
             </div>
           ) : certificates.length === 0 ? (
             <div className="col-span-2 p-8 text-center text-slate-400 text-xs">
-              No digital certificates registered in the CTS trust store.
+              No digital certificates registered in the MISDESC trust store.
             </div>
           ) : (
             certificates.map((cert) => {
@@ -394,7 +394,7 @@ export default function PKICertificatesPanel() {
                 <label className="block font-semibold text-slate-700 mb-1">Serial Number Identifier</label>
                 <input
                   type="text"
-                  placeholder="e.g. CTS-PKI-2026-003"
+                  placeholder="e.g. MISDESC-PKI-2026-003"
                   value={formData.serialNumber}
                   onChange={(e) => setFormData({ ...formData, serialNumber: e.target.value })}
                   className="w-full px-3 py-2 border border-slate-200 rounded-xl font-mono focus:outline-purple-600"

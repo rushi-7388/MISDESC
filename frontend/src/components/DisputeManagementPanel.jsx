@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import client from "../api/client";
 import { useClearingEvents } from "../hooks/useClearingEvents";
+import { exportRbiOmbudsmanEvidenceBundle } from "../utils/ombudsmanEvidenceExport";
 
 export default function DisputeManagementPanel() {
   const [disputes, setDisputes] = useState([]);
@@ -10,6 +11,7 @@ export default function DisputeManagementPanel() {
   const [newStatus, setNewStatus] = useState("RESOLVED_CLAIMANT");
   const [resolutionSummary, setResolutionSummary] = useState("");
   const [submitting, setSubmitting] = useState(false);
+  const [exportingId, setExportingId] = useState(null);
   const [successMsg, setSuccessMsg] = useState(null);
 
   async function loadDisputes() {
@@ -32,6 +34,19 @@ export default function DisputeManagementPanel() {
     loadDisputes();
   });
 
+  async function handleExportBundle(dispute) {
+    try {
+      setExportingId(dispute.id);
+      const result = await exportRbiOmbudsmanEvidenceBundle(dispute);
+      setSuccessMsg(`Legal Evidence Bundle downloaded: ${result.filename} (${(result.sizeBytes / 1024).toFixed(1)} KB)`);
+      setTimeout(() => setSuccessMsg(null), 6000);
+    } catch (err) {
+      alert("Failed to export evidence bundle: " + err.message);
+    } finally {
+      setExportingId(null);
+    }
+  }
+
   async function handleAdjudicate(e) {
     e.preventDefault();
     if (!adjudicatingDispute) return;
@@ -40,7 +55,7 @@ export default function DisputeManagementPanel() {
       setSubmitting(true);
       await client.patch(`/disputes/${adjudicatingDispute.id}/status`, {
         toStatus: newStatus,
-        resolutionSummary: resolutionSummary || `Ruled ${newStatus} under CTS Dispute Resolution Protocol`,
+        resolutionSummary: resolutionSummary || `Ruled ${newStatus} under MISDESC Dispute Resolution Protocol`,
       });
 
       setSuccessMsg(`Dispute ${adjudicatingDispute.claimNumber} successfully adjudicated.`);
@@ -59,6 +74,7 @@ export default function DisputeManagementPanel() {
     (d) => filterStatus === "ALL" || d.status === filterStatus
   );
 
+
   return (
     <div className="space-y-6">
       {successMsg && (
@@ -74,7 +90,7 @@ export default function DisputeManagementPanel() {
           <h2 className="text-base font-bold text-slate-900 flex items-center gap-2">
             <span>Clearing Dispute Resolution Claims Registry</span>
             <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-50 text-amber-800 border border-amber-200">
-              NPCI CTS DRM Rule 32
+              NPCI MISDESC DRM Rule 32
             </span>
           </h2>
           <p className="text-xs text-slate-500 mt-0.5">
@@ -196,15 +212,28 @@ export default function DisputeManagementPanel() {
                       </td>
 
                       <td className="py-3.5 px-4 text-right">
-                        <button
-                          type="button"
-                          onClick={() => setAdjudicatingDispute(d)}
-                          className="bg-slate-900 hover:bg-slate-800 text-white px-3 py-1.5 rounded-xl font-bold text-[11px] transition-all cursor-pointer shadow-xs"
-                        >
-                          Adjudicate
-                        </button>
+                        <div className="flex items-center justify-end gap-2">
+                          <button
+                            type="button"
+                            onClick={() => handleExportBundle(d)}
+                            disabled={exportingId === d.id}
+                            className="bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-300 px-2.5 py-1.5 rounded-xl font-bold text-[11px] transition-all cursor-pointer shadow-2xs flex items-center gap-1.5 disabled:opacity-50"
+                            title="Export full RBI Banking Ombudsman evidentiary ZIP package"
+                          >
+                            <span>{exportingId === d.id ? "📦 Bundling..." : "📦 Export Bundle (ZIP)"}</span>
+                          </button>
+
+                          <button
+                            type="button"
+                            onClick={() => setAdjudicatingDispute(d)}
+                            className="bg-slate-900 hover:bg-slate-800 text-white px-3 py-1.5 rounded-xl font-bold text-[11px] transition-all cursor-pointer shadow-xs"
+                          >
+                            Adjudicate
+                          </button>
+                        </div>
                       </td>
                     </tr>
+
                   );
                 })}
               </tbody>
@@ -286,30 +315,42 @@ export default function DisputeManagementPanel() {
                 </label>
                 <textarea
                   rows={3}
-                  placeholder="Record formal reasons for ruling based on CTS Rule 32..."
+                  placeholder="Record formal reasons for ruling based on MISDESC Rule 32..."
                   value={resolutionSummary}
                   onChange={(e) => setResolutionSummary(e.target.value)}
                   className="w-full px-3 py-2 border border-slate-200 rounded-xl focus:outline-cyan-600 resize-none"
                 />
               </div>
 
-              <div className="flex items-center justify-end gap-2 pt-2 border-t border-slate-100">
+              <div className="flex flex-wrap items-center justify-between gap-2 pt-3 border-t border-slate-100">
                 <button
                   type="button"
-                  onClick={() => setAdjudicatingDispute(null)}
-                  className="px-4 py-2 font-bold text-slate-600 hover:bg-slate-100 rounded-xl"
+                  onClick={() => handleExportBundle(adjudicatingDispute)}
+                  disabled={exportingId === adjudicatingDispute.id}
+                  className="px-3 py-2 font-bold text-amber-900 bg-amber-50 hover:bg-amber-100 border border-amber-300 rounded-xl text-xs flex items-center gap-1.5 transition-all cursor-pointer shadow-2xs"
                 >
-                  Cancel
+                  <span>{exportingId === adjudicatingDispute.id ? "📦 Packaging..." : "📦 Export Evidence Bundle (ZIP)"}</span>
                 </button>
-                <button
-                  type="submit"
-                  disabled={submitting}
-                  className="px-4 py-2 font-bold bg-slate-900 hover:bg-slate-800 text-white rounded-xl shadow-xs disabled:opacity-50"
-                >
-                  {submitting ? "Submitting Ruling..." : "Commit Arbitration Ruling"}
-                </button>
+
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setAdjudicatingDispute(null)}
+                    className="px-3.5 py-2 font-bold text-slate-600 hover:bg-slate-100 rounded-xl text-xs cursor-pointer"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={submitting}
+                    className="px-4 py-2 font-bold bg-slate-900 hover:bg-slate-800 text-white rounded-xl shadow-xs disabled:opacity-50 text-xs cursor-pointer"
+                  >
+                    {submitting ? "Submitting..." : "Commit Arbitration Ruling"}
+                  </button>
+                </div>
               </div>
             </form>
+
           </div>
         </div>
       )}

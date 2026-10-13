@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 # ==============================================================================
-# CTS National Clearing Grid Traffic Simulator (Bash)
+# MISDESC National Clearing Grid Traffic Simulator (Bash)
 # ==============================================================================
 set -e
 
 CYCLES=${1:-3}
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-echo ">>> Launching CTS Clearing Grid Traffic Simulator ($CYCLES cycles)..."
+echo ">>> Launching MISDESC Clearing Grid Traffic Simulator ($CYCLES cycles)..."
 
 node "$SCRIPT_DIR/simulate-clearing-grid.js" "$CYCLES"
 

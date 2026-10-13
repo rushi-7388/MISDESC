@@ -3,7 +3,7 @@ const { broadcastEvent } = require("../utils/sse.util");
 
 /**
  * Clearing Session Cutoff & Automated Two-Way Reconciliation Service
- * Conforms to CTS Clearing House Rule 31 (Session Balancing & Reconcilement).
+ * Conforms to MISDESC Clearing House Rule 31 (Session Balancing & Reconcilement).
  */
 
 /**
@@ -39,7 +39,7 @@ async function configureBatchCutoff(batchId, { windowType, minutesToCutoff = 30 
 }
 
 /**
- * Inspects real-time cutoff status of an active clearing session.
+ * InspeMISDESC real-time cutoff status of an active clearing session.
  */
 async function getSessionCutoffStatus(batchId) {
   const batch = await prisma.batch.findUnique({

@@ -87,7 +87,7 @@ export default function BranchManagerDashboard() {
               {summary?.branchName || "Athwa Lines Branch"} — Operations Command
             </h1>
             <p className="text-xs sm:text-sm text-slate-500 mt-1">
-              Teller queue oversight, high-value instrument counter-signature approvals (&gt;₹50,000), and batch dispatch to CTS Clearing Switch.
+              Teller queue oversight, high-value instrument counter-signature approvals (&gt;₹50,000), and batch dispatch to MISDESC Clearing Switch.
             </p>
           </div>
 

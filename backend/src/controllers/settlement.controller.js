@@ -1,5 +1,5 @@
 const prisma = require("../config/prisma");
-const { generatePacs008Xml } = require("../utils/iso20022.util");
+const { generatePacs008Xml, validateIso20022Xml } = require("../utils/iso20022.util");
 const { broadcastEvent } = require("../utils/sse.util");
 const { settlementCyclesTotal } = require("../utils/metrics.util");
 
@@ -369,7 +369,7 @@ async function getEkuberPacs009Xml(req, res) {
 
     const { generatePacs009Xml } = require("../utils/ekuber.util");
     const xml = generatePacs009Xml({
-      settlementRef: cheque.ekuberRef || `EKUBER/CTS3/REF-${cheque.id.slice(0, 8)}`,
+      settlementRef: cheque.ekuberRef || `EKUBER/MISDESC3/REF-${cheque.id.slice(0, 8)}`,
       utr: cheque.ekuberUtr,
       cheque,
       presentingBank: cheque.presentingBank,
@@ -385,10 +385,23 @@ async function getEkuberPacs009Xml(req, res) {
   }
 }
 
+// Live ISO 20022 Schematron & XSD conformance validator
+async function validateSettlementIso20022(req, res) {
+  try {
+    const { xml } = req.body;
+    if (!xml) return res.status(400).json({ error: "Missing XML document payload" });
+    const result = validateIso20022Xml(xml);
+    return res.json(result);
+  } catch (err) {
+    return res.status(500).json({ error: "Validation failure: " + err.message });
+  }
+}
+
 module.exports = {
   runSettlement,
   listSettlements,
   getSettlementIso20022,
+  validateSettlementIso20022,
   getLiquidityMonitor,
   updateCollateralLimit,
   getContinuousSettlementStatus,

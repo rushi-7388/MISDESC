@@ -1,5 +1,5 @@
 /**
- * Automated Verification Diagnostic for New CTS Enterprise Features:
+ * Automated Verification Diagnostic for New MISDESC Enterprise Features:
  * 1. Intraday Liquidity & Collateral Reservation System (LMS)
  * 2. Clearing Dispute Resolution Mechanism (DRM)
  * 3. Public Key Infrastructure (PKI) Digital Signature Validation
@@ -28,7 +28,7 @@ function assert(condition, testName) {
 
 async function runTests() {
   console.log("================================================================");
-  console.log("  CTS New Enterprise Features — Comprehensive Unit Diagnostic   ");
+  console.log("  MISDESC New Enterprise Features — Comprehensive Unit Diagnostic   ");
   console.log("================================================================\n");
 
   // TEST SUITE 1: Validation Engine
@@ -95,7 +95,7 @@ async function runTests() {
   const breachMetrics = liquidityService.calculatePoolMetrics(breachPool);
   assert(breachMetrics.status === "BREACHED", "Pool status transitions to BREACHED when >= 95%");
 
-  // TEST SUITE 3: Dispute Resolution Engine (NPCI CTS DRM)
+  // TEST SUITE 3: Dispute Resolution Engine (NPCI MISDESC DRM)
   console.log("\n▶ SUITE 3: Dispute Resolution Mechanism (DRM) Rules");
   const claimNum1 = disputeService.generateClaimNumber();
   const claimNum2 = disputeService.generateClaimNumber();
@@ -142,7 +142,7 @@ async function runTests() {
     fraudScore: 88,
   });
   assert(suspectChequeAnalysis.anomalies.length > 0, "Suspect instrument flags chemical washing / prepended digit anomalies");
-  assert(suspectChequeAnalysis.securityFibers.length > 0, "CTS-2010 security fibers mapped across spectral grid");
+  assert(suspectChequeAnalysis.securityFibers.length > 0, "MISDESC-2010 security fibers mapped across spectral grid");
 
   // TEST SUITE 6: Interbank Liquidity Gridlock Resolution Engine (LSM)
   console.log("\n▶ SUITE 6: ⚡ Interbank Liquidity Gridlock Resolution Engine (Tarjan LSM)");
@@ -248,7 +248,7 @@ async function runTests() {
   const suspectDocket = await swarmService.evaluateChequeWithSwarm("test-suspect-02", suspectCheque);
   assert(suspectDocket.consensus.autoCleared === false, "Suspect instrument correctly blocks autonomous STP");
   assert(suspectDocket.consensus.criticalFlagsCount > 0, "Critical flags raised for FFT diffusion & Stale instrument");
-  assert(suspectDocket.consensus.recommendation.includes("REJECT") || suspectDocket.consensus.recommendation.includes("SENIOR_CHECKER"), "Arbiter directs human escalation");
+  assert(suspectDocket.consensus.recommendation.includes("REJECT") || suspectDocket.consensus.recommendation.includes("SENIOR_CHECKER"), "Arbiter direMISDESC human escalation");
 
   // TEST SUITE 11: Phase 3 — NIST Post-Quantum Cryptography (FIPS 204 ML-DSA & FIPS 203 ML-KEM)
   console.log("\n▶ SUITE 11: 🛡️ Phase 3: NIST FIPS 204 ML-DSA (Dilithium) & FIPS 203 ML-KEM (Kyber)");
@@ -281,7 +281,7 @@ async function runTests() {
   const readiness = pqcService.getQuantumReadinessMetrics();
   assert(readiness.overallReadinessScorePercent >= 90.0, "National clearing switch PQC readiness score certified >= 90%");
 
-  // TEST SUITE 12: Zero-Knowledge Confidential Clearing (zk-CTS / Groth16 BN254)
+  // TEST SUITE 12: Zero-Knowledge Confidential Clearing (zk-MISDESC / Groth16 BN254)
   console.log("\n▶ SUITE 12: 🔐 Zero-Knowledge Confidential Clearing (zk-SNARK Groth16 / BN254)");
   const zkpService = require("../src/services/zkp.service");
   const testZkCheque = {
@@ -328,7 +328,7 @@ async function runTests() {
   assert(cbdcReceipt.atomicFinality === "IMMEDIATE_FINAL_IRREVOCABLE", "Atomic finality confirmed via CBDC token minting");
 
   // TEST SUITE 14: Cross-Border Multi-Currency Clearing & Real-Time Sanctions Screener
-  console.log("\n▶ SUITE 14: 🌐 Cross-Border Multi-Currency CTS & Real-Time Sanctions Screener");
+  console.log("\n▶ SUITE 14: 🌐 Cross-Border Multi-Currency MISDESC & Real-Time Sanctions Screener");
   const crossService = require("../src/services/crossborder.service");
 
   // Currency Conversion & Forward Hedging
@@ -352,12 +352,259 @@ async function runTests() {
   assert(pacs009Xml.includes("pacs.009.001.08"), "Generates valid ISO 20022 pacs.009.001.08 XML document");
   assert(pacs009Xml.includes("RBI-EKUBER-CBPR-PLUS"), "Includes CBPR+ Central Bank clearing system proprietary header");
 
+  // TEST SUITE 15: Production Database Schema & Persistence Models (Phase 1)
+  console.log("\n▶ SUITE 15: 🗄️ Phase 1: PostgreSQL Schema Persistence Models");
+  const prismaClient = require("../src/config/prisma");
+  assert(typeof prismaClient.smartChequeContract?.findMany === "function", "Prisma model SmartChequeContract registered");
+  assert(typeof prismaClient.escrowMilestone?.findMany === "function", "Prisma model EscrowMilestone registered");
+  assert(typeof prismaClient.microLien?.findMany === "function", "Prisma model MicroLien registered");
+  assert(typeof prismaClient.zkProofRecord?.findMany === "function", "Prisma model ZkProofRecord registered");
+  assert(typeof prismaClient.pqcManifest?.findMany === "function", "Prisma model PqcManifest registered");
+  assert(typeof prismaClient.swarmDocket?.findMany === "function", "Prisma model SwarmDocket registered");
+  assert(typeof prismaClient.sanctionsLog?.findMany === "function", "Prisma model SanctionsLog registered");
 
+  // TEST SUITE 16: Industrial Fuzzy Sanctions Radar (Jaro-Winkler & Double-Metaphone) (Phase 2)
+  console.log("\n▶ SUITE 16: 🌐 Phase 2: Industrial Fuzzy Sanctions Radar (Jaro-Winkler & Metaphone)");
+  const jwExact = crossService.jaroWinkler("Al-Faisal", "Al-Faisal");
+  assert(jwExact === 1.0, "Jaro-Winkler computes identity match (1.0)");
+
+  const meta1 = crossService.doubleMetaphone("Al-Faisal");
+  const meta2 = crossService.doubleMetaphone("Al Fayzal");
+  assert(meta1 === meta2, "Double-Metaphone maps 'Al-Faisal' and 'Al Fayzal' to identical phonetic signature");
+
+  const fuzzyHit = crossService.screenSanctions({ drawerName: "Al Fayzal Logistics", payeeName: "Standard Corp" });
+  assert(fuzzyHit.matchedSanctions.length > 0, "Fuzzy radar deteMISDESC spelling variant alias 'Al Fayzal Logistics'");
+  assert(fuzzyHit.status === "BLOCKED", "Enforces statutory block on critical fuzzy alias match");
+
+  const hawalaFuzzy = crossService.screenSanctions({ drawerName: "Havala Remittance Network", payeeName: "Apex" });
+  assert(hawalaFuzzy.matchedSanctions.length > 0, "Phonetic matcher flags 'Havala Remittance Network' against 'Hawala'");
+
+  // TEST SUITE 17: Hybrid E-13B MICR OCR Extraction (Phase 2)
+  console.log("\n▶ SUITE 17: 📷 Phase 2: E-13B MICR OCR & Structured Extraction Engine");
+  const ocrUtil = require("../src/utils/ocr.util");
+  const ocrResult = await ocrUtil.scanChequeOCR(
+    null,
+    "CHEQUE NO: 000456 MICR: 395024002 A/C: 987654321012 IFSC: SBIN0001234 TC: 10 ₹125,000 PAY TO: Acme Steel Corp"
+  );
+  assert(ocrResult.extracted.chequeNumber === "000456", "E-13B OCR extraMISDESC 6-digit cheque number");
+  assert(ocrResult.extracted.micrCode === "395024002", "E-13B OCR extraMISDESC 9-digit MICR routing code");
+  assert(ocrResult.extracted.accountNumber === "987654321012", "E-13B OCR extraMISDESC 12-digit drawer account number");
+  assert(ocrResult.extracted.ifsc === "SBIN0001234", "OCR extraMISDESC 11-character Indian Bank IFSC");
+  assert(ocrResult.extracted.suggestedAmount === 125000, "OCR extraMISDESC courtesy box numeric amount (₹1,25,000)");
+  assert(ocrResult.boundingBoxes.micrBand !== undefined, "Calculates MISDESC-2010 bounding box coordinates");
+
+  // TEST SUITE 18: IoT / e-Way Bill Webhook Trigger & Milestone 2 Auto-Disbursement (Phase 3)
+  console.log("\n▶ SUITE 18: 📡 Phase 3: IoT / e-Way Bill Automated Escrow Webhook Engine");
+  const smartChequeService = require("../src/services/smartcheque.service");
+  const testContract = smartChequeService.createSmartContract("chq-iot-test-99", {
+    amount: 200000,
+    payeeName: "Apex Logistics & Supply Chain Ltd",
+  });
+  assert(
+    testContract.milestones.find((m) => m.stepId === "M2_DELIVERY_SIGN_OFF").status ===
+      "PENDING_IOT_CONFIRMATION",
+    "Milestone 2 initiates in PENDING_IOT_CONFIRMATION status"
+  );
+
+  const iotWebhookResponse = await smartChequeService.processIotWebhookTrigger({
+    chequeId: "chq-iot-test-99",
+    waybillNumber: "EWB-MH-994829104821",
+    rfidTag: "EPC-RFID-48291038",
+    gpsCoordinates: { lat: 19.076, lng: 72.8777, location: "Nhava Sheva Port Gate 2" },
+    temperatureLog: "3.8°C",
+    signatureToken: "ORACLE-SIGN-VALID-9948",
+  });
+
+  assert(iotWebhookResponse.success === true, "IoT e-Way bill webhook verified successfully");
+  assert(iotWebhookResponse.milestone.status === "SATISFIED", "Milestone 2 automatically disbursed upon IoT trigger");
+  assert(
+    iotWebhookResponse.milestone.telematicsProof.waybillNumber === "EWB-MH-994829104821",
+    "Stores e-Way bill number and telematics telemetry"
+  );
+  assert(
+    iotWebhookResponse.contract.programmableState === "ALL_MILESTONES_RELEASED",
+    "Contract transitions to ALL_MILESTONES_RELEASED"
+  );
+  assert(iotWebhookResponse.receiptHash !== undefined, "Generates cryptographic receipt hash for arbitration");
+
+  // TEST SUITE 19: LSM Live Cheque Atomic Realization (Phase 4)
+  console.log("\n▶ SUITE 19: ⚡ Phase 4: Multi-Cheque Atomic Realization upon Tarjan Netting");
+  await lsmService.resetTopology();
+  const lsmResolved = await lsmService.resolveGridlock();
+  assert(lsmResolved.success === true, "Executes Tarjan SCC multilateral gridlock resolution");
+  assert(lsmResolved.receipt.cyclesResolvedCount >= 0, "Tracks resolved indebtedness cycle count");
+  assert(lsmResolved.receipt.centralBankReservesConsumed === 0, "Zero central bank reserves consumed in cycle elimination");
+  assert(lsmResolved.receipt.realizedChequesCount !== undefined, "Atomic multi-cheque realization tracks cleared cheque count");
+
+  // TEST SUITE 20: National Cybernetic War Room - Interbank Liquidity Shock Simulator (Phase 6)
+  console.log("\n▶ SUITE 20: 🌐 Phase 6: Interbank Clearing Shock & Liquidity Stress Simulator");
+  await lsmService.resetTopology();
+  const shockRes = await lsmService.injectLiquidityShock({
+    shockType: "SURGE",
+    amount: 500000000,
+    targetBank: "bank-srt",
+  });
+  assert(shockRes.success === true, "InjeMISDESC ₹50 Crore inward clearing surge into topology");
+  assert(shockRes.shock.injectedAmount === 500000000, "Shock metadata records ₹50 Cr volume spike");
+  assert(shockRes.topology.metrics.isGridlocked === true, "Network triggers gridlock detection under shock");
+
+  const freezeRes = await lsmService.injectLiquidityShock({
+    shockType: "COLLATERAL_FREEZE",
+    targetBank: "bank-srt",
+  });
+  assert(freezeRes.success === true, "InjeMISDESC participant bank collateral freeze shock");
+  const srtNode = freezeRes.topology.nodes.find((n) => n.id === "bank-srt");
+  assert(srtNode && srtNode.availableHeadroom <= 100000, "Bank SRT headroom restricted to near zero");
+  assert(srtNode.status === "GRIDLOCK_RESTRICTED", "Bank SRT flagged as GRIDLOCK_RESTRICTED");
+
+  // Autonomous resolution under shock
+  const postShockResolution = await lsmService.resolveGridlock();
+  assert(postShockResolution.success === true, "Tarjan LSM engine autonomously resolves bottlenecks post-shock");
+  assert(postShockResolution.receipt.centralBankReservesConsumed === 0, "Zero central bank reserves consumed post-shock");
+
+  // TEST SUITE 21: RBI e-Kuber ISO 20022 CBPR+ pacs.008 & pacs.002 Central Gateway (Phase 7)
+  console.log("\n▶ SUITE 21: 🏛️ Phase 7: RBI e-Kuber ISO 20022 pacs.008 & pacs.002 Central Gateway");
+  const isoUtil = require("../src/utils/iso20022.util");
+
+  // Test pacs.008 generation
+  const pacs008Xml = isoUtil.generatePacs008Xml({
+    settlement: {
+      id: "settl-iso-test-01",
+      netAmount: 45000000,
+      bankA: { name: "Surat Bank", ifsc: "SBIN0001234" },
+      bankB: { name: "Horizon Digital Bank", ifsc: "HDFC0005678" },
+    },
+    cheques: [
+      {
+        id: "chq-iso-001",
+        chequeNumber: "000991",
+        amount: 25000000,
+        accountNumber: "987654321012",
+        payeeName: "Tata Consultancy Services",
+        presentingBank: { name: "Surat Bank", ifsc: "SBIN0001234" },
+        draweeBank: { name: "Horizon Digital Bank", ifsc: "HDFC0005678" },
+      },
+      {
+        id: "chq-iso-002",
+        chequeNumber: "000992",
+        amount: 20000000,
+        accountNumber: "987654321013",
+        payeeName: "Reliance Retail Ltd",
+        presentingBank: { name: "Surat Bank", ifsc: "SBIN0001234" },
+        draweeBank: { name: "Horizon Digital Bank", ifsc: "HDFC0005678" },
+      },
+    ],
+  });
+
+  assert(pacs008Xml.includes("pacs.008.001.08"), "Generates valid pacs.008.001.08 XML document");
+  assert(pacs008Xml.includes("head.001.001.02"), "Embeds mandatory CBPR+ AppHdr head.001.001.02 header");
+  assert(pacs008Xml.includes("ds:Signature"), "Embeds FIPS 140-2 Level 3 HSM <ds:Signature> XMLDSig block");
+  assert(pacs008Xml.includes("Tata Consultancy Services"), "Populates Creditor entity details");
+
+  // Test pacs.002 with statutory reject reason codes
+  const pacs002Xml = isoUtil.generatePacs002Xml({
+    cheque: {
+      id: "chq-reject-01",
+      chequeNumber: "000993",
+      amount: 1500000,
+      returnReason: "Insufficient funds",
+      presentingBank: { name: "Surat Bank", ifsc: "SBIN0001234" },
+      draweeBank: { name: "Horizon Digital Bank", ifsc: "HDFC0005678" },
+    },
+  });
+
+  assert(pacs002Xml.includes("pacs.002.001.10"), "Generates valid pacs.002.001.10 Payment Status Report XML");
+  assert(pacs002Xml.includes("<Cd>AM04</Cd>"), "Maps 'Insufficient funds' to statutory ISO 20022 reason code AM04");
+
+  // Test live Schematron & XSD validator
+  const validationP008 = isoUtil.validateIso20022Xml(pacs008Xml);
+  assert(validationP008.isValid === true, "validateIso20022Xml confirms pacs.008 schema conformance");
+  assert(validationP008.validations.length >= 4, "Executes all statutory schema validation rules");
+
+  const validationP002 = isoUtil.validateIso20022Xml(pacs002Xml);
+  assert(validationP002.isValid === true, "validateIso20022Xml confirms pacs.002 schema conformance");
+
+  // TEST SUITE 22: Autonomous 4-Agent Swarm Live Deliberation Sandbox (Phase 8)
+  console.log("\n▶ SUITE 22: 🤖 Phase 8: Autonomous 4-Agent Swarm Live Deliberation Sandbox");
+  // Test 1: Clean Baseline
+  const cleanReport = swarmService.simulateAdversarialAttack({ scenario: "CLEAN_BASELINE" });
+  assert(cleanReport.verdict === "AUTONOMOUS_STP_CLEARED", "Clean baseline clears autonomous STP");
+  assert(cleanReport.radarDimensions.length === 4, "Generates 4-dimensional radar metrics");
+
+  // Test 2: Prepending a digit attack
+  const prependReport = swarmService.simulateAdversarialAttack({
+    scenario: "PREPEND_DIGIT",
+    originalAmount: 50000,
+    alteredAmount: 150000,
+  });
+  assert(prependReport.verdict === "ZERO_DAY_FRAUD_INTERCEPTED", "Swarm intercepts digit prepending attack");
+  assert(prependReport.flags.some((f) => f.code === "INK_DENSITY_KERNING_DISCREPANCY"), "Spectral Vision catches kerning discrepancy");
+  assert(prependReport.flags.some((f) => f.code === "PPS_MANDATE_DEFICIT"), "AML Agent catches PPS discrepancy");
+
+  // Test 3: Chemical washing attack
+  const washReport = swarmService.simulateAdversarialAttack({ scenario: "CHEMICAL_WASHING" });
+  assert(washReport.verdict === "ZERO_DAY_FRAUD_INTERCEPTED", "Swarm intercepts chemical washing attack");
+  assert(washReport.flags.some((f) => f.code === "UV_BLEACH_HALO_FLUORESCENCE"), "Catches UV bleach halo solvent fluorescence");
+
+  // Test 4: Forged signature variance
+  const forgeReport = swarmService.simulateAdversarialAttack({ scenario: "FORGED_SIGNATURE" });
+  assert(forgeReport.verdict === "ZERO_DAY_FRAUD_INTERCEPTED", "Swarm intercepts forged signature variance");
+  assert(forgeReport.flags.some((f) => f.code === "DTW_STROKE_CONTOUR_DIVERGENCE"), "Biometric Graph catches DTW contour divergence");
+
+  // TEST SUITE 23: High-Throughput Stress Engine & Load Generator (Phase 9)
+  console.log("\n▶ SUITE 23: 🚀 Phase 9: High-Throughput Stress Engine (1,000+ TPS Load Generator)");
+  const stressService = require("../src/services/stress.service");
+
+  // Test synthetic batch generation
+  const synthBatch = await stressService.generateSyntheticBatch({ count: 200 });
+  assert(synthBatch.success === true, "Generates synthetic MISDESC-2010 batch");
+  assert(synthBatch.batchSize === 200, "Generates exactly 200 instruments");
+  assert(synthBatch.sampleCheques[0].micrCode.length === 9, "Valid 9-digit E-13B MICR code attached");
+  assert(synthBatch.sampleCheques[0].chequeNumber.length === 6, "Valid 6-digit cheque number attached");
+
+  // Test benchmark execution (>1000 TPS)
+  const benchResult = await stressService.runClearingStressBenchmark({ targetTps: 1100, durationSec: 3 });
+  assert(benchResult.success === true, "Executes high-throughput clearing benchmark");
+  assert(benchResult.achievedTps >= 1000, "Achieves >= 1,000 Cheques/second peak throughput");
+  assert(benchResult.latencyPercentiles.p99Ms < 50, "P99 latency satisfies sub-50ms statutory SLA");
+  assert(benchResult.clusterPods.length === 3, "Monitors multi-pod CPU and memory utilization");
+
+  // TEST SUITE 24: Multi-Tenant Core Banking Webhooks & Open Banking APIs (Phase 10)
+  console.log("\n▶ SUITE 24: 📡 Phase 10: Multi-Tenant Core Banking Webhook Gateway & OpenAPI 3.0");
+  const webhookService = require("../src/services/webhook.service");
+  const { OPENAPI_SPEC } = require("../src/utils/openapi.util");
+
+  // Test subscription listing & HMAC generation
+  const subscriptions = await webhookService.listSubscriptions();
+  assert(subscriptions.length >= 3, "Initializes default CBS subscriptions (Finacle, BaNCS, Flexcube)");
+
+  const cbsTestPayload = { chequeNumber: "000456", amount: 150000, event: "CHEQUE_PRESENTED" };
+  const hmacSecret = "whsec_test_secret_key_123456";
+  const hmacSig = webhookService.generateHmacSignature(hmacSecret, cbsTestPayload);
+  assert(typeof hmacSig === "string" && hmacSig.length === 64, "Generates 64-character hex HMAC-SHA256 signature");
+
+  const isValidSig = webhookService.verifyHmacSignature(hmacSecret, cbsTestPayload, `sha256=${hmacSig}`);
+  assert(isValidSig === true, "Constant-time HMAC verification passes for authentic signature");
+
+  const isInvalidSig = webhookService.verifyHmacSignature(hmacSecret, { ...cbsTestPayload, amount: 999999 }, `sha256=${hmacSig}`);
+  assert(isInvalidSig === false, "HMAC verification rejeMISDESC tampered payload");
+
+  // Test dispatching real-time event
+  const dispatchResult = await webhookService.dispatchWebhookEvent("CHEQUE_PRESENTED", cbsTestPayload);
+  assert(dispatchResult.success === true, "Dispatches webhook event across subscribed endpoints");
+  assert(dispatchResult.dispatchedCount >= 1, "Delivers event to matching CBS endpoints");
+  assert(dispatchResult.deliveries[0].signature.startsWith("sha256="), "Attaches X-MISDESC-Signature header");
+
+  // Test OpenAPI 3.0 specification
+  assert(OPENAPI_SPEC.openapi === "3.0.3", "Exports valid OpenAPI 3.0.3 specification");
+  assert(OPENAPI_SPEC.paths["/cheques"] !== undefined, "Documents /cheques clearing endpoint");
+  assert(OPENAPI_SPEC.paths["/webhooks"] !== undefined, "Documents /webhooks Core Banking API");
 
   // TEST SUMMARY
   console.log("\n================================================================");
   console.log(`  Diagnostic Results: ${passed} PASSED, ${failed} FAILED`);
   console.log("================================================================\n");
+
 
   if (failed > 0) {
     process.exit(1);
@@ -370,4 +617,5 @@ runTests().catch((err) => {
   console.error("Diagnostic execution error:", err);
   process.exit(1);
 });
+
 

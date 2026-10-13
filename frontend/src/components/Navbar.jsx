@@ -30,8 +30,8 @@ const DEMO_ROLES = [
   {
     role: "ADMIN",
     label: "Clearing House Admin",
-    sublabel: "National Clearing House (CTS)",
-    email: "admin@cts.com",
+    sublabel: "National Clearing House (MISDESC)",
+    email: "admin@MISDESC.com",
     path: "/admin",
   },
   {
@@ -45,7 +45,7 @@ const DEMO_ROLES = [
     role: "IT_STAFF",
     label: "Core SRE & IT Staff",
     sublabel: "Central Switch Infrastructure",
-    email: "itops@cts.com",
+    email: "itops@MISDESC.com",
     path: "/it-monitoring",
   },
   {
@@ -59,7 +59,7 @@ const DEMO_ROLES = [
     role: "SETTLEMENT_OFFICER",
     label: "Settlement & Treasury Officer",
     sublabel: "National Treasury Settlement Desk",
-    email: "treasury@cts.com",
+    email: "treasury@MISDESC.com",
     path: "/settlement",
   },
 ];
@@ -138,12 +138,12 @@ export default function Navbar() {
           >
             <img
               src={logo}
-              alt="CTS Logo"
+              alt="MISDESC Logo"
               className="w-8 h-8 sm:w-9 sm:h-9 rounded-lg object-cover border border-slate-700"
             />
             <div className="flex flex-col">
               <div className="font-bold tracking-tight text-sm sm:text-base leading-none flex items-center gap-2">
-                <span className="text-white">CTS</span>
+                <span className="text-white">MISDESC</span>
                 <span className="text-slate-600 font-light hidden sm:inline">|</span>
                 <span className="text-xs font-semibold text-slate-300 hidden sm:inline tracking-normal">
                   Cheque Truncation System

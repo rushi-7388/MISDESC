@@ -10,6 +10,9 @@ export default function InterbankCapitalFlowGraph() {
   const [activeTab, setActiveTab] = useState("topology"); // "topology" | "bilateral" | "daemon"
   const [daemonState, setDaemonState] = useState({ enabled: false, autoSolve: false, intervalMs: 15000 });
   const [daemonTicking, setDaemonTicking] = useState(false);
+  const [cycleBurstPulse, setCycleBurstPulse] = useState(false);
+  const [shockLoading, setShockLoading] = useState(false);
+  const [shockNotification, setShockNotification] = useState(null);
 
   const fetchTopology = async () => {
     try {
@@ -36,6 +39,8 @@ export default function InterbankCapitalFlowGraph() {
       const res = await client.post("/liquidity/lsm/resolve-gridlock", { includeBilateral });
       if (res.data.receipt) {
         setLastReceipt(res.data.receipt);
+        setCycleBurstPulse(true);
+        setTimeout(() => setCycleBurstPulse(false), 5000);
       }
       setData(res.data.topology);
     } catch (err) {
@@ -46,10 +51,27 @@ export default function InterbankCapitalFlowGraph() {
     }
   };
 
+  const handleSimulateShock = async (shockType = "SURGE", amount = 500000000) => {
+    try {
+      setShockLoading(true);
+      const res = await client.post("/liquidity/lsm/simulate-shock", { shockType, amount });
+      if (res.data.topology) {
+        setData(res.data.topology);
+      }
+      setShockNotification(res.data.shock?.narrative || "Interbank clearing shock injected.");
+      setTimeout(() => setShockNotification(null), 6000);
+    } catch (err) {
+      alert("Failed to inject liquidity shock: " + (err.response?.data?.error || err.message));
+    } finally {
+      setShockLoading(false);
+    }
+  };
+
   const handleReset = async () => {
     try {
       setLoading(true);
       setLastReceipt(null);
+      setCycleBurstPulse(false);
       const res = await client.post("/liquidity/lsm/reset");
       setData(res.data);
     } catch (err) {
@@ -58,6 +80,7 @@ export default function InterbankCapitalFlowGraph() {
       setLoading(false);
     }
   };
+
 
   const handleToggleDaemon = async (enabled, autoSolve) => {
     try {
@@ -109,8 +132,18 @@ export default function InterbankCapitalFlowGraph() {
         <div className="flex flex-wrap items-center gap-2 sm:gap-3">
           <button
             type="button"
+            onClick={() => handleSimulateShock("SURGE", 500000000)}
+            disabled={loading || solving || shockLoading}
+            className="px-3 py-1.5 rounded-xl border border-rose-800/80 bg-rose-950/60 hover:bg-rose-900 text-rose-300 text-xs font-semibold transition-all cursor-pointer disabled:opacity-50 flex items-center gap-1.5 shadow-2xs"
+            title="Inject an interbank clearing shock (₹50 Cr surge) to test Tarjan LSM cycle solver"
+          >
+            <span>{shockLoading ? "Injecting..." : "⚡ Inject ₹50 Cr Surge"}</span>
+          </button>
+
+          <button
+            type="button"
             onClick={handleReset}
-            disabled={loading || solving}
+            disabled={loading || solving || shockLoading}
             className="px-3 py-1.5 rounded-xl border border-slate-700 bg-slate-900 hover:bg-slate-800 text-slate-300 text-xs font-semibold transition-all cursor-pointer disabled:opacity-50"
           >
             ↺ Reset Graph
@@ -143,6 +176,27 @@ export default function InterbankCapitalFlowGraph() {
           </button>
         </div>
       </div>
+
+      {/* Shock or Burst Feedback Banners */}
+      {shockNotification && (
+        <div className="bg-rose-950/70 border border-rose-700/80 text-rose-200 px-4 py-2.5 rounded-xl text-xs font-semibold flex items-center justify-between shadow-lg animate-pulse">
+          <span className="flex items-center gap-2">
+            <span>🚨 STRESS SIMULATOR:</span>
+            <span>{shockNotification}</span>
+          </span>
+          <button onClick={() => setShockNotification(null)} className="font-bold text-rose-400 hover:text-white">✕</button>
+        </div>
+      )}
+
+      {cycleBurstPulse && (
+        <div className="bg-emerald-950/80 border border-emerald-500/90 text-emerald-200 px-4 py-2.5 rounded-xl text-xs font-bold flex items-center justify-between shadow-2xl animate-fade-in">
+          <span className="flex items-center gap-2">
+            <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping" />
+            <span>⚡ TARJAN SCC CYCLE ELIMINATED: Circular indebtedness discharged with 0% central bank liquidity!</span>
+          </span>
+          <span className="font-mono text-[11px] text-cyan-300">100% CAPITAL EFFICIENCY PURE OFFSET</span>
+        </div>
+      )}
 
       {/* Mode Navigation Tabs */}
       <div className="flex items-center gap-2 border-b border-slate-800 text-xs">
@@ -227,7 +281,7 @@ export default function InterbankCapitalFlowGraph() {
             <div className="absolute top-4 left-4 bg-rose-950/80 border border-rose-800 text-rose-300 text-[11px] px-3 py-1.5 rounded-xl backdrop-blur-md flex items-center gap-2 shadow-lg z-10">
               <span className="w-2 h-2 rounded-full bg-rose-500 animate-ping" />
               <span>
-                <strong>Circular Debt Cycle:</strong> [SRT ➔ SBI ➔ HDFC ➔ SRT] holding ₹1.50 Cr queued.
+                <strong>Circular Debt Cycle:</strong> [SRT ➔ SBI ➔ HDFC ➔ SRT] holding ₹{(data.metrics.gridlockGrossVolume / 100000).toFixed(0)}L queued.
               </span>
             </div>
           )}
@@ -250,9 +304,16 @@ export default function InterbankCapitalFlowGraph() {
                   <feMergeNode in="SourceGraphic" />
                 </feMerge>
               </filter>
+              <filter id="glow-burst" x="-30%" y="-30%" width="160%" height="160%">
+                <feGaussianBlur stdDeviation="6" result="blur" />
+                <feMerge>
+                  <feMergeNode in="blur" />
+                  <feMergeNode in="SourceGraphic" />
+                </feMerge>
+              </filter>
             </defs>
 
-            {/* Render Edges */}
+            {/* Render Edges with Multi-Particle Staggered Motion */}
             {data?.edges?.map((edge) => {
               const p1 = nodePositions[edge.source];
               const p2 = nodePositions[edge.target];
@@ -280,10 +341,19 @@ export default function InterbankCapitalFlowGraph() {
                     className={isDeadlock ? "animate-pulse" : ""}
                   />
 
+                  {/* Multi-Particle Stream: Staggered Particles Flowing along Corridor */}
                   {!isSettled && (
-                    <circle r={isDeadlock ? 3.5 : 2.5} fill={isDeadlock ? "#fb7185" : "#38bdf8"}>
-                      <animateMotion dur={isDeadlock ? "1.4s" : "2.6s"} repeatCount="indefinite" path={pathD} />
-                    </circle>
+                    <>
+                      <circle r={isDeadlock ? 3.5 : 2.5} fill={isDeadlock ? "#fb7185" : "#38bdf8"}>
+                        <animateMotion dur={isDeadlock ? "1.4s" : "2.6s"} begin="0s" repeatCount="indefinite" path={pathD} />
+                      </circle>
+                      <circle r={isDeadlock ? 2.8 : 2.0} fill={isDeadlock ? "#f43f5e" : "#06b6d4"}>
+                        <animateMotion dur={isDeadlock ? "1.4s" : "2.6s"} begin="0.7s" repeatCount="indefinite" path={pathD} />
+                      </circle>
+                      <circle r={isDeadlock ? 2.2 : 1.6} fill={isDeadlock ? "#fda4af" : "#a5f3fc"}>
+                        <animateMotion dur={isDeadlock ? "1.4s" : "2.6s"} begin="1.4s" repeatCount="indefinite" path={pathD} />
+                      </circle>
+                    </>
                   )}
 
                   <g transform={`translate(${mx}, ${my})`}>
@@ -313,12 +383,17 @@ export default function InterbankCapitalFlowGraph() {
               );
             })}
 
-            {/* Render Nodes */}
+            {/* Render Nodes with Real-Time Headroom Radius Scaling & Cycle Burst Pulse */}
             {data?.nodes?.map((node) => {
               const pos = nodePositions[node.id];
               if (!pos) return null;
 
-              const baseRadius = 32 + (node.collateral / 50000000) * 12;
+              // Real-Time Dynamic Radius Scaling based on available headroom ratio
+              const headroom = Number(node.availableHeadroom || 0);
+              const capacity = Number(node.totalCapacity || 1);
+              const headroomRatio = Math.max(0.1, Math.min(1.0, headroom / capacity));
+              const baseRadius = 26 + headroomRatio * 20; // 28px - 46px dynamic radius
+
               const isSelected = selectedNode?.id === node.id;
               const isRestricted = node.status === "GRIDLOCK_RESTRICTED" && isGridlocked;
 
@@ -329,6 +404,18 @@ export default function InterbankCapitalFlowGraph() {
                   className="cursor-pointer group"
                   onClick={() => setSelectedNode(node)}
                 >
+                  {/* Radiating Green Shockwave when Tarjan Cycle is Eliminated */}
+                  {cycleBurstPulse && (
+                    <circle
+                      r={baseRadius + 16}
+                      fill="none"
+                      stroke="#10b981"
+                      strokeWidth="2.5"
+                      opacity="0.8"
+                      className="animate-ping origin-center"
+                    />
+                  )}
+
                   {isRestricted && (
                     <circle
                       r={baseRadius + 8}
@@ -343,9 +430,17 @@ export default function InterbankCapitalFlowGraph() {
                   <circle
                     r={baseRadius}
                     fill="#0f172a"
-                    stroke={isRestricted ? "#f43f5e" : isSelected ? "#38bdf8" : pos.color}
-                    strokeWidth={isSelected ? 4 : 2.5}
-                    className="transition-all duration-200 group-hover:scale-105"
+                    stroke={
+                      cycleBurstPulse
+                        ? "#10b981"
+                        : isRestricted
+                        ? "#f43f5e"
+                        : isSelected
+                        ? "#38bdf8"
+                        : pos.color
+                    }
+                    strokeWidth={isSelected || cycleBurstPulse ? 3.5 : 2.5}
+                    className="transition-all duration-300 group-hover:scale-105"
                   />
 
                   <text
@@ -368,7 +463,7 @@ export default function InterbankCapitalFlowGraph() {
                     fontSize="9"
                     fontFamily="monospace"
                   >
-                    ₹{(node.availableHeadroom / 100000).toFixed(1)}L
+                    ₹{(headroom / 100000).toFixed(1)}L
                   </text>
 
                   <text

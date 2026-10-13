@@ -98,6 +98,7 @@ model Batch {
   discrepancyAmount    Decimal               @default(0) @db.Decimal(14, 2)
   reconciliationReport Json?
   signatures           BatchSignatureAudit[]
+  pqcManifests         PqcManifest[]
 
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
@@ -161,6 +162,13 @@ model Cheque {
 
   // Intraday Liquidity Reservation
   liquidityReservationRef String?
+
+  // Next-Gen Fintech Engines Relations
+  smartContract  SmartChequeContract?
+  microLien      MicroLien?
+  zkProofRecords ZkProofRecord[]
+  swarmDockets   SwarmDocket[]
+  sanctionsLogs  SanctionsLog[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -303,7 +311,7 @@ model LiquidityEvent {
 }
 
 // ============================================================================
-// 2. Clearing Dispute Resolution & Chargeback Engine (NPCI CTS DRM)
+// 2. Clearing Dispute Resolution & Chargeback Engine (NPCI MISDESC DRM)
 // ============================================================================
 enum DisputeType {
   UNAUTHORIZED_DEBIT
@@ -375,7 +383,7 @@ model DigitalCertificate {
   bank            Bank                  @relation(fields: [bankId], references: [id])
   certThumbprint  String                @unique
   serialNumber    String                @unique
-  issuer          String                @default("CTS National PKI Root Trust CA")
+  issuer          String                @default("MISDESC National PKI Root Trust CA")
   subject         String
   validFrom       DateTime
   validTo         DateTime
@@ -397,5 +405,164 @@ model BatchSignatureAudit {
   verified          Boolean            @default(true)
   verificationNotes String?
   signedAt          DateTime           @default(now())
+}
+
+// ============================================================================
+// 4. Programmable Smart Cheques & Micro-Lien Escrows
+// ============================================================================
+model SmartChequeContract {
+  id                String            @id @default(uuid())
+  contractId        String            @unique
+  chequeId          String            @unique
+  cheque            Cheque            @relation(fields: [chequeId], references: [id], onDelete: Cascade)
+  totalAmount       Decimal           @db.Decimal(14, 2)
+  taxRatePercent    Float             @default(18.0)
+  taxDeductedAmount Decimal           @db.Decimal(14, 2)
+  netVendorAmount   Decimal           @db.Decimal(14, 2)
+  taxAuthority      String            @default("GSTN / CBDT")
+  taxChallanRef     String?
+  programmableState String            @default("ACTIVE") // ACTIVE, SATISFIED, REVOKED
+  cbdcSettled       Boolean           @default(false)
+  cbdcReceipt       Json?
+  milestones        EscrowMilestone[]
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
+}
+
+model EscrowMilestone {
+  id            String              @id @default(uuid())
+  contractId    String
+  contract      SmartChequeContract @relation(fields: [contractId], references: [id], onDelete: Cascade)
+  stepId        String              // M1_PRESENTATION_CLEARANCE, M2_DELIVERY_SIGN_OFF
+  name          String
+  payoutPercent Float
+  amount        Decimal             @db.Decimal(14, 2)
+  status        String              @default("PENDING") // SATISFIED, PENDING_IOT_CONFIRMATION
+  releasedAt    DateTime?
+  createdAt     DateTime            @default(now())
+}
+
+model MicroLien {
+  id               String   @id @default(uuid())
+  lienId           String   @unique
+  chequeId         String   @unique
+  cheque           Cheque   @relation(fields: [chequeId], references: [id], onDelete: Cascade)
+  drawerAccount    String
+  earmarkedAmount  Decimal  @db.Decimal(14, 2)
+  status           String   @default("LOCKED_IN_ESCROW")
+  bounceRisk       String   @default("0.0%")
+  cbsLockReference String
+  holdExpiry       DateTime
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+}
+
+// ============================================================================
+// 5. Zero-Knowledge Confidential Clearing (zk-SNARK Groth16 / BN254)
+// ============================================================================
+model ZkProofRecord {
+  id               String   @id @default(uuid())
+  proofId          String   @unique
+  chequeId         String
+  cheque           Cheque   @relation(fields: [chequeId], references: [id], onDelete: Cascade)
+  protocol         String   @default("Groth16")
+  curve            String   @default("BN254")
+  provingTimeMs    Float
+  publicSignals    Json
+  proofPiA         Json
+  proofPiB         Json
+  proofPiC         Json
+  verified         Boolean  @default(true)
+  pairingEquation  String?
+  createdAt        DateTime @default(now())
+}
+
+// ============================================================================
+// 6. Post-Quantum Cryptography (NIST FIPS 204 ML-DSA / FIPS 203 ML-KEM)
+// ============================================================================
+model PqcManifest {
+  id                 String   @id @default(uuid())
+  manifestId         String   @unique
+  batchId            String
+  batch              Batch    @relation(fields: [batchId], references: [id], onDelete: Cascade)
+  bankCode           String
+  algorithm          String   @default("ML-DSA-65")
+  classicalDigest    String
+  pqcDigest          String
+  dualLayerSignature Json
+  latticeNormBound   Float
+  latticeVerified    Boolean  @default(true)
+  kemEncapsulation   Json?
+  signedAt           DateTime @default(now())
+}
+
+// ============================================================================
+// 7. Autonomous 4-Agent Swarm Adjudication & Forensic Dockets
+// ============================================================================
+model SwarmDocket {
+  id             String   @id @default(uuid())
+  docketId       String   @unique
+  chequeId       String
+  cheque         Cheque   @relation(fields: [chequeId], references: [id], onDelete: Cascade)
+  consensusScore Float
+  verdict        String   // STP_CLEARED_AUTONOMOUS, ESCALATED_HUMAN_REVIEW
+  stpExecuted    Boolean  @default(false)
+  durationMs     Float
+  sealedProof    String
+  agentResults   Json     // Array of 4 agent outputs & metrics
+  criticalFlags  Json     // Flags array
+  createdAt      DateTime @default(now())
+}
+
+// ============================================================================
+// 8. International Sanctions & PEP Watchlist Audit Radar
+// ============================================================================
+model SanctionsLog {
+  id                  String   @id @default(uuid())
+  screeningRef        String   @unique
+  chequeId            String?
+  cheque              Cheque?  @relation(fields: [chequeId], references: [id], onDelete: SetNull)
+  drawerName          String
+  payeeName           String
+  countryOrigin       String   @default("IN")
+  verdict             String   // CLEARED_INTERNATIONAL_CLEARING, SANCTIONS_BLOCKED_OFAC_VIOLATION, etc.
+  isBlocked           Boolean  @default(false)
+  isFlagged           Boolean  @default(false)
+  screeningDurationMs Float
+  matches             Json
+  auditorOverride     Boolean  @default(false)
+  overrideBy          String?
+  overrideNotes       String?
+  createdAt           DateTime @default(now())
+}
+
+// ============================================================================
+// 9. Multi-Tenant Core Banking (CBS) Webhook Gateway & Open Banking APIs
+// ============================================================================
+model WebhookSubscription {
+  id          String   @id @default(uuid())
+  bankCode    String   // e.g. "SBIN", "HDFC", "FINACLE_CORP", "FLEXCUBE_01"
+  systemName  String   @default("CORE_BANKING_SYSTEM") // "Finacle", "TCS BaNCS", "Oracle Flexcube"
+  targetUrl   String
+  secretKey   String   // HMAC-SHA256 signing secret
+  events      Json     // Array of subscribed events ["CHEQUE_PRESENTED", "LIEN_EARMARKED", "LSM_CYCLE_SETTLED", "DISPUTE_FILED"]
+  isActive    Boolean  @default(true)
+  deliveries  WebhookDelivery[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model WebhookDelivery {
+  id             String   @id @default(uuid())
+  subscriptionId String
+  subscription   WebhookSubscription @relation(fields: [subscriptionId], references: [id], onDelete: Cascade)
+  eventType      String
+  payload        Json
+  signature      String   // HMAC-SHA256 signature
+  statusCode     Int?
+  responseBody   String?
+  attempts       Int      @default(1)
+  status         String   // DELIVERED, FAILED, RETRYING
+  createdAt      DateTime @default(now())
 }
 

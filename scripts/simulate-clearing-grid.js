@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // ==============================================================================
-// CTS Real-Time National Clearing Grid Traffic Simulator
+// MISDESC Real-Time National Clearing Grid Traffic Simulator
 // Generates live interbank clearing traffic across all 6 next-gen fintech engines:
 // 1. Tarjan LSM Cycle Solving
 // 2. Autonomous Multi-Agent Swarm Adjudication
@@ -23,7 +23,7 @@ const crossborderService = require(path.join(BACKEND_DIR, "src/services/crossbor
 const { getPrometheusMetrics } = require(path.join(BACKEND_DIR, "src/utils/metrics.util"));
 
 console.log("==================================================================");
-console.log("   CTS NATIONAL CLEARING GRID — INTERBANK TRAFFIC SIMULATOR       ");
+console.log("   MISDESC NATIONAL CLEARING GRID — INTERBANK TRAFFIC SIMULATOR       ");
 console.log("==================================================================");
 
 async function simulate() {
@@ -65,7 +65,7 @@ async function simulate() {
     // 4. zk-SNARK Groth16 Confidential Solvency Proof
     const zkProof = zkpService.generateSolvencyProof(mockCheque, { balance: 5000000 });
     const zkVerification = zkpService.verifySolvencyProof(zkProof);
-    console.log(`[zk-CTS BN254] Zero-knowledge proof verified: ${zkVerification.verified} in ${zkVerification.verificationTimeMs}ms (0% data leakage)`);
+    console.log(`[zk-MISDESC BN254] Zero-knowledge proof verified: ${zkVerification.verified} in ${zkVerification.verificationTimeMs}ms (0% data leakage)`);
 
     // 5. Programmable Smart Cheque Escrow & CBDC Settlement
     const contract = smartchequeService.createSmartContract(mockCheque.id, mockCheque.amount, {
@@ -90,15 +90,15 @@ async function simulate() {
 
   console.log(">>> Checking updated Prometheus Metrics Registry...");
   const metrics = await getPrometheusMetrics();
-  const lsmMetric = metrics.match(/cts_lsm_gridlock_cycles_resolved_total.* (\d+)/);
-  const swarmMetric = metrics.match(/cts_swarm_reviews_total.* (\d+)/);
-  const pqcMetric = metrics.match(/cts_pqc_signatures_verified_total.* (\d+)/);
-  const zkpMetric = metrics.match(/cts_zkp_proofs_verified_total.* (\d+)/);
+  const lsmMetric = metrics.match(/MISDESC_lsm_gridlock_cycles_resolved_total.* (\d+)/);
+  const swarmMetric = metrics.match(/MISDESC_swarm_reviews_total.* (\d+)/);
+  const pqcMetric = metrics.match(/MISDESC_pqc_signatures_verified_total.* (\d+)/);
+  const zkpMetric = metrics.match(/MISDESC_zkp_proofs_verified_total.* (\d+)/);
 
-  console.log(`- cts_lsm_gridlock_cycles_resolved_total: ${lsmMetric ? lsmMetric[1] : "Active"}`);
-  console.log(`- cts_swarm_reviews_total:                 ${swarmMetric ? swarmMetric[1] : "Active"}`);
-  console.log(`- cts_pqc_signatures_verified_total:     ${pqcMetric ? pqcMetric[1] : "Active"}`);
-  console.log(`- cts_zkp_proofs_verified_total:          ${zkpMetric ? zkpMetric[1] : "Active"}`);
+  console.log(`- MISDESC_lsm_gridlock_cycles_resolved_total: ${lsmMetric ? lsmMetric[1] : "Active"}`);
+  console.log(`- MISDESC_swarm_reviews_total:                 ${swarmMetric ? swarmMetric[1] : "Active"}`);
+  console.log(`- MISDESC_pqc_signatures_verified_total:     ${pqcMetric ? pqcMetric[1] : "Active"}`);
+  console.log(`- MISDESC_zkp_proofs_verified_total:          ${zkpMetric ? zkpMetric[1] : "Active"}`);
 
   console.log("\n==================================================================");
   console.log("   🎉 CLEARING SIMULATION COMPLETE — TELEMETRY DISPATCHED!        ");

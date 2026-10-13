@@ -3,7 +3,7 @@ const prisma = require("../config/prisma");
 
 /**
  * Public Key Infrastructure (PKI) & Digital Signature Service
- * Conforms to CTS-2010 X.509 PKI Digital Signature Mandate.
+ * Conforms to MISDESC-2010 X.509 PKI Digital Signature Mandate.
  */
 
 /**
@@ -13,7 +13,7 @@ async function registerCertificate({
   bankId,
   subject,
   serialNumber,
-  issuer = "CTS National PKI Root Trust CA",
+  issuer = "MISDESC National PKI Root Trust CA",
   validityDays = 365,
   keyAlgorithm = "RSA-4096 / SHA-256",
 }) {
@@ -26,7 +26,7 @@ async function registerCertificate({
 
   const validFrom = new Date();
   const validTo = new Date(Date.now() + validityDays * 24 * 60 * 60 * 1000);
-  const genSerial = serialNumber || `CTS-PKI-${Date.now().toString(16).toUpperCase()}`;
+  const genSerial = serialNumber || `MISDESC-PKI-${Date.now().toString(16).toUpperCase()}`;
 
   // Deterministic SHA-256 thumbprint from certificate attributes
   const rawCertData = `${bank.code}::${subject}::${genSerial}::${validFrom.toISOString()}::${validTo.toISOString()}`;
@@ -35,7 +35,7 @@ async function registerCertificate({
   const certificate = await prisma.digitalCertificate.create({
     data: {
       bankId,
-      subject: subject || `CN=${bank.name} CTS Clearing Signer, O=${bank.name}, C=IN`,
+      subject: subject || `CN=${bank.name} MISDESC Clearing Signer, O=${bank.name}, C=IN`,
       serialNumber: genSerial,
       issuer,
       certThumbprint,
@@ -116,7 +116,7 @@ async function signBatchPayload(batchId, bankId) {
       payloadDigest,
       signatureDigest,
       verified: true,
-      verificationNotes: `Digitally signed with CTS PKI Cert #${certificate.serialNumber} (${certificate.keyAlgorithm})`,
+      verificationNotes: `Digitally signed with MISDESC PKI Cert #${certificate.serialNumber} (${certificate.keyAlgorithm})`,
     },
     include: { certificate: true, batch: true },
   });

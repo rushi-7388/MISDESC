@@ -11,7 +11,7 @@
       "collapsed": false,
       "gridPos": { "h": 1, "w": 24, "x": 0, "y": 0 },
       "id": 100,
-      "title": "National CTS: Continuous Clearing & e-Kuber Real-Time Pulse",
+      "title": "National MISDESC: Continuous Clearing & e-Kuber Real-Time Pulse",
       "type": "row"
     },
     {
@@ -21,7 +21,7 @@
       "gridPos": { "h": 4, "w": 6, "x": 0, "y": 1 },
       "targets": [
         {
-          "expr": "sum(cts_ekuber_realizations_total) or vector(0)",
+          "expr": "sum(MISDESC_ekuber_realizations_total) or vector(0)",
           "refId": "A",
           "legendFormat": "Realizations"
         }
@@ -47,7 +47,7 @@
       "gridPos": { "h": 4, "w": 6, "x": 6, "y": 1 },
       "targets": [
         {
-          "expr": "sum(cts_settlement_volume_inr_total) or vector(0)",
+          "expr": "sum(MISDESC_settlement_volume_inr_total) or vector(0)",
           "refId": "A",
           "legendFormat": "INR Cleared"
         }
@@ -73,7 +73,7 @@
       "gridPos": { "h": 4, "w": 6, "x": 12, "y": 1 },
       "targets": [
         {
-          "expr": "sum(cts_cheques_cleared_total) or vector(0)",
+          "expr": "sum(MISDESC_cheques_cleared_total) or vector(0)",
           "refId": "A",
           "legendFormat": "Cleared"
         }
@@ -98,7 +98,7 @@
       "gridPos": { "h": 4, "w": 6, "x": 18, "y": 1 },
       "targets": [
         {
-          "expr": "sum(rate(cts_http_requests_total[1m])) or vector(0)",
+          "expr": "sum(rate(MISDESC_http_requests_total[1m])) or vector(0)",
           "refId": "A",
           "legendFormat": "Throughput"
         }
@@ -124,12 +124,12 @@
       "gridPos": { "h": 8, "w": 12, "x": 0, "y": 6 },
       "targets": [
         {
-          "expr": "sum(rate(cts_cheques_cleared_total[1m])) by (drawee_bank)",
+          "expr": "sum(rate(MISDESC_cheques_cleared_total[1m])) by (drawee_bank)",
           "refId": "A",
           "legendFormat": "Cleared: {{drawee_bank}}"
         },
         {
-          "expr": "sum(rate(cts_cheques_presented_total[1m])) by (presenting_bank)",
+          "expr": "sum(rate(MISDESC_cheques_presented_total[1m])) by (presenting_bank)",
           "refId": "B",
           "legendFormat": "Presented: {{presenting_bank}}"
         }
@@ -142,7 +142,7 @@
       "gridPos": { "h": 8, "w": 12, "x": 12, "y": 6 },
       "targets": [
         {
-          "expr": "cts_liquidity_utilization_ratio or vector(0.48)",
+          "expr": "MISDESC_liquidity_utilization_ratio or vector(0.48)",
           "refId": "A",
           "legendFormat": "{{bank_code}}"
         }
@@ -177,7 +177,7 @@
       "gridPos": { "h": 7, "w": 12, "x": 0, "y": 15 },
       "targets": [
         {
-          "expr": "sum(cts_pps_verification_total) by (result)",
+          "expr": "sum(MISDESC_pps_verification_total) by (result)",
           "refId": "A",
           "legendFormat": "{{result}}"
         }
@@ -190,12 +190,12 @@
       "gridPos": { "h": 7, "w": 12, "x": 12, "y": 15 },
       "targets": [
         {
-          "expr": "histogram_quantile(0.95, sum(rate(cts_http_request_duration_seconds_bucket[1m])) by (le))",
+          "expr": "histogram_quantile(0.95, sum(rate(MISDESC_http_request_duration_seconds_bucket[1m])) by (le))",
           "refId": "A",
           "legendFormat": "P95 Latency"
         },
         {
-          "expr": "histogram_quantile(0.99, sum(rate(cts_http_request_duration_seconds_bucket[1m])) by (le))",
+          "expr": "histogram_quantile(0.99, sum(rate(MISDESC_http_request_duration_seconds_bucket[1m])) by (le))",
           "refId": "B",
           "legendFormat": "P99 Latency"
         }
@@ -220,7 +220,7 @@
       "gridPos": { "h": 4, "w": 6, "x": 0, "y": 23 },
       "targets": [
         {
-          "expr": "sum(cts_lsm_gridlock_cycles_resolved_total) or vector(0)",
+          "expr": "sum(MISDESC_lsm_gridlock_cycles_resolved_total) or vector(0)",
           "refId": "A",
           "legendFormat": "SCC Cycles Resolved"
         }
@@ -246,7 +246,7 @@
       "gridPos": { "h": 4, "w": 6, "x": 6, "y": 23 },
       "targets": [
         {
-          "expr": "sum(cts_lsm_liquidity_unlocked_inr_total) or vector(0)",
+          "expr": "sum(MISDESC_lsm_liquidity_unlocked_inr_total) or vector(0)",
           "refId": "A",
           "legendFormat": "Liquidity Saved"
         }
@@ -267,12 +267,12 @@
     },
     {
       "id": 11,
-      "title": "Autonomous Swarm Adjudication Verdicts",
+      "title": "Autonomous Swarm Adjudication VerdiMISDESC",
       "type": "barchart",
       "gridPos": { "h": 7, "w": 12, "x": 12, "y": 23 },
       "targets": [
         {
-          "expr": "sum(cts_swarm_reviews_total) by (verdict)",
+          "expr": "sum(MISDESC_swarm_reviews_total) by (verdict)",
           "refId": "A",
           "legendFormat": "{{verdict}}"
         }
@@ -285,7 +285,7 @@
       "gridPos": { "h": 3, "w": 6, "x": 0, "y": 27 },
       "targets": [
         {
-          "expr": "sum(cts_pqc_signatures_verified_total) or vector(0)",
+          "expr": "sum(MISDESC_pqc_signatures_verified_total) or vector(0)",
           "refId": "A",
           "legendFormat": "PQC Signatures"
         }
@@ -304,7 +304,7 @@
       "gridPos": { "h": 3, "w": 6, "x": 6, "y": 27 },
       "targets": [
         {
-          "expr": "sum(cts_pqc_key_exchanges_total) or vector(0)",
+          "expr": "sum(MISDESC_pqc_key_exchanges_total) or vector(0)",
           "refId": "A",
           "legendFormat": "KEM Tunnels"
         }
@@ -337,9 +337,9 @@
       "gridPos": { "h": 6, "w": 6, "x": 0, "y": 31 },
       "targets": [
         {
-          "expr": "sum(cts_zkp_proofs_verified_total) by (result)",
+          "expr": "sum(MISDESC_zkp_proofs_verified_total) by (result)",
           "refId": "A",
-          "legendFormat": "zk-CTS Proofs: {{result}}"
+          "legendFormat": "zk-MISDESC Proofs: {{result}}"
         }
       ],
       "fieldConfig": {
@@ -363,12 +363,12 @@
       "gridPos": { "h": 6, "w": 10, "x": 6, "y": 31 },
       "targets": [
         {
-          "expr": "sum(rate(cts_smart_cheque_contracts_total[1m])) or vector(0)",
+          "expr": "sum(rate(MISDESC_smart_cheque_contraMISDESC_total[1m])) or vector(0)",
           "refId": "A",
-          "legendFormat": "Escrow Contracts / sec"
+          "legendFormat": "Escrow ContraMISDESC / sec"
         },
         {
-          "expr": "sum(rate(cts_cbdc_settlements_total[1m])) or vector(0)",
+          "expr": "sum(rate(MISDESC_cbdc_settlements_total[1m])) or vector(0)",
           "refId": "B",
           "legendFormat": "CBDC e-Rupee Finality / sec"
         }
@@ -381,7 +381,7 @@
       "gridPos": { "h": 6, "w": 8, "x": 16, "y": 31 },
       "targets": [
         {
-          "expr": "sum(cts_sanctions_screened_total) by (verdict)",
+          "expr": "sum(MISDESC_sanctions_screened_total) by (verdict)",
           "refId": "A",
           "legendFormat": "Watchlist Scan: {{verdict}}"
         }
@@ -391,10 +391,10 @@
   "refresh": "5s",
   "schemaVersion": 38,
   "style": "dark",
-  "tags": ["cts", "clearing", "ekuber", "rbi", "fintech"],
+  "tags": ["MISDESC", "clearing", "ekuber", "rbi", "fintech"],
   "time": { "from": "now-1h", "to": "now" },
   "timepicker": { "refresh_intervals": ["5s", "10s", "30s", "1m"] },
   "timezone": "browser",
-  "title": "CTS National Clearing Grid: Continuous e-Kuber Executive Dashboard",
-  "uid": "cts-national-clearing"
+  "title": "MISDESC National Clearing Grid: Continuous e-Kuber Executive Dashboard",
+  "uid": "MISDESC-national-clearing"
 }

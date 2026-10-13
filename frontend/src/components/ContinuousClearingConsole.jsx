@@ -134,7 +134,7 @@ export default function ContinuousClearingConsole() {
               {timerDisplay}
             </span>
             <span className="text-[11px] font-mono text-slate-400">
-              Cycle: #CTS-CC-{new Date().toISOString().slice(8, 10)}84
+              Cycle: #MISDESC-CC-{new Date().toISOString().slice(8, 10)}84
             </span>
           </div>
           <div className="w-full bg-slate-800 rounded-full h-1.5 overflow-hidden">

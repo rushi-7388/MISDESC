@@ -33,6 +33,16 @@ export default function DraweeBankDashboard() {
   const [ekuberChequeId, setEkuberChequeId] = useState(null);
   const [returnMemoChequeId, setReturnMemoChequeId] = useState(null);
 
+  // Clerk High-Speed Hotkey Navigation State (J/K, Space, S, R)
+  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [hotkeyFeedback, setHotkeyFeedback] = useState(null);
+  const [hotkeysEnabled, setHotkeysEnabled] = useState(true);
+
+  const showToast = (msg) => {
+    setHotkeyFeedback(msg);
+    setTimeout(() => setHotkeyFeedback(null), 3000);
+  };
+
   async function load() {
     try {
       const { data } = await client.get("/cheques");
@@ -44,9 +54,26 @@ export default function DraweeBankDashboard() {
     }
   }
 
+  // Quick Approve/Clear Cheque via Hotkey [S]
+  async function handleQuickApprove(targetCheque) {
+    if (!targetCheque) return;
+    try {
+      showToast(`⚡ Passing & Clearing Cheque #${targetCheque.chequeNumber}...`);
+      await client.patch(`/cheques/${targetCheque.id}/status`, {
+        status: "CLEARED",
+        remarks: "Fast-tracked & Cleared via Clerk Hotkey [S]",
+      });
+      showToast(`✓ Cheque #${targetCheque.chequeNumber} cleared successfully!`);
+      await load();
+    } catch (err) {
+      showToast(`✗ Failed to clear: ${err.response?.data?.error || err.message}`);
+    }
+  }
+
   useEffect(() => {
     load();
   }, []);
+
 
   useClearingEvents(() => {
     load();
@@ -174,8 +201,71 @@ export default function DraweeBankDashboard() {
     return { filteredCheques: [], isCrossTabSearch: false };
   }, [cheques, matchingCheques, activeTab, searchQuery]);
 
+  // Keep selectedIndex within valid range
+  useEffect(() => {
+    if (selectedIndex >= filteredCheques.length && filteredCheques.length > 0) {
+      setSelectedIndex(filteredCheques.length - 1);
+    }
+  }, [filteredCheques.length, selectedIndex]);
+
+  // Clerk High-Speed Hotkey Listener (J, K, Space, S, R)
+  useEffect(() => {
+    function handleKeyDown(e) {
+      if (!hotkeysEnabled) return;
+      const tag = e.target.tagName?.toLowerCase();
+      if (tag === "input" || tag === "textarea" || e.target.isContentEditable) {
+        return;
+      }
+
+      if (e.key === "Escape") {
+        setViewerCheque(null);
+        setReturnMemoChequeId(null);
+        setEkuberChequeId(null);
+        return;
+      }
+
+      if (filteredCheques.length === 0) return;
+      const activeCheque = filteredCheques[selectedIndex] || filteredCheques[0];
+
+      if (e.key === "j" || e.key === "J" || e.key === "ArrowDown") {
+        e.preventDefault();
+        const nextIdx = Math.min(selectedIndex + 1, filteredCheques.length - 1);
+        setSelectedIndex(nextIdx);
+        showToast(`[J] Focus Cheque #${filteredCheques[nextIdx]?.chequeNumber}`);
+      } else if (e.key === "k" || e.key === "K" || e.key === "ArrowUp") {
+        e.preventDefault();
+        const prevIdx = Math.max(selectedIndex - 1, 0);
+        setSelectedIndex(prevIdx);
+        showToast(`[K] Focus Cheque #${filteredCheques[prevIdx]?.chequeNumber}`);
+      } else if (e.key === " " || e.code === "Space") {
+        e.preventDefault();
+        if (activeCheque) {
+          setViewerCheque(activeCheque);
+          showToast(`[Space] Inspecting Cheque #${activeCheque.chequeNumber}`);
+        }
+      } else if (e.key === "s" || e.key === "S") {
+        e.preventDefault();
+        if (activeCheque && ["PRESENTED", "AWAITING_CHECKER"].includes(activeCheque.status)) {
+          handleQuickApprove(activeCheque);
+        } else if (activeCheque) {
+          showToast(`Cheque #${activeCheque.chequeNumber} is ${activeCheque.status}`);
+        }
+      } else if (e.key === "r" || e.key === "R") {
+        e.preventDefault();
+        if (activeCheque) {
+          setReturnMemoChequeId(activeCheque.id);
+          showToast(`[R] Initiating Return Memo for Cheque #${activeCheque.chequeNumber}`);
+        }
+      }
+    }
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [filteredCheques, selectedIndex, hotkeysEnabled]);
+
   return (
     <div className="min-h-screen bg-gray-50/60 pb-16">
+
       <Navbar />
 
       <div className="max-w-7xl mx-auto p-4 sm:p-6 space-y-6">
@@ -191,7 +281,7 @@ export default function DraweeBankDashboard() {
               </span>
             </div>
             <p className="text-xs text-slate-500">
-              Drawee Scrutiny Desk · CTS-2010 Standards · e-Kuber Settlement
+              Drawee Scrutiny Desk · MISDESC-2010 Standards · e-Kuber Settlement
             </p>
           </div>
 
@@ -222,7 +312,7 @@ export default function DraweeBankDashboard() {
             </div>
             <button
               type="button"
-              onClick={() => client.post("/auth/login", { email: "checker@hdb.com", password: "password123" }).then(res => { localStorage.setItem("cts_token", res.data.token); localStorage.setItem("cts_user", JSON.stringify(res.data.user)); window.location.reload(); })}
+              onClick={() => client.post("/auth/login", { email: "checker@hdb.com", password: "password123" }).then(res => { localStorage.setItem("MISDESC_token", res.data.token); localStorage.setItem("MISDESC_user", JSON.stringify(res.data.user)); window.location.reload(); })}
               className="px-3 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white font-semibold transition-colors cursor-pointer"
             >
               Switch to Checker Mode →
@@ -238,7 +328,7 @@ export default function DraweeBankDashboard() {
             </div>
             <button
               type="button"
-              onClick={() => client.post("/auth/login", { email: "drawee@hdb.com", password: "password123" }).then(res => { localStorage.setItem("cts_token", res.data.token); localStorage.setItem("cts_user", JSON.stringify(res.data.user)); window.location.reload(); })}
+              onClick={() => client.post("/auth/login", { email: "drawee@hdb.com", password: "password123" }).then(res => { localStorage.setItem("MISDESC_token", res.data.token); localStorage.setItem("MISDESC_user", JSON.stringify(res.data.user)); window.location.reload(); })}
               className="px-3 py-1.5 rounded-lg bg-amber-600 hover:bg-amber-700 text-white font-semibold transition-colors cursor-pointer"
             >
               Switch to Maker Mode →
@@ -488,17 +578,32 @@ export default function DraweeBankDashboard() {
             ) : null}
           </div>
         ) : viewMode === "cards" ? (
-          /* Zero-Scroll Workbench Cards Grid */
+          /* Zero-Scroll Workbench Cards Grid with Hotkey Target Indicator */
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-            {filteredCheques.map((c) => (
-              <DraweeVerificationCard
+            {filteredCheques.map((c, idx) => (
+              <div
                 key={c.id}
-                cheque={c}
-                onInspect={(cheque) => setViewerCheque(cheque)}
-                onViewEKuber={(id) => setEkuberChequeId(id)}
-                onViewReturnMemo={(id) => setReturnMemoChequeId(id)}
-                onUpdated={() => load()}
-              />
+                onClick={() => setSelectedIndex(idx)}
+                className={`relative rounded-2xl transition-all duration-150 cursor-pointer ${
+                  idx === selectedIndex && hotkeysEnabled
+                    ? "ring-2 ring-purple-600 ring-offset-2 ring-offset-gray-50 shadow-md"
+                    : "hover:ring-1 hover:ring-purple-200"
+                }`}
+              >
+                {idx === selectedIndex && hotkeysEnabled && (
+                  <div className="absolute -top-2.5 right-4 z-20 bg-purple-700 text-white font-mono text-[9px] font-bold px-2 py-0.5 rounded-full shadow-xs flex items-center gap-1">
+                    <span>HOTKEY TARGET</span>
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span>
+                  </div>
+                )}
+                <DraweeVerificationCard
+                  cheque={c}
+                  onInspect={(cheque) => setViewerCheque(cheque)}
+                  onViewEKuber={(id) => setEkuberChequeId(id)}
+                  onViewReturnMemo={(id) => setReturnMemoChequeId(id)}
+                  onUpdated={() => load()}
+                />
+              </div>
             ))}
           </div>
         ) : (
@@ -537,6 +642,48 @@ export default function DraweeBankDashboard() {
           onClose={() => setReturnMemoChequeId(null)}
         />
       )}
+
+      {/* High-Speed Clerk Hotkey HUD Dock */}
+      <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-40 bg-slate-950/95 backdrop-blur-md border border-slate-700/80 rounded-2xl px-4 py-2.5 shadow-2xl flex flex-wrap items-center justify-between gap-3 text-xs text-white max-w-4xl transition-all">
+        <div className="flex items-center gap-1.5 pr-3 border-r border-slate-800 shrink-0">
+          <span className={`w-2 h-2 rounded-full ${hotkeysEnabled ? "bg-emerald-400 animate-pulse" : "bg-slate-500"}`}></span>
+          <span className="font-bold text-[11px] text-slate-200">CLERK HOTKEYS</span>
+        </div>
+
+        <div className="flex flex-wrap items-center gap-2 font-mono text-[10px]">
+          <span className="bg-slate-800 px-1.5 py-0.5 rounded border border-slate-700 text-purple-300 font-bold">J / K</span>
+          <span className="text-slate-400">Navigate</span>
+          <span className="text-slate-600">·</span>
+          <span className="bg-slate-800 px-1.5 py-0.5 rounded border border-slate-700 text-cyan-300 font-bold">Space</span>
+          <span className="text-slate-400">Inspect</span>
+          <span className="text-slate-600">·</span>
+          <span className="bg-slate-800 px-1.5 py-0.5 rounded border border-slate-700 text-emerald-300 font-bold">S</span>
+          <span className="text-slate-400">Pass / Clear</span>
+          <span className="text-slate-600">·</span>
+          <span className="bg-slate-800 px-1.5 py-0.5 rounded border border-slate-700 text-rose-300 font-bold">R</span>
+          <span className="text-slate-400">Return Memo</span>
+        </div>
+
+        {hotkeyFeedback && (
+          <div className="pl-2 border-l border-slate-800 text-cyan-300 font-bold font-mono text-[10px] truncate max-w-xs animate-pulse">
+            {hotkeyFeedback}
+          </div>
+        )}
+
+        <button
+          type="button"
+          onClick={() => setHotkeysEnabled(!hotkeysEnabled)}
+          className={`ml-auto text-[10px] font-bold px-2 py-0.5 rounded transition-all cursor-pointer ${
+            hotkeysEnabled
+              ? "bg-purple-900/70 text-purple-200 border border-purple-600"
+              : "bg-slate-800 text-slate-400 border border-slate-700"
+          }`}
+          title="Toggle high-speed clerk hotkeys"
+        >
+          {hotkeysEnabled ? "ENABLED" : "PAUSED"}
+        </button>
+      </div>
     </div>
   );
 }
+

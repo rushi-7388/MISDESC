@@ -57,7 +57,7 @@ export default function SettlementSummary() {
           <div>
             <div className="flex items-center gap-2">
               <span className="inline-flex items-center justify-center px-2 py-0.5 bg-indigo-50 text-indigo-700 rounded text-xs font-mono font-semibold">
-                RBI/CTS MONITOR
+                RBI/MISDESC MONITOR
               </span>
               <h2 className="font-bold text-base text-gray-900">
                 Interbank Liquidity Cap & Central Bank Settlement Credit Monitor

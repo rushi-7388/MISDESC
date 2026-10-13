@@ -17,6 +17,131 @@ export default function ChequeUploadForm({ onCreated }) {
   const [warnings, setWarnings] = useState([]);
   const [showPreviewModal, setShowPreviewModal] = useState(false);
 
+  const [canvasFilter, setCanvasFilter] = useState("raw"); // "raw" | "grayscale" | "otsu" | "sobel"
+  const [showBoundingBoxes, setShowBoundingBoxes] = useState(true);
+  const [previewImageUrl, setPreviewImageUrl] = useState("/sample-cheque.jpg");
+  const [detectedBoxes, setDetectedBoxes] = useState(null);
+  const canvasRef = useRef(null);
+
+  // Client-side canvas preprocessing: Grayscale, Otsu binarization, Sobel edge detection
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    const width = canvas.width;
+    const height = canvas.height;
+
+    const img = new Image();
+    img.crossOrigin = "anonymous";
+    img.src = previewImageUrl;
+
+    img.onload = () => {
+      ctx.clearRect(0, 0, width, height);
+      ctx.drawImage(img, 0, 0, width, height);
+
+      if (canvasFilter !== "raw") {
+        const imgData = ctx.getImageData(0, 0, width, height);
+        const data = imgData.data;
+        const gray = new Uint8Array(width * height);
+
+        // 1. Grayscale conversion: 0.299R + 0.587G + 0.114B
+        for (let i = 0, j = 0; i < data.length; i += 4, j++) {
+          gray[j] = Math.round(0.299 * data[i] + 0.587 * data[i + 1] + 0.114 * data[i + 2]);
+        }
+
+        if (canvasFilter === "grayscale") {
+          for (let i = 0, j = 0; i < data.length; i += 4, j++) {
+            data[i] = gray[j];
+            data[i + 1] = gray[j];
+            data[i + 2] = gray[j];
+          }
+        } else if (canvasFilter === "otsu") {
+          // 2. Otsu Automated Global Binarization (Isolates E-13B magnetic characters)
+          const hist = new Array(256).fill(0);
+          for (let i = 0; i < gray.length; i++) hist[gray[i]]++;
+          const total = gray.length;
+          let sum = 0;
+          for (let t = 0; t < 256; t++) sum += t * hist[t];
+          let sumB = 0, wB = 0, wF = 0, varMax = 0, threshold = 128;
+          for (let t = 0; t < 256; t++) {
+            wB += hist[t];
+            if (wB === 0) continue;
+            wF = total - wB;
+            if (wF === 0) break;
+            sumB += t * hist[t];
+            const mB = sumB / wB;
+            const mF = (sum - sumB) / wF;
+            const varBetween = wB * wF * (mB - mF) * (mB - mF);
+            if (varBetween > varMax) {
+              varMax = varBetween;
+              threshold = t;
+            }
+          }
+
+          for (let i = 0, j = 0; i < data.length; i += 4, j++) {
+            const val = gray[j] < threshold ? 0 : 255;
+            data[i] = val;
+            data[i + 1] = val;
+            data[i + 2] = val;
+          }
+        } else if (canvasFilter === "sobel") {
+          // 3. Sobel Edge Gradient Filter
+          const sobelData = new Uint8Array(width * height);
+          for (let y = 1; y < height - 1; y++) {
+            for (let x = 1; x < width - 1; x++) {
+              const idx = y * width + x;
+              const gx =
+                -1 * gray[(y - 1) * width + (x - 1)] + 1 * gray[(y - 1) * width + (x + 1)] +
+                -2 * gray[y * width + (x - 1)] + 2 * gray[y * width + (x + 1)] +
+                -1 * gray[(y + 1) * width + (x - 1)] + 1 * gray[(y + 1) * width + (x + 1)];
+              const gy =
+                -1 * gray[(y - 1) * width + (x - 1)] - 2 * gray[(y - 1) * width + x] - 1 * gray[(y - 1) * width + (x + 1)] +
+                1 * gray[(y + 1) * width + (x - 1)] + 2 * gray[(y + 1) * width + x] + 1 * gray[(y + 1) * width + (x + 1)];
+              const mag = Math.min(255, Math.sqrt(gx * gx + gy * gy));
+              sobelData[idx] = mag > 60 ? 255 : 0;
+            }
+          }
+          for (let i = 0, j = 0; i < data.length; i += 4, j++) {
+            data[i] = sobelData[j];
+            data[i + 1] = sobelData[j] ? 240 : 0;
+            data[i + 2] = sobelData[j] ? 255 : 0;
+          }
+        }
+
+        ctx.putImageData(imgData, 0, 0);
+      }
+
+      // Draw MISDESC-2010 Detected Bounding Boxes overlay
+      if (showBoundingBoxes) {
+        const boxes = detectedBoxes || {
+          micrBand: { x: 5, y: 80, width: 90, height: 16, label: "E-13B MICR Band", color: "#38bdf8" },
+          payeeZone: { x: 12, y: 22, width: 55, height: 10, label: "Payee Name Zone", color: "#a855f7" },
+          amountZone: { x: 70, y: 32, width: 25, height: 12, label: "Amount Courtesy Box", color: "#10b981" },
+          signatureZone: { x: 65, y: 60, width: 30, height: 18, label: "Authorized Signatory", color: "#f59e0b" },
+        };
+
+        Object.values(boxes).forEach((b) => {
+          const bx = (b.x / 100) * width;
+          const by = (b.y / 100) * height;
+          const bw = (b.width / 100) * width;
+          const bh = (b.height / 100) * height;
+
+          ctx.strokeStyle = b.color || "#38bdf8";
+          ctx.lineWidth = 1.8;
+          ctx.setLineDash([4, 3]);
+          ctx.strokeRect(bx, by, bw, bh);
+          ctx.setLineDash([]);
+
+          ctx.fillStyle = "rgba(0, 0, 0, 0.85)";
+          ctx.fillRect(bx, by - 14, bw, 13);
+          ctx.fillStyle = b.color || "#ffffff";
+          ctx.font = "bold 8px monospace";
+          ctx.fillText(b.label || "Detected Zone", bx + 3, by - 4);
+        });
+      }
+    };
+  }, [previewImageUrl, canvasFilter, showBoundingBoxes, detectedBoxes]);
+
   async function handleOcrScan(selectedFile) {
     const fileToScan = selectedFile || file;
     setScanningOcr(true);
@@ -31,7 +156,7 @@ export default function ChequeUploadForm({ onCreated }) {
         headers: { "Content-Type": "multipart/form-data" },
       });
 
-      const { extracted, confidencePercent, securityFeaturesDetected } = res.data;
+      const { extracted, confidencePercent, securityFeaturesDetected, boundingBoxes } = res.data;
       if (extracted) {
         setChequeNumber(extracted.chequeNumber);
         setIfsc(extracted.ifsc);
@@ -39,12 +164,16 @@ export default function ChequeUploadForm({ onCreated }) {
         if (!payeeName) setPayeeName(extracted.suggestedPayee || "Apex Industrial Corp");
         if (!amount) setAmount(extracted.suggestedAmount || "75000");
 
+        if (boundingBoxes) {
+          setDetectedBoxes(boundingBoxes);
+        }
+
         setOcrSuccess({
           confidence: confidencePercent,
           features: securityFeaturesDetected,
         });
 
-        setTimeout(() => setOcrSuccess(null), 5000);
+        setTimeout(() => setOcrSuccess(null), 6000);
       }
     } catch (err) {
       console.error("OCR Scan failed:", err);
@@ -58,6 +187,7 @@ export default function ChequeUploadForm({ onCreated }) {
     const chosen = e.target.files[0];
     setFile(chosen);
     if (chosen) {
+      setPreviewImageUrl(URL.createObjectURL(chosen));
       handleOcrScan(chosen);
     }
   }
@@ -106,7 +236,7 @@ export default function ChequeUploadForm({ onCreated }) {
     amount: amount || "50000",
     micrCode: `${chequeNumber || "000123"} ${ifsc || "SBIN0001234"} ${accountNumber || "123456789012"} 10`,
     imageUrl: file
-      ? URL.createObjectURL(file)
+      ? previewImageUrl
       : chequeNumber === "000102"
         ? "/cheque-000102.jpg"
         : chequeNumber === "000123"
@@ -148,15 +278,15 @@ export default function ChequeUploadForm({ onCreated }) {
           </div>
         )}
 
-        {/* Cheque Image Upload & OCR Trigger Card */}
-        <div className="p-5 rounded-2xl bg-slate-50/80 border-2 border-dashed border-slate-300 hover:border-brand-400 transition-colors">
+        {/* Cheque Image Upload & Canvas Preprocessing Workbench Card */}
+        <div className="p-5 rounded-2xl bg-slate-50/80 border-2 border-dashed border-slate-300 hover:border-brand-400 transition-colors space-y-4">
           <div className="flex flex-wrap items-center justify-between gap-4">
             <div>
               <label className="block text-xs font-bold text-slate-800 uppercase tracking-wider mb-1">
-                Cheque Image (Optical Character Recognition)
+                Cheque Scan Optical Character Recognition (MISDESC-2010)
               </label>
               <p className="text-xs text-slate-500">
-                Upload instrument image to scan E-13B MICR line and instrument details.
+                Upload instrument scan for automated E-13B MICR line, IFSC and courtesy box extraction.
               </p>
             </div>
 
@@ -168,10 +298,80 @@ export default function ChequeUploadForm({ onCreated }) {
                 className="text-xs file:mr-3 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-brand-600 file:text-white hover:file:bg-brand-700 cursor-pointer transition-all"
               />
               {scanningOcr && (
-                <span className="text-xs text-brand-600 font-bold whitespace-nowrap">
-                  Scanning Instrument...
+                <span className="text-xs text-brand-600 font-bold whitespace-nowrap animate-pulse">
+                  Scanning Optical Features...
                 </span>
               )}
+            </div>
+          </div>
+
+          {/* Canvas Preprocessing Control Deck */}
+          <div className="pt-3 border-t border-slate-200 flex flex-wrap items-center justify-between gap-3 text-xs">
+            <div className="flex items-center gap-2">
+              <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Canvas Preprocessing:</span>
+              <div className="inline-flex bg-white rounded-lg p-0.5 border border-slate-200 text-xs">
+                <button
+                  type="button"
+                  onClick={() => setCanvasFilter("raw")}
+                  className={`px-2.5 py-1 rounded-md font-semibold transition-all cursor-pointer ${
+                    canvasFilter === "raw" ? "bg-slate-800 text-white" : "text-slate-600 hover:text-slate-900"
+                  }`}
+                >
+                  Raw Scan
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setCanvasFilter("grayscale")}
+                  className={`px-2.5 py-1 rounded-md font-semibold transition-all cursor-pointer ${
+                    canvasFilter === "grayscale" ? "bg-slate-800 text-white" : "text-slate-600 hover:text-slate-900"
+                  }`}
+                >
+                  Grayscale
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setCanvasFilter("otsu")}
+                  className={`px-2.5 py-1 rounded-md font-semibold transition-all cursor-pointer ${
+                    canvasFilter === "otsu" ? "bg-brand-600 text-white" : "text-slate-600 hover:text-slate-900"
+                  }`}
+                  title="Otsu Automated Global Binarization isolates E-13B magnetic characters"
+                >
+                  ⚡ Otsu Binarized
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setCanvasFilter("sobel")}
+                  className={`px-2.5 py-1 rounded-md font-semibold transition-all cursor-pointer ${
+                    canvasFilter === "sobel" ? "bg-purple-600 text-white" : "text-slate-600 hover:text-slate-900"
+                  }`}
+                  title="Sobel Edge Operator deteMISDESC ink boundaries and stroke contours"
+                >
+                  Sobel Edges
+                </button>
+              </div>
+            </div>
+
+            <label className="flex items-center gap-2 cursor-pointer font-semibold text-slate-700 text-xs">
+              <input
+                type="checkbox"
+                checked={showBoundingBoxes}
+                onChange={(e) => setShowBoundingBoxes(e.target.checked)}
+                className="rounded accent-brand-600"
+              />
+              <span>Highlight MISDESC-2010 Detection Zones</span>
+            </label>
+          </div>
+
+          {/* Interactive Preprocessed Preview Canvas */}
+          <div className="relative rounded-xl overflow-hidden bg-slate-900 border border-slate-300 aspect-[16/6] flex items-center justify-center shadow-inner">
+            <canvas
+              ref={canvasRef}
+              width={750}
+              height={280}
+              className="w-full h-full object-contain"
+            />
+            <div className="absolute top-2 left-3 bg-black/70 backdrop-blur-xs px-2 py-0.5 rounded text-[10px] font-mono font-bold text-brand-300 pointer-events-none">
+              Client Vision Stream: {canvasFilter.toUpperCase()}
             </div>
           </div>
         </div>

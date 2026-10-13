@@ -115,7 +115,7 @@ async function approveBranchCheque(req, res, next) {
 
     return res.json({
       success: true,
-      message: "Instrument counter-signed and approved for CTS switch clearing.",
+      message: "Instrument counter-signed and approved for MISDESC switch clearing.",
       cheque: updated,
     });
   } catch (err) {
@@ -145,7 +145,7 @@ async function dispatchBranchBatch(req, res, next) {
 
     return res.json({
       success: true,
-      message: `Branch batch ${batch.sessionCode} sealed and dispatched to CTS Core Switch.`,
+      message: `Branch batch ${batch.sessionCode} sealed and dispatched to MISDESC Core Switch.`,
       batch: updated,
     });
   } catch (err) {

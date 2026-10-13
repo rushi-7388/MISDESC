@@ -283,7 +283,7 @@ export default function DevOpsConsole() {
           <div className="p-4 rounded-lg bg-gray-50 border border-gray-200">
             <div className="text-xs font-bold text-gray-800 mb-1">Simulate DB Network Lag</div>
             <p className="text-[11px] text-gray-500 mb-3">
-              Injects +1200ms synthetic delay to test request timeout handling.
+              InjeMISDESC +1200ms synthetic delay to test request timeout handling.
             </p>
             <button
               onClick={() => applyChaos({ latencyMs: 1200 }, "1200ms Latency Injection")}

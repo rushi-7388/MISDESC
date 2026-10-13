@@ -3,13 +3,13 @@ const { broadcastEvent } = require("../utils/sse.util");
 
 /**
  * Dispute Resolution Mechanism (DRM) & Chargeback Claims Service
- * Conforms to NPCI CTS Procedural Guidelines Rule 32 & RBI Ombudsman Framework.
+ * Conforms to NPCI MISDESC Procedural Guidelines Rule 32 & RBI Ombudsman Framework.
  */
 
 const DEFAULT_SLA_HOURS = 72; // Statutory 72-hour regulatory resolution window
 
 /**
- * Generates an official CTS Dispute Resolution Reference Number.
+ * Generates an official MISDESC Dispute Resolution Reference Number.
  * Format: DRM/YYYY/<seq>
  */
 function generateClaimNumber() {

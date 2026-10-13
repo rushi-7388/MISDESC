@@ -3,7 +3,7 @@ import axios from "axios";
 const client = axios.create({ baseURL: "/api" });
 
 client.interceptors.request.use((config) => {
-  const token = localStorage.getItem("cts_token");
+  const token = localStorage.getItem("MISDESC_token");
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
@@ -19,8 +19,8 @@ client.interceptors.response.use(
     const isAlreadyOnLoginPage = window.location.pathname === "/login";
 
     if (err.response?.status === 401 && !isLoginEndpoint) {
-      localStorage.removeItem("cts_token");
-      localStorage.removeItem("cts_user");
+      localStorage.removeItem("MISDESC_token");
+      localStorage.removeItem("MISDESC_user");
       if (!isAlreadyOnLoginPage) {
         window.location.href = "/login";
       }

@@ -25,6 +25,8 @@ const swarmRoutes = require("./routes/swarm.routes");
 const zkpRoutes = require("./routes/zkp.routes");
 const smartchequeRoutes = require("./routes/smartcheque.routes");
 const crossborderRoutes = require("./routes/crossborder.routes");
+const stressRoutes = require("./routes/stress.routes");
+const webhookRoutes = require("./routes/webhook.routes");
 
 const app = express();
 
@@ -68,6 +70,8 @@ app.use("/api/swarm", swarmRoutes);
 app.use("/api/zkp", zkpRoutes);
 app.use("/api/smart-cheques", smartchequeRoutes);
 app.use("/api/crossborder", crossborderRoutes);
+app.use("/api/stress", stressRoutes);
+app.use("/api/webhooks", webhookRoutes);
 
 
 

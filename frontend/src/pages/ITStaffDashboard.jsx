@@ -65,7 +65,7 @@ export default function ITStaffDashboard() {
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-slate-850 border border-slate-800 rounded-2xl p-6 shadow-xl">
           <div>
             <div className="inline-flex items-center px-2.5 py-0.5 rounded text-[11px] font-bold bg-emerald-950/70 text-emerald-300 border border-emerald-800/60 mb-2">
-              CTS Core Switch · SRE & Infrastructure Ops
+              MISDESC Core Switch · SRE & Infrastructure Ops
             </div>
             <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white">
               IT Staff & Switch Reliability Command Center

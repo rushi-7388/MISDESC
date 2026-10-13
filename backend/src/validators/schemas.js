@@ -1,7 +1,7 @@
 /**
  * Request Validation Engine
  * Provides deterministic boundary validation, schema checks, and error formatting
- * for CTS financial and regulatory endpoints.
+ * for MISDESC financial and regulatory endpoints.
  */
 
 class ValidationError extends Error {

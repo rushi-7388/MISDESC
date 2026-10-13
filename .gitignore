@@ -1,5 +1,5 @@
 # ==============================================================================
-# Git Ignore Configuration for Cheque Truncation System (CTS)
+# Git Ignore Configuration for Cheque Truncation System (MISDESC)
 # ==============================================================================
 
 # ------------------------------------------------------------------------------
@@ -172,7 +172,7 @@ ceremony_vault/
 m-of-n-shards/
 
 # ------------------------------------------------------------------------------
-# 13. Zero-Knowledge Proof (ZKP) Circuits & Prover Artifacts
+# 13. Zero-Knowledge Proof (ZKP) Circuits & Prover ArtifaMISDESC
 # ------------------------------------------------------------------------------
 *.zkey
 *.ptau

@@ -122,7 +122,7 @@ export default function SessionReconciliationConsole() {
           <h2 className="text-base font-bold text-slate-900 flex items-center gap-2">
             <span>Clearing Window Cutoff & Bilateral Reconcilement</span>
             <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-cyan-50 text-cyan-800 border border-cyan-200">
-              CTS Rule 31 Mandate
+              MISDESC Rule 31 Mandate
             </span>
           </h2>
           <p className="text-xs text-slate-500 mt-0.5">

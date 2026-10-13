@@ -458,7 +458,7 @@ export default function RBACManagement() {
                                 >
                                   Edit
                                 </button>
-                                {!isSelf && user.email !== "admin@cts.com" && (
+                                {!isSelf && user.email !== "admin@MISDESC.com" && (
                                   <button
                                     type="button"
                                     onClick={() => handleDeleteUser(user)}
@@ -485,10 +485,10 @@ export default function RBACManagement() {
           <div className="space-y-6">
             <div className="bg-white rounded-2xl border border-slate-200/80 p-6 shadow-xs">
               <h2 className="text-lg font-bold text-slate-900 tracking-tight">
-                CTS Master RBAC Capabilities & Operational Thresholds
+                MISDESC Master RBAC Capabilities & Operational Thresholds
               </h2>
               <p className="text-xs text-slate-500 mt-1">
-                Formal role definitions, segregation of duties (SoD), and financial transaction authorities prescribed under NPCI CTS-2010 and RBI Clearing Corporation guidelines.
+                Formal role definitions, segregation of duties (SoD), and financial transaction authorities prescribed under NPCI MISDESC-2010 and RBI Clearing Corporation guidelines.
               </p>
 
               <div className="mt-6 overflow-x-auto">

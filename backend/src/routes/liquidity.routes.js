@@ -9,6 +9,7 @@ const {
   resetLsmTopology,
   toggleLsmDaemon,
   getLsmDaemonStatus,
+  simulateLsmShock,
 } = require("../controllers/liquidity.controller");
 
 const router = express.Router();
@@ -27,12 +28,14 @@ router.post("/collateral", authorize("ADMIN", "SETTLEMENT_OFFICER"), updateColla
 router.post("/collateral/:bankId", authorize("ADMIN", "SETTLEMENT_OFFICER"), updateCollateral);
 
 // LSM (Liquidity Saving Mechanism) Tarjan Cycle Gridlock Resolution Engine
-router.get("/lsm/gridlock-topology", authorize("ADMIN", "SETTLEMENT_OFFICER", "COMPLIANCE_AUDITOR"), getLsmTopology);
-router.post("/lsm/resolve-gridlock", authorize("ADMIN", "SETTLEMENT_OFFICER"), resolveLsmGridlock);
-router.post("/lsm/reset", authorize("ADMIN", "SETTLEMENT_OFFICER"), resetLsmTopology);
-router.post("/lsm/daemon/toggle", authorize("ADMIN", "SETTLEMENT_OFFICER"), toggleLsmDaemon);
-router.get("/lsm/daemon/status", authorize("ADMIN", "SETTLEMENT_OFFICER", "COMPLIANCE_AUDITOR"), getLsmDaemonStatus);
+router.get("/lsm/gridlock-topology", authorize("ADMIN", "SETTLEMENT_OFFICER", "COMPLIANCE_AUDITOR", "IT_STAFF"), getLsmTopology);
+router.post("/lsm/resolve-gridlock", authorize("ADMIN", "SETTLEMENT_OFFICER", "IT_STAFF"), resolveLsmGridlock);
+router.post("/lsm/reset", authorize("ADMIN", "SETTLEMENT_OFFICER", "IT_STAFF"), resetLsmTopology);
+router.post("/lsm/daemon/toggle", authorize("ADMIN", "SETTLEMENT_OFFICER", "IT_STAFF"), toggleLsmDaemon);
+router.get("/lsm/daemon/status", authorize("ADMIN", "SETTLEMENT_OFFICER", "COMPLIANCE_AUDITOR", "IT_STAFF"), getLsmDaemonStatus);
+router.post("/lsm/simulate-shock", authorize("ADMIN", "SETTLEMENT_OFFICER", "IT_STAFF"), simulateLsmShock);
 
 module.exports = router;
+
 
 

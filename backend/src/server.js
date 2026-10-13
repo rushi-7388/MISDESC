@@ -5,7 +5,7 @@ const prisma = require("./config/prisma");
 const PORT = process.env.PORT || 5000;
 
 const server = app.listen(PORT, () => {
-  console.log(`CTS backend running on http://localhost:${PORT}`);
+  console.log(`MISDESC backend running on http://localhost:${PORT}`);
   console.log(`DevOps & SRE Probes: /health/live, /health/ready, /metrics`);
 });
 

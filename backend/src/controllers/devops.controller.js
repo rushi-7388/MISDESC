@@ -64,7 +64,7 @@ async function dbPing(req, res) {
     return res.json({
       success: true,
       latencyMs,
-      database: result[0]?.current_database || "cts_system",
+      database: result[0]?.current_database || "MISDESC_system",
       serverTime: result[0]?.server_time || new Date().toISOString(),
     });
   } catch (err) {

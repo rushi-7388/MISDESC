@@ -195,7 +195,7 @@ function runLegalRegulatoryAgent(cheque) {
     flags.push({
       type: "PPS_MANDATE_MISMATCH",
       severity: "HIGH",
-      description: "Drawer positive pay registration conflicts with presented instrument payee or amount",
+      description: "Drawer positive pay registration confliMISDESC with presented instrument payee or amount",
     });
   } else if (isPpsMandatory && cheque.ppsStatus === "PPS_NOT_REGISTERED") {
     agentConfidence -= 15;
@@ -394,6 +394,32 @@ async function evaluateChequeWithSwarm(chequeId, overrideChequeData = null) {
   // Cache docket
   docketCache.set(cheque.id, docket);
 
+  // Persist Swarm Docket to PostgreSQL
+  await quickDb(async () => {
+    if (!prisma || !prisma.swarmDocket) return;
+    const chq = await prisma.cheque.findUnique({ where: { id: cheque.id } });
+    if (!chq) return;
+
+    await prisma.swarmDocket.upsert({
+      where: { docketId },
+      create: {
+        docketId,
+        chequeId: cheque.id,
+        consensusScore: consensus.consensusScore,
+        verdict: consensus.autoCleared ? "STP_CLEARED_AUTONOMOUS" : "ESCALATED_HUMAN_REVIEW",
+        stpExecuted: !!consensus.autoCleared,
+        durationMs: 135.0,
+        sealedProof: docket.cryptographicSeal,
+        agentResults: docket.agents,
+        criticalFlags: consensus.criticalFlags || [],
+      },
+      update: {
+        consensusScore: consensus.consensusScore,
+        stpExecuted: !!consensus.autoCleared,
+      },
+    });
+  });
+
   // If Autonomous STP Cleared, update database if online
   if (consensus.autoCleared) {
     await quickDb(() =>
@@ -438,12 +464,40 @@ async function evaluateChequeWithSwarm(chequeId, overrideChequeData = null) {
 }
 
 /**
- * Retrieves cached or newly evaluated docket for a cheque
+ * Retrieves cached or newly evaluated docket for a cheque with DB fallback
  */
 async function getDocket(chequeId) {
   if (docketCache.has(chequeId)) {
     return docketCache.get(chequeId);
   }
+
+  // Attempt DB rehydration
+  const dbDocket = await quickDb(async () => {
+    if (!prisma || !prisma.swarmDocket) return null;
+    return prisma.swarmDocket.findFirst({
+      where: { chequeId },
+      orderBy: { createdAt: "desc" },
+    });
+  });
+
+  if (dbDocket) {
+    const reconstructed = {
+      docketId: dbDocket.docketId,
+      chequeId: dbDocket.chequeId,
+      consensus: {
+        consensusScore: dbDocket.consensusScore,
+        autoCleared: dbDocket.stpExecuted,
+        recommendation: dbDocket.verdict,
+        criticalFlags: dbDocket.criticalFlags,
+      },
+      agents: dbDocket.agentResults,
+      cryptographicSeal: dbDocket.sealedProof,
+      createdAt: dbDocket.createdAt.toISOString(),
+    };
+    docketCache.set(chequeId, reconstructed);
+    return reconstructed;
+  }
+
   return evaluateChequeWithSwarm(chequeId);
 }
 
@@ -490,10 +544,163 @@ async function autoAdjudicateActiveSession() {
   };
 }
 
+/**
+ * Phase 8: Autonomous 4-Agent Deliberation Sandbox & Adversarial Fraud Playground
+ */
+function simulateAdversarialAttack(options = {}) {
+  const {
+    scenario = "CLEAN_BASELINE", // "PREPEND_DIGIT" | "CHEMICAL_WASHING" | "FORGED_SIGNATURE" | "CLEAN_BASELINE"
+    originalAmount = 50000,
+    alteredAmount = 150000,
+    chemicalWashingIntensity = 85,
+    signatureVariancePercent = 65,
+    drawerName = "Kothari Textile Industries Pvt Ltd",
+    payeeName = "Apex Machinery & Spares Ltd",
+  } = options;
+
+  let spectralScore = 98.4;
+  let biometricScore = 96.8;
+  let amlScore = 98.9;
+  let networkScore = 97.2;
+
+  const agentDetails = [];
+  const flags = [];
+
+  if (scenario === "PREPEND_DIGIT") {
+    // Attack 1: Courtesy Box Digit Prepending (e.g., ₹50,000 altered to ₹1,50,000)
+    spectralScore = 42.5; // Spatial frequency mismatch in courtesy box
+    biometricScore = 91.0;
+    amlScore = 38.2; // PPS threshold breached + Benford's law anomaly
+    networkScore = 64.0; // Sudden withdrawal velocity anomaly relative to trailing 90 days
+
+    flags.push({
+      agent: "Spectral Vision Agent",
+      code: "INK_DENSITY_KERNING_DISCREPANCY",
+      severity: "CRITICAL",
+      message: `2D FFT courtesy box window reveals localized ink-deposition discontinuity on leading digit '1'. Spatial pitch is 1.42mm vs nominal 2.10mm.`,
+    });
+    flags.push({
+      agent: "AML Sanctions Agent",
+      code: "PPS_MANDATE_DEFICIT",
+      severity: "CRITICAL",
+      message: `Presented amount (₹${Number(alteredAmount).toLocaleString("en-IN")}) confliMISDESC with Positive Pay System registration (₹${Number(originalAmount).toLocaleString("en-IN")}).`,
+    });
+    flags.push({
+      agent: "Network Graph Agent",
+      code: "OUT_OF_PROFILE_VELOCITY",
+      severity: "HIGH",
+      message: `300% deviation from drawer's trailing 90-day median cheque size.`,
+    });
+  } else if (scenario === "CHEMICAL_WASHING") {
+    // Attack 2: Chemical Washing / Eradication using polar solvents
+    spectralScore = 12.0; // Severe cellulose degradation & bleach halo under UV
+    biometricScore = 74.0;
+    amlScore = 89.0;
+    networkScore = 88.0;
+
+    flags.push({
+      agent: "Spectral Vision Agent",
+      code: "UV_BLEACH_HALO_FLUORESCENCE",
+      severity: "CRITICAL",
+      message: `Multi-spectral UV-A (365nm) imaging deteMISDESC severe chemical washing solvent halo. Protective fugitive security ink dissolved across Payee field.`,
+    });
+    flags.push({
+      agent: "Spectral Vision Agent",
+      code: "CELLULOSE_FIBER_EROSION",
+      severity: "CRITICAL",
+      message: `Spatial transform indicates paper fiber erosion depth of 42µm. Mechanical scrubbing detected.`,
+    });
+  } else if (scenario === "FORGED_SIGNATURE") {
+    // Attack 3: Forged Signature Variance / Tracing
+    spectralScore = 92.0;
+    biometricScore = 31.5; // Dynamic Time Warping (DTW) distance divergence
+    amlScore = 88.0;
+    networkScore = 79.0;
+
+    flags.push({
+      agent: "Biometric Graph Agent",
+      code: "DTW_STROKE_CONTOUR_DIVERGENCE",
+      severity: "CRITICAL",
+      message: `Dynamic Time Warping (DTW) stroke contour distance is 0.685 (threshold < 0.200). Pen speed profile indicates mechanical hesitation and line tremor.`,
+    });
+    flags.push({
+      agent: "Biometric Graph Agent",
+      code: "BALLISTIC_ACCELERATION_MISMATCH",
+      severity: "HIGH",
+      message: `Ballistic acceleration curve fails CBS biometric mandate: Zero-crossing inflection count deviates by +14 strokes.`,
+    });
+  }
+
+  const consensusScore = Number(
+    (spectralScore * 0.35 + biometricScore * 0.30 + amlScore * 0.20 + networkScore * 0.15).toFixed(1)
+  );
+
+  const isFraudIntercepted = flags.length > 0;
+  const verdict = isFraudIntercepted ? "ZERO_DAY_FRAUD_INTERCEPTED" : "AUTONOMOUS_STP_CLEARED";
+
+  const radarDimensions = [
+    {
+      axis: "Spectral Vision (FFT / Bleach Halo)",
+      agent: "Spectral Vision Agent",
+      baseline: 98.4,
+      current: Number(spectralScore.toFixed(1)),
+      unit: "Spectral Purity %",
+      status: spectralScore < 70 ? "CRITICAL_ANOMALY" : "PASS",
+    },
+    {
+      axis: "Biometric Graph (DTW Contour)",
+      agent: "Biometric Graph Agent",
+      baseline: 96.8,
+      current: Number(biometricScore.toFixed(1)),
+      unit: "Biometric Match %",
+      status: biometricScore < 75 ? "CRITICAL_ANOMALY" : "PASS",
+    },
+    {
+      axis: "AML Sanctions (Jaro-Winkler Distance)",
+      agent: "AML Sanctions Agent",
+      baseline: 98.9,
+      current: Number(amlScore.toFixed(1)),
+      unit: "Regulatory Compliance %",
+      status: amlScore < 75 ? "CRITICAL_ANOMALY" : "PASS",
+    },
+    {
+      axis: "Network Graph (PageRank / Cyclic)",
+      agent: "Network Graph Agent",
+      baseline: 97.2,
+      current: Number(networkScore.toFixed(1)),
+      unit: "Graph Centrality %",
+      status: networkScore < 75 ? "CRITICAL_ANOMALY" : "PASS",
+    },
+  ];
+
+  return {
+    scenario,
+    verdict,
+    consensusScore,
+    isFraudIntercepted,
+    interceptionLeadAgent: flags[0]?.agent || "None (All Passed)",
+    inputParams: {
+      originalAmount,
+      alteredAmount: scenario === "PREPEND_DIGIT" ? alteredAmount : originalAmount,
+      chemicalWashingIntensity,
+      signatureVariancePercent,
+      drawerName,
+      payeeName,
+    },
+    radarDimensions,
+    flags,
+    explainableAiReasoning: isFraudIntercepted
+      ? `The Autonomous 4-Agent Swarm successfully intercepted the zero-day fraudulent instrument prior to switch presentation. ${flags.length} critical forensic anomalies were flagged across ${new Set(flags.map((f) => f.agent)).size} independent inspection dimensions with ${consensusScore}% consensus score.`
+      : `The Autonomous 4-Agent Swarm unanimously certified the instrument with a ${consensusScore}% overall consensus score. All 2D FFT spectral transforms, DTW pen stroke contours, and AML sanctions matrices satisfy statutory straight-through processing criteria.`,
+    timestamp: new Date().toISOString(),
+  };
+}
+
 module.exports = {
   evaluateChequeWithSwarm,
   getDocket,
   autoAdjudicateActiveSession,
+  simulateAdversarialAttack,
   runForensicVisionAgent,
   runAmlGraphAgent,
   runLegalRegulatoryAgent,

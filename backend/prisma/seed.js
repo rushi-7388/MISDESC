@@ -57,11 +57,11 @@ async function main() {
   });
 
   await prisma.user.upsert({
-    where: { email: "admin@cts.com" },
+    where: { email: "admin@MISDESC.com" },
     update: {},
     create: {
       name: "System Admin",
-      email: "admin@cts.com",
+      email: "admin@MISDESC.com",
       password: hash,
       role: "ADMIN",
       bankId: bankA.id,
@@ -82,11 +82,11 @@ async function main() {
   });
 
   await prisma.user.upsert({
-    where: { email: "itops@cts.com" },
+    where: { email: "itops@MISDESC.com" },
     update: {},
     create: {
       name: "Neha Sharma (Core SRE & IT Staff)",
-      email: "itops@cts.com",
+      email: "itops@MISDESC.com",
       password: hash,
       role: "IT_STAFF",
       branchName: "Central Switch Infrastructure",
@@ -108,11 +108,11 @@ async function main() {
   });
 
   await prisma.user.upsert({
-    where: { email: "treasury@cts.com" },
+    where: { email: "treasury@MISDESC.com" },
     update: {},
     create: {
       name: "Pooja Hegde (Settlement Officer)",
-      email: "treasury@cts.com",
+      email: "treasury@MISDESC.com",
       password: hash,
       role: "SETTLEMENT_OFFICER",
       branchName: "National Treasury Settlement Desk",
@@ -237,9 +237,9 @@ async function main() {
     create: {
       bankId: bankA.id,
       certThumbprint: "a1b2c3d4e5f60718293a4b5c6d7e8f90123456789abcdef0123456789abcdef0",
-      serialNumber: "CTS-PKI-SNB-2026-001",
-      issuer: "CTS National PKI Root Trust CA",
-      subject: "CN=Surat Bank CTS Presentation Signer, OU=Digital Clearing, O=Surat Bank, C=IN",
+      serialNumber: "MISDESC-PKI-SNB-2026-001",
+      issuer: "MISDESC National PKI Root Trust CA",
+      subject: "CN=Surat Bank MISDESC Presentation Signer, OU=Digital Clearing, O=Surat Bank, C=IN",
       validFrom: new Date(),
       validTo: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000),
       status: "ACTIVE",
@@ -253,9 +253,9 @@ async function main() {
     create: {
       bankId: bankB.id,
       certThumbprint: "f0e1d2c3b4a5968778695a4b3c2d1e0f0123456789abcdef0123456789abcdef1",
-      serialNumber: "CTS-PKI-HDB-2026-002",
-      issuer: "CTS National PKI Root Trust CA",
-      subject: "CN=Horizon Digital Bank CTS Authorization Signer, OU=Inward Operations, O=Horizon Digital Bank, C=IN",
+      serialNumber: "MISDESC-PKI-HDB-2026-002",
+      issuer: "MISDESC National PKI Root Trust CA",
+      subject: "CN=Horizon Digital Bank MISDESC Authorization Signer, OU=Inward Operations, O=Horizon Digital Bank, C=IN",
       validFrom: new Date(),
       validTo: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000),
       status: "ACTIVE",
@@ -268,11 +268,11 @@ async function main() {
   console.log("- presenting@snb.com (Clerk - Presenting)");
   console.log("- drawee@hdb.com (Verifier - Drawee Maker)");
   console.log("- checker@hdb.com (Senior Approver - Drawee Checker)");
-  console.log("- admin@cts.com (System Administrator)");
+  console.log("- admin@MISDESC.com (System Administrator)");
   console.log("- manager@snb.com (Branch Operations Manager)");
-  console.log("- itops@cts.com (Core SRE & IT Staff)");
+  console.log("- itops@MISDESC.com (Core SRE & IT Staff)");
   console.log("- auditor@rbi.org.in (Compliance & Regulatory Auditor)");
-  console.log("- treasury@cts.com (Treasury & Settlement Officer)");
+  console.log("- treasury@MISDESC.com (Treasury & Settlement Officer)");
 }
 
 main()

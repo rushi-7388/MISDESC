@@ -2,12 +2,12 @@ const crypto = require("crypto");
 
 /**
  * Generates an official RBI e-Kuber Central Bank Transaction Reference
- * Format: EKUBER/CTS3/YYYYMMDD/<seq>
+ * Format: EKUBER/MISDESC3/YYYYMMDD/<seq>
  */
 function generateEkuberTransactionRef() {
   const dateStr = new Date().toISOString().slice(0, 10).replace(/-/g, "");
   const seq = Math.floor(100000 + Math.random() * 900000);
-  return `EKUBER/CTS3/${dateStr}/${seq}`;
+  return `EKUBER/MISDESC3/${dateStr}/${seq}`;
 }
 
 /**
@@ -92,7 +92,7 @@ function generatePacs009Xml({ settlementRef, utr, cheque, presentingBank, drawee
       <SttlmInf>
         <SttlmMtd>CLRG</SttlmMtd>
         <ClrSys>
-          <Prtry>RBI-EKUBER-CTS-T0</Prtry>
+          <Prtry>RBI-EKUBER-MISDESC-T0</Prtry>
         </ClrSys>
       </SttlmInf>
     </GrpHdr>

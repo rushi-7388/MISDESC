@@ -29,8 +29,28 @@ async function autoAdjudicateSession(req, res, next) {
   }
 }
 
+async function simulateAdversarialFraud(req, res, next) {
+  try {
+    const report = swarmService.simulateAdversarialAttack(req.body);
+    return res.json(report);
+  } catch (err) {
+    next(err);
+  }
+}
+
+async function getRadarSample(req, res, next) {
+  try {
+    const report = swarmService.simulateAdversarialAttack({ scenario: "CLEAN_BASELINE" });
+    return res.json(report);
+  } catch (err) {
+    next(err);
+  }
+}
+
 module.exports = {
   evaluateCheque,
   getChequeDocket,
   autoAdjudicateSession,
+  simulateAdversarialFraud,
+  getRadarSample,
 };

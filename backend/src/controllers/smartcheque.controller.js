@@ -16,8 +16,12 @@ async function earmarkLien(req, res, next) {
 async function getContract(req, res, next) {
   try {
     const { chequeId } = req.params;
-    const contract = smartService.getSmartContract(chequeId);
-    const lien = smartService.getMicroLien(chequeId);
+    let contract = await smartService.fetchSmartContractFromDb(chequeId);
+    if (!contract) contract = smartService.getSmartContract(chequeId);
+
+    let lien = await smartService.fetchMicroLienFromDb(chequeId);
+    if (!lien) lien = smartService.getMicroLien(chequeId);
+
     return res.json({ contract, lien });
   } catch (err) {
     next(err);
@@ -51,9 +55,20 @@ async function settleCbdc(req, res, next) {
   }
 }
 
+async function handleIotTriggerWebhook(req, res, next) {
+  try {
+    const result = await smartService.processIotWebhookTrigger(req.body);
+    return res.status(200).json(result);
+  } catch (err) {
+    next(err);
+  }
+}
+
 module.exports = {
   earmarkLien,
   getContract,
   releaseMilestone,
   settleCbdc,
+  handleIotTriggerWebhook,
 };
+
