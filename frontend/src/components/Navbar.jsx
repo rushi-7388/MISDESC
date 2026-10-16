@@ -4,6 +4,9 @@ import { useAuth } from "../context/AuthContext";
 import client from "../api/client";
 import logo from "../assets/logo.jpg";
 import PositivePayRegistryModal from "./PositivePayRegistryModal";
+import DynamicCollateralManagementModal from "./DynamicCollateralManagementModal";
+import RbiCimsRegulatoryModal from "./RbiCimsRegulatoryModal";
+import CoreBankingAdapterModal from "./CoreBankingAdapterModal";
 
 const DEMO_ROLES = [
   {
@@ -71,6 +74,9 @@ export default function Navbar() {
   const [systemHealthy, setSystemHealthy] = useState(true);
   const [chaosActive, setChaosActive] = useState(false);
   const [showPpsModal, setShowPpsModal] = useState(false);
+  const [showCollateralModal, setShowCollateralModal] = useState(false);
+  const [showCimsModal, setShowCimsModal] = useState(false);
+  const [showCbsModal, setShowCbsModal] = useState(false);
   const [showRoleDropdown, setShowRoleDropdown] = useState(false);
   const [switching, setSwitching] = useState(false);
   const dropdownRef = useRef(null);
@@ -278,6 +284,36 @@ export default function Navbar() {
               <span>CTS Operations</span>
             </Link>
 
+            {/* Dynamic Liquidity & Collateral (LMS) */}
+            <button
+              type="button"
+              onClick={() => setShowCollateralModal(true)}
+              className="hidden lg:flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-emerald-950/80 border border-emerald-800/80 text-emerald-300 hover:text-white hover:bg-emerald-900 text-xs font-bold transition-colors cursor-pointer"
+              title="Dynamic Liquidity & Collateral Management (LMS)"
+            >
+              <span>💼 LMS</span>
+            </button>
+
+            {/* Automated RBI CIMS Hub */}
+            <button
+              type="button"
+              onClick={() => setShowCimsModal(true)}
+              className="hidden lg:flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-blue-950/80 border border-blue-800/80 text-blue-300 hover:text-white hover:bg-blue-900 text-xs font-bold transition-colors cursor-pointer"
+              title="Automated RBI CIMS & Section 138 Hub"
+            >
+              <span>🏛️ CIMS</span>
+            </button>
+
+            {/* Core Banking (CBS) Adapter */}
+            <button
+              type="button"
+              onClick={() => setShowCbsModal(true)}
+              className="hidden lg:flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-teal-950/80 border border-teal-800/80 text-teal-300 hover:text-white hover:bg-teal-900 text-xs font-bold transition-colors cursor-pointer"
+              title="Core Banking (CBS) & Open Banking Adapter Suite"
+            >
+              <span>🌐 CBS</span>
+            </button>
+
             {/* RBAC Portal Link for Managers and Admins */}
             {canManageRBAC && (
               <Link
@@ -365,6 +401,18 @@ export default function Navbar() {
 
       {showPpsModal && (
         <PositivePayRegistryModal onClose={() => setShowPpsModal(false)} />
+      )}
+
+      {showCollateralModal && (
+        <DynamicCollateralManagementModal onClose={() => setShowCollateralModal(false)} />
+      )}
+
+      {showCimsModal && (
+        <RbiCimsRegulatoryModal onClose={() => setShowCimsModal(false)} />
+      )}
+
+      {showCbsModal && (
+        <CoreBankingAdapterModal onClose={() => setShowCbsModal(false)} />
       )}
     </>
   );

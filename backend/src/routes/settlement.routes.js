@@ -27,7 +27,7 @@ router.post("/continuous/toggle", authorize("SETTLEMENT_OFFICER", "ADMIN"), togg
 router.post("/continuous/settle-now/:chequeId", authorize("SETTLEMENT_OFFICER", "ADMIN"), settleChequeEkuber);
 router.get("/ekuber/:id/pacs009", getEkuberPacs009Xml);
 
-// ISO 20022 Schema & Conformance Validation Route
+// Schema & Conformance Validation Route
 router.post("/iso20022/validate", validateSettlementIso20022);
 
 router.get("/", listSettlements);

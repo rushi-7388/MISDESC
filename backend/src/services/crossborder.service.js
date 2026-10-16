@@ -5,12 +5,12 @@ const { crossborderFxVolumeTotal, sanctionsScreenedTotal } = require("../utils/m
 
 /**
  * Cross-Border Multi-Currency MISDESC & Real-Time Sanctions Screening Service
- * Conforms to ISO 20022 CBPR+ (pacs.009 / camt.053) & Central Bank Sanctions Mandates.
+ * Conforms to CBPR+ (pacs.009 / camt.053) & Central Bank Sanctions Mandates.
  * 
  * Includes:
  * 1. Multi-Currency FX Conversion & Forward Hedging Calculations
  * 2. Industrial Sub-100ms Sanctions Radar with Jaro-Winkler & Double-Metaphone Phonetic Matching
- * 3. ISO 20022 pacs.009.001.08 XML Manifest Generator
+ * 3. pacs.009.001.08 XML Manifest Generator
  * 4. Audit Persistence to PostgreSQL (SanctionsLog)
  */
 
@@ -214,7 +214,7 @@ function convertCurrency(foreignAmount, foreignCurrency = "USD") {
   try {
     const usdEquiv = foreignCurrency === "USD" ? numericAmount : Number((inrGross / (FX_RATES.USD.rate || 84.12)).toFixed(2));
     crossborderFxVolumeTotal.inc({ source_currency: foreignCurrency, target_currency: "INR" }, usdEquiv);
-  } catch (err) {}
+  } catch (err) { }
 
   return result;
 }
@@ -269,8 +269,8 @@ function screenSanctions({ drawerName = "", payeeName = "", countryOrigin = "IN"
   const verdict = isBlocked
     ? "SANCTIONS_BLOCKED_OFAC_VIOLATION"
     : isFlagged
-    ? "MANUAL_COMPLIANCE_HOLD_PEP"
-    : "CLEARED_INTERNATIONAL_CLEARING";
+      ? "MANUAL_COMPLIANCE_HOLD_PEP"
+      : "CLEARED_INTERNATIONAL_CLEARING";
 
   const screeningRef = `SANCT-AUDIT-${Date.now()}-${crypto.randomBytes(3).toString("hex").toUpperCase()}`;
 
@@ -291,7 +291,7 @@ function screenSanctions({ drawerName = "", payeeName = "", countryOrigin = "IN"
 
   try {
     sanctionsScreenedTotal.inc({ verdict: result.status });
-  } catch (err) {}
+  } catch (err) { }
 
   // Production Persistence to PostgreSQL (Non-blocking background transaction)
   if (prisma && prisma.sanctionsLog) {
@@ -310,14 +310,14 @@ function screenSanctions({ drawerName = "", payeeName = "", countryOrigin = "IN"
           matches: matchedSanctions,
         },
       })
-      .catch(() => {});
+      .catch(() => { });
   }
 
   return result;
 }
 
 /**
- * 3. Generates ISO 20022 pacs.009.001.08 Cross-Border Financial Institution Transfer XML
+ * 3. Generates pacs.009.001.08 Cross-Border Financial Institution Transfer XML
  */
 function generatePacs009Xml(cheque, fxDetails) {
   const msgId = `CBPR/MISDESC3/${new Date().toISOString().slice(0, 10).replace(/-/g, "")}/${cheque.chequeNumber}`;

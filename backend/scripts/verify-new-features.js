@@ -12,6 +12,10 @@ const disputeService = require("../src/services/dispute.service");
 const pkiService = require("../src/services/pki.service");
 const reconciliationService = require("../src/services/reconciliation.service");
 const reportService = require("../src/services/report.service");
+const forensicService = require("../src/services/forensic.service");
+const collateralService = require("../src/services/collateral.service");
+const cimsService = require("../src/services/cims.service");
+const cbsAdapterService = require("../src/services/cbsadapter.service");
 const { validateRequired, validatePositiveNumber, validateEnum } = require("../src/validators/schemas");
 
 let passed = 0;
@@ -348,9 +352,9 @@ async function runTests() {
   assert(blockedScreening.status === "BLOCKED", "Identifies entity on OFAC SDN Watchlist and enforces statutory block");
   assert(blockedScreening.matchedSanctions.length > 0, "Matched sanctions entry returned in audit log");
 
-  // ISO 20022 pacs.009 Export
+  // pacs.009 Export
   const pacs009Xml = crossService.generatePacs009Xml({ chequeNumber: "990011", payeeName: "Global Trade Inc" }, fxResult);
-  assert(pacs009Xml.includes("pacs.009.001.08"), "Generates valid ISO 20022 pacs.009.001.08 XML document");
+  assert(pacs009Xml.includes("pacs.009.001.08"), "Generates valid pacs.009.001.08 XML document");
   assert(pacs009Xml.includes("RBI-EKUBER-CBPR-PLUS"), "Includes CBPR+ Central Bank clearing system proprietary header");
 
   // TEST SUITE 15: Production Database Schema & Persistence Models (Phase 1)
@@ -463,8 +467,8 @@ async function runTests() {
   assert(postShockResolution.success === true, "Tarjan LSM engine autonomously resolves bottlenecks post-shock");
   assert(postShockResolution.receipt.centralBankReservesConsumed === 0, "Zero central bank reserves consumed post-shock");
 
-  // TEST SUITE 21: RBI e-Kuber ISO 20022 CBPR+ pacs.008 & pacs.002 Central Gateway (Phase 7)
-  console.log("\n▶ SUITE 21: 🏛️ Phase 7: RBI e-Kuber ISO 20022 pacs.008 & pacs.002 Central Gateway");
+  // TEST SUITE 21: RBI e-Kuber CBPR+ pacs.008 & pacs.002 Central Gateway (Phase 7)
+  console.log("\n▶ SUITE 21: 🏛️ Phase 7: RBI e-Kuber pacs.008 & pacs.002 Central Gateway");
   const isoUtil = require("../src/utils/iso20022.util");
 
   // Test pacs.008 generation
@@ -515,7 +519,7 @@ async function runTests() {
   });
 
   assert(pacs002Xml.includes("pacs.002.001.10"), "Generates valid pacs.002.001.10 Payment Status Report XML");
-  assert(pacs002Xml.includes("<Cd>AM04</Cd>"), "Maps 'Insufficient funds' to statutory ISO 20022 reason code AM04");
+  assert(pacs002Xml.includes("<Cd>AM04</Cd>"), "Maps 'Insufficient funds' to statutory reason code AM04");
 
   // Test live Schematron & XSD validator
   const validationP008 = isoUtil.validateIso20022Xml(pacs008Xml);
@@ -654,6 +658,154 @@ async function runTests() {
 
   const fetchedReport = await reportService.getReportById(dailyReport.id);
   assert(fetchedReport && fetchedReport.reportRef === dailyReport.reportRef, "Fetches generated report by identifier");
+
+  // Test 5: Maker-Checker Verification Workflow
+  const submitRes = await reportService.submitForVerification(dailyReport.id, testUser, "Submitting for EOD sign-off");
+  assert(submitRes.workflow && submitRes.workflow.status === "PENDING_CHECKER", "Maker submits report for Checker verification");
+
+  const auditorUser = { id: "chk-99", name: "Audit Inspector", role: "COMPLIANCE_AUDITOR", email: "auditor@spcbl.in" };
+  const approveRes = await reportService.verifyAndApproveReport(dailyReport.id, auditorUser, { decision: "APPROVED", comments: "Verified against CBS balances" });
+  assert(approveRes.workflow.status === "CHECKER_APPROVED", "Checker signs off and approves report");
+  assert(typeof approveRes.workflow.checker.signatureDigest === "string" && approveRes.workflow.checker.signatureDigest.length === 64, "Checker embeds cryptographic HMAC-SHA256 signature seal");
+
+  // Test 6: RBI CIMS XML Statutory Format Export
+  const cimsXml = reportService.generateRbiCimsXml(dailyReport);
+  assert(typeof cimsXml === "string" && cimsXml.includes("<cims:CimsRegulatoryReturn"), "Generates valid RBI CIMS regulatory XML document");
+  assert(cimsXml.includes("urn:rbi.org.in:cims:returns:cts-v2.1"), "Embeds official RBI CIMS CTS taxonomy namespace");
+  assert(cimsXml.includes("SPCB0000001"), "Identifies Surat Peoples Co-op Bank institution identifier");
+
+  // Test 7: Branch Performance League Matrix
+  const branchMatrix = reportService.getBranchPerformanceMatrix();
+  assert(Array.isArray(branchMatrix) && branchMatrix.length === 10, "Generates multi-branch comparative benchmark matrix for 10 branches");
+  assert(branchMatrix[0].code === "BR-001" && typeof branchMatrix[0].realizationRate === "number", "Calculates branch clearing realization percentage");
+  assert(branchMatrix.some((b) => b.auditRating === "AAA"), "Assigns institutional audit tier ratings (AAA/AA+/A)");
+
+  // Test 8: Regulatory Early-Warning Alerts Radar
+  const alerts = reportService.getRegulatoryAlerts();
+  assert(Array.isArray(alerts) && alerts.length >= 3, "Monitors real-time regulatory breach thresholds");
+  const ackAlert = reportService.acknowledgeAlert("ALT-REG-2026-001", testUser, "Actioned by risk committee");
+  assert(ackAlert.status === "ACKNOWLEDGED", "Compliance desk acknowledges and actions operational alerts");
+
+  // Test 9: Period-over-Period Report Variance & Trend Comparison
+  const comparison = await reportService.compareReports(dailyReport.id, rbiReport.id);
+  assert(comparison && comparison.variance, "Computes delta variance between clearing reports");
+  assert(typeof comparison.variance.recordDelta === "number", "Calculates record count growth and volume variance");
+
+  // Test 10: Multi-Channel Automated Dispatch Engine
+  const dispatchRes = await reportService.dispatchReport(dailyReport.id, "RBI_SFTP_GATEWAY", "sftp://cims.rbi.org.in/inbound", testUser);
+  assert(dispatchRes.status === "DELIVERED", "Automated gateway dispatches report over RBI SFTP channel");
+  assert(dispatchRes.receiptToken.startsWith("DISP-RBI-"), "Issues instant cryptographic transmission receipt token");
+
+  const dispatches = reportService.getDispatchLogs();
+  assert(Array.isArray(dispatches) && dispatches.length >= 1, "Maintains transmission audit ledger");
+
+  // SUITE 25: AI Fraud Intelligence & Forensic Biometrics
+  console.log("\n▶ SUITE 25: 🧬 AI Fraud Intelligence & Forensic Biometrics");
+  const authSigMatch = forensicService.compareSignatures("identical_drawer_signature", "identical_drawer_signature");
+  assert(authSigMatch.isMatched === true, "Authentic signature passes Siamese neural comparison");
+  assert(authSigMatch.siameseSimilarityPercent >= 90.0, "High Siamese similarity score for matching specimen");
+  assert(authSigMatch.dtwContourDistance >= 0, "Computes Dynamic Time Warping (DTW) contour distance");
+
+  const uvNormal = forensicService.analyzeUvSpectralFluorescence({ chequeNumber: "000101", fluorescenceIntensity: 15.0 });
+  assert(uvNormal.status === "PASS_AUTHENTIC", "Cotton security paper passes 365nm UV fluorescence inspection");
+  assert(uvNormal.securityFibersDetected >= 20, "Detects embedded security fibers");
+
+  const uvAltered = forensicService.analyzeUvSpectralFluorescence({ chequeNumber: "000102", hasChemicalWash: true });
+  assert(uvAltered.status === "REJECT_CHEMICAL_ALTERATION", "Flags chemical bleach wash halo solvent fluorescence");
+
+  const payeeClean = forensicService.analyzePayeeIntegrity({ payeeName: "SURAT DIAMOND TRADERS", isAltered: false });
+  assert(payeeClean.verdict === "CLEAN_VERIFIED", "Confirms optical kerning and micro-print baseline integrity");
+
+  const payeeTampered = forensicService.analyzePayeeIntegrity({ payeeName: "UNKNOWN FRAUDSTER", isAltered: true });
+  assert(payeeTampered.verdict === "TAMPERED_FRAUD_HOLD", "Detects payee alteration and micro-print line breach");
+
+  const chqDossier = forensicService.generateForensicDossier({
+    chequeNumber: "000999",
+    amount: 150000,
+    amountInWords: "One Lakh Fifty Thousand",
+    payeeName: "RELIABLE TRADERS",
+    drawerAccount: "123456789012",
+  });
+  assert(chqDossier && typeof chqDossier.overallRiskScore === "number", "Generates composite forensic dossier with multi-dimensional risk score");
+
+  // SUITE 26: Dynamic Liquidity & Collateral Management (LMS)
+  console.log("\n▶ SUITE 26: 💼 Dynamic Liquidity & Collateral Management (LMS)");
+  const portfolios = collateralService.getPortfolios();
+  assert(Array.isArray(portfolios) && portfolios.length >= 3, "Loads participant bank collateral portfolios");
+  assert(portfolios[0].bankCode === "SNB" && portfolios[0].totalEffectiveCollateral > 0, "Calculates effective collateral post statutory haircuts");
+
+  const pledged = collateralService.pledgeSecurity({
+    bankCode: "SNB",
+    type: "G_SEC_10Y",
+    nominalValue: 5000000,
+  });
+  assert(pledged.status === "ACTIVE", "Pledges 10Y Benchmark G-Sec into intraday collateral buffer");
+  assert(pledged.effectiveValue === 4900000, "Applies statutory 2% RBI haircut to sovereign bond pledge");
+
+  const repoTxn = collateralService.drawdownRepoLine("SNB", 1000000);
+  assert(repoTxn.status === "ACTIVE_DRAWDOWN", "Executes automated intraday Repo drawdown to relieve queue deficit");
+  assert(repoTxn.repoRatePercent === 6.50, "Applies RBI standard Marginal Standing Facility (MSF) rate");
+
+  const stressReport = collateralService.runStressTest("COUNTERPARTY_DEFAULT");
+  assert(stressReport.scenario.severity === "CRITICAL", "Executes multi-factor counterparty default stress simulation");
+  assert(stressReport.scenario.systemicResilienceScore > 80, "Verifies systemic resilience and SGF absorption capacity");
+
+  // SUITE 27: Automated RBI Regulatory CIMS & Compliance Hub
+  console.log("\n▶ SUITE 27: 🏛️ Automated RBI Regulatory CIMS & Compliance Hub");
+  const cimsDoc = cimsService.generateCimsXml({
+    returnType: "CTS_RET_01",
+    totalVolume: 2500,
+    totalAmountInr: 320000000,
+  });
+  assert(cimsDoc && cimsDoc.xml.includes("<cims:CimsRegulatoryReturn"), "Generates valid RBI CIMS XML regulatory return");
+  assert(cimsDoc.xml.includes("<cims:ReturnType>CTS_RET_01</cims:ReturnType>"), "Specifies statutory CTS_RET_01 taxonomy category");
+  assert(cimsDoc.xml.includes("<ds:Signature>"), "Embeds XMLDSig digital signature block for regulatory submission");
+
+  const memo = cimsService.generateSection138Memo({
+    chequeNumber: "000555",
+    amount: 500000,
+    payeeName: "KAPODRA WEAVERS ASSN",
+    returnReasonCode: "31",
+  });
+  assert(memo.statutoryLimitation.noticePeriodDays === 30, "Calculates Section 138 NI Act mandatory 30-day notice limitation window");
+  assert(memo.sectionInvoked.includes("Section 138"), "Correctly invokes criminal liability statute for dishonour (Code 31 - Funds Insufficient)");
+
+  const retAnalytics = cimsService.getReturnAnalytics();
+  assert(Array.isArray(retAnalytics.reasonDistribution), "Analyzes dishonour reason codes across clearing operations");
+  assert(retAnalytics.returnRateAgainstPresentationPercent < 2.0, "Validates return rate within RBI 2.0% statutory threshold");
+
+  const escalations = cimsService.listComplianceEscalations();
+  assert(Array.isArray(escalations) && escalations.length >= 2, "Tracks active compliance breach escalation tickets");
+  const actionedEscalation = cimsService.actionComplianceEscalation(escalations[0].id, "ESCALATE_TO_CCO", "Head of Compliance", "High risk review");
+  assert(actionedEscalation.status === "CCO_REVIEW", "Advances compliance ticket through formal governance workflow");
+
+  // SUITE 28: Core Banking (CBS) & Open Banking Adapter Suite
+  console.log("\n▶ SUITE 28: 🌐 Core Banking (CBS) & Open Banking Adapter Suite");
+  const camt053 = cbsAdapterService.generateCamt053Xml({
+    accountIban: "IN29SPCB0000001029384756",
+    openingBalance: 100000000,
+    closingBalance: 112000000,
+  });
+  assert(camt053.xml.includes("urn:iso:std:iso:20022:tech:xsd:camt.053.001.08"), "Generates ISO 20022 camt.053.001.08 Bank-to-Customer Statement XML");
+  assert(camt053.xml.includes("<BkToCstmrStmt>"), "Embeds ISO 20022 BkToCstmrStmt structural message element");
+
+  const camt054 = cbsAdapterService.generateCamt054Xml({
+    chequeNumber: "000789",
+    amount: 250000,
+    creditDebitIndicator: "CRDT",
+  });
+  assert(camt054.xml.includes("urn:iso:std:iso:20022:tech:xsd:camt.054.001.08"), "Generates ISO 20022 camt.054.001.08 Debit/Credit Notification XML");
+
+  const cbsSimSuccess = cbsAdapterService.simulateCbsInquiry({
+    system: "FINACLE",
+    accountNumber: "102938475612",
+    amount: 100000,
+  });
+  assert(cbsSimSuccess.isSolvent === true, "Simulates Finacle core balance inquiry for solvent account");
+  assert(cbsSimSuccess.lienHoldPlaced === true && cbsSimSuccess.lienReference.startsWith("LIEN-"), "Earmarks intraday clearing lien hold on core balance");
+
+  const cbsAdapters = cbsAdapterService.getAdapterStatus();
+  assert(cbsAdapters.FINACLE && cbsAdapters.BANCS && cbsAdapters.FLEXCUBE, "Maintains registry of Finacle, BaNCS, and Flexcube adapters");
 
   // TEST SUMMARY
   console.log("\n================================================================");

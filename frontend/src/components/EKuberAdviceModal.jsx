@@ -72,7 +72,7 @@ export default function EKuberAdviceModal({ chequeId, onClose }) {
                 </span>
               </div>
               <p className="text-[11px] text-slate-400 font-mono mt-0.5">
-                ISO 20022 pacs.009.001.08 · RTGS Interbank Financial Institution Credit Transfer
+                pacs.009.001.08 · RTGS Interbank Financial Institution Credit Transfer
               </p>
             </div>
           </div>
@@ -89,8 +89,8 @@ export default function EKuberAdviceModal({ chequeId, onClose }) {
           <button
             onClick={() => setActiveTab("advice")}
             className={`py-3 px-4 font-bold border-b-2 transition-colors cursor-pointer ${activeTab === "advice"
-                ? "border-brand-600 text-brand-700 bg-white"
-                : "border-transparent text-gray-500 hover:text-gray-700"
+              ? "border-brand-600 text-brand-700 bg-white"
+              : "border-transparent text-gray-500 hover:text-gray-700"
               }`}
           >
             Settlement Advice
@@ -98,11 +98,11 @@ export default function EKuberAdviceModal({ chequeId, onClose }) {
           <button
             onClick={() => setActiveTab("xml")}
             className={`py-3 px-4 font-bold border-b-2 transition-colors cursor-pointer flex items-center gap-1.5 ${activeTab === "xml"
-                ? "border-brand-600 text-brand-700 bg-white"
-                : "border-transparent text-gray-500 hover:text-gray-700"
+              ? "border-brand-600 text-brand-700 bg-white"
+              : "border-transparent text-gray-500 hover:text-gray-700"
               }`}
           >
-            ISO 20022 pacs.009 XML
+            pacs.009 XML
           </button>
         </div>
 
@@ -203,11 +203,11 @@ export default function EKuberAdviceModal({ chequeId, onClose }) {
               </div>
             </div>
           ) : (
-            /* Raw ISO 20022 XML View */
+            /* Raw XML View */
             <div className="space-y-3">
               <div className="flex items-center justify-between">
                 <span className="text-xs text-gray-500 font-mono">
-                  ISO 20022 pacs.009.001.08 XML payload dispatched to e-Kuber
+                  pacs.009.001.08 XML payload dispatched to e-Kuber
                 </span>
                 <div className="flex gap-2">
                   <button

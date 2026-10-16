@@ -115,8 +115,8 @@ export default function SettlementSummary() {
           {primaryBank && (
             <div
               className={`p-4 rounded-xl border transition-all ${primaryBank.liquidityWarning
-                  ? "bg-red-50/40 border-red-300 shadow-sm"
-                  : "bg-slate-50 border-gray-200"
+                ? "bg-red-50/40 border-red-300 shadow-sm"
+                : "bg-slate-50 border-gray-200"
                 }`}
             >
               <div className="flex items-center justify-between mb-2">
@@ -128,8 +128,8 @@ export default function SettlementSummary() {
                 </div>
                 <span
                   className={`px-2 py-0.5 rounded text-[10px] font-bold font-mono ${primaryBank.liquidityWarning
-                      ? "bg-red-100 text-red-800 border border-red-300"
-                      : "bg-emerald-100 text-emerald-800 border border-emerald-300"
+                    ? "bg-red-100 text-red-800 border border-red-300"
+                    : "bg-emerald-100 text-emerald-800 border border-emerald-300"
                     }`}
                 >
                   {primaryBank.liquidityWarning ? "LIQUIDITY_WARNING" : "NORMAL"}
@@ -142,10 +142,10 @@ export default function SettlementSummary() {
                   <span className="font-semibold text-gray-600">Intraday Collateral Stress Bar:</span>
                   <span
                     className={`font-mono font-bold ${primaryBank.liquidityWarning
-                        ? "text-red-600 font-extrabold"
-                        : primaryBank.utilizationPercent >= 60
-                          ? "text-amber-600"
-                          : "text-emerald-700"
+                      ? "text-red-600 font-extrabold"
+                      : primaryBank.utilizationPercent >= 60
+                        ? "text-amber-600"
+                        : "text-emerald-700"
                       }`}
                   >
                     {primaryBank.utilizationPercent}% Utilized
@@ -154,10 +154,10 @@ export default function SettlementSummary() {
                 <div className="w-full bg-gray-200 rounded-full h-3 relative overflow-hidden">
                   <div
                     className={`h-full rounded-full transition-all duration-500 ${primaryBank.liquidityWarning
-                        ? "bg-red-600"
-                        : primaryBank.utilizationPercent >= 60
-                          ? "bg-amber-500"
-                          : "bg-emerald-500"
+                      ? "bg-red-600"
+                      : primaryBank.utilizationPercent >= 60
+                        ? "bg-amber-500"
+                        : "bg-emerald-500"
                       }`}
                     style={{ width: `${Math.min(100, primaryBank.utilizationPercent)}%` }}
                   />
@@ -214,8 +214,8 @@ export default function SettlementSummary() {
           {counterpartyBank && (
             <div
               className={`p-4 rounded-xl border transition-all ${counterpartyBank.liquidityWarning
-                  ? "bg-red-50/40 border-red-300 shadow-sm"
-                  : "bg-slate-50 border-gray-200"
+                ? "bg-red-50/40 border-red-300 shadow-sm"
+                : "bg-slate-50 border-gray-200"
                 }`}
             >
               <div className="flex items-center justify-between mb-2">
@@ -227,8 +227,8 @@ export default function SettlementSummary() {
                 </div>
                 <span
                   className={`px-2 py-0.5 rounded text-[10px] font-bold font-mono ${counterpartyBank.liquidityWarning
-                      ? "bg-red-100 text-red-800 border border-red-300"
-                      : "bg-emerald-100 text-emerald-800 border border-emerald-300"
+                    ? "bg-red-100 text-red-800 border border-red-300"
+                    : "bg-emerald-100 text-emerald-800 border border-emerald-300"
                     }`}
                 >
                   {counterpartyBank.liquidityWarning ? "LIQUIDITY_WARNING" : "NORMAL"}
@@ -241,10 +241,10 @@ export default function SettlementSummary() {
                   <span className="font-semibold text-gray-600">Intraday Collateral Stress Bar:</span>
                   <span
                     className={`font-mono font-bold ${counterpartyBank.liquidityWarning
-                        ? "text-red-600 font-extrabold"
-                        : counterpartyBank.utilizationPercent >= 60
-                          ? "text-amber-600"
-                          : "text-emerald-700"
+                      ? "text-red-600 font-extrabold"
+                      : counterpartyBank.utilizationPercent >= 60
+                        ? "text-amber-600"
+                        : "text-emerald-700"
                       }`}
                   >
                     {counterpartyBank.utilizationPercent}% Utilized
@@ -253,10 +253,10 @@ export default function SettlementSummary() {
                 <div className="w-full bg-gray-200 rounded-full h-3 relative overflow-hidden">
                   <div
                     className={`h-full rounded-full transition-all duration-500 ${counterpartyBank.liquidityWarning
-                        ? "bg-red-600"
-                        : counterpartyBank.utilizationPercent >= 60
-                          ? "bg-amber-500"
-                          : "bg-emerald-500"
+                      ? "bg-red-600"
+                      : counterpartyBank.utilizationPercent >= 60
+                        ? "bg-amber-500"
+                        : "bg-emerald-500"
                       }`}
                     style={{ width: `${Math.min(100, counterpartyBank.utilizationPercent)}%` }}
                   />
@@ -317,7 +317,7 @@ export default function SettlementSummary() {
           <div>
             <h2 className="font-bold text-base text-gray-900">Multilateral Net Settlement Ledger</h2>
             <p className="text-xs text-gray-500 mt-0.5">
-              Interbank clearing bilateral netting and ISO 20022 pacs.008 export
+              Interbank clearing bilateral netting and pacs.008 export
             </p>
           </div>
           <button
@@ -350,7 +350,7 @@ export default function SettlementSummary() {
                   <th className="text-left px-3 py-2.5">Debtor Bank</th>
                   <th className="text-left px-3 py-2.5">Direction</th>
                   <th className="text-right px-3 py-2.5">Netted Volume</th>
-                  <th className="text-right px-3 py-2.5">ISO 20022 Standard</th>
+                  <th className="text-right px-3 py-2.5">Standard</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100">

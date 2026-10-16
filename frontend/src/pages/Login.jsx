@@ -100,18 +100,14 @@ export default function Login() {
         <div className="flex items-center gap-3">
           <div className="hidden sm:flex items-center gap-2 px-3 py-1 rounded text-[11px] font-medium bg-emerald-950/50 border border-emerald-800/60 text-emerald-300">
             <span className="font-mono">{currentTime || "ONLINE"} IST</span>
-            <span className="text-emerald-700">·</span>
-            <span className="text-[10px] uppercase tracking-wider text-emerald-400 font-mono">
-              Switch 01 Active
-            </span>
           </div>
 
-          <div className="hidden lg:flex items-center gap-2 text-xs font-mono text-slate-400 border-l border-slate-800 pl-3">
+          {/* <div className="hidden lg:flex items-center gap-2 text-xs font-mono text-slate-400 border-l border-slate-800 pl-3">
             <span className="px-1.5 py-0.5 rounded bg-slate-800 text-[10px] text-slate-300 border border-slate-700">
               ISO 20022
             </span>
             <span className="text-[11px] text-slate-500">256-bit TLS</span>
-          </div>
+          </div> */}
         </div>
       </header>
 
@@ -239,7 +235,7 @@ export default function Login() {
         <div className="flex items-center gap-2 sm:gap-3 text-[10px] font-mono text-slate-400">
           <span>SHA-256 Ledger</span>
           <span>•</span>
-          <span>ISO 20022 XML</span>
+          <span>XML</span>
           <span>•</span>
           <span>Continuous Clearing</span>
         </div>

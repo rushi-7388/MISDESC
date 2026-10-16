@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo } from "react";
 import client from "../api/client";
 
 /**
- * Tokenizes XML for syntax highlighting in the ISO 20022 Studio
+ * Tokenizes XML for syntax highlighting in the Studio
  */
 function highlightXmlLine(line) {
   // Regex pattern to tokenize comments, open/close tags, attributes, strings, and entities
@@ -85,7 +85,7 @@ export default function ISO20022Modal({ settlementId, chequeId, onClose }) {
         setXml(xmlData);
         runValidation(xmlData);
       } catch (err) {
-        const fallbackErr = `<Error>Failed to load ISO 20022 message: ${err.message}</Error>`;
+        const fallbackErr = `<Error>Failed to load message: ${err.message}</Error>`;
         setXml(fallbackErr);
         runValidation(fallbackErr);
       } finally {
@@ -111,12 +111,12 @@ export default function ISO20022Modal({ settlementId, chequeId, onClose }) {
 
       setValidationResult({
         isValid: hasAppHdr && hasMsgId && hasCcy && hasSignature,
-        schemaStandard: "ISO 20022 CBPR+ / Reserve Bank of India NextGen e-Kuber Standard",
+        schemaStandard: "CBPR+ / Reserve Bank of India NextGen e-Kuber Standard",
         detectedMessageType: isPacs008
           ? "pacs.008.001.08 (Financial Institutional Customer Credit Transfer)"
           : isPacs002
-          ? "pacs.002.001.10 (Payment Status Report / Return Advice)"
-          : "ISO 20022 Envelope",
+            ? "pacs.002.001.10 (Payment Status Report / Return Advice)"
+            : "Envelope",
         validations: [
           {
             name: "CBPR+ Business Application Header (head.001.001.02)",
@@ -193,7 +193,7 @@ export default function ISO20022Modal({ settlementId, chequeId, onClose }) {
             <div className="flex items-center gap-2.5 flex-wrap">
               <span className="font-bold text-white text-base flex items-center gap-2">
                 <span className="w-2.5 h-2.5 rounded-full bg-cyan-400 animate-pulse" />
-                RBI e-Kuber ISO 20022 Central Gateway Studio
+                RBI e-Kuber Central Gateway Studio
               </span>
               <span className="px-2.5 py-0.5 rounded text-[11px] font-mono font-bold bg-cyan-950 text-cyan-300 border border-cyan-700/60">
                 {detectedMessageType}
@@ -243,22 +243,20 @@ export default function ISO20022Modal({ settlementId, chequeId, onClose }) {
             <button
               type="button"
               onClick={() => setActiveTab("editor")}
-              className={`px-3 py-1.5 rounded-lg font-semibold transition-all cursor-pointer ${
-                activeTab === "editor"
+              className={`px-3 py-1.5 rounded-lg font-semibold transition-all cursor-pointer ${activeTab === "editor"
                   ? "bg-slate-800 text-cyan-400 border border-slate-700"
                   : "text-slate-400 hover:text-slate-200"
-              }`}
+                }`}
             >
               XML Code Inspector ({xmlLines.length} Lines)
             </button>
             <button
               type="button"
               onClick={() => setActiveTab("validator")}
-              className={`px-3 py-1.5 rounded-lg font-semibold transition-all cursor-pointer flex items-center gap-1.5 ${
-                activeTab === "validator"
+              className={`px-3 py-1.5 rounded-lg font-semibold transition-all cursor-pointer flex items-center gap-1.5 ${activeTab === "validator"
                   ? "bg-slate-800 text-cyan-400 border border-slate-700"
                   : "text-slate-400 hover:text-slate-200"
-              }`}
+                }`}
             >
               <span>XSD & CBPR+ Validator</span>
               {validationResult?.isValid ? (
@@ -270,11 +268,10 @@ export default function ISO20022Modal({ settlementId, chequeId, onClose }) {
             <button
               type="button"
               onClick={() => setActiveTab("hsm")}
-              className={`px-3 py-1.5 rounded-lg font-semibold transition-all cursor-pointer flex items-center gap-1.5 ${
-                activeTab === "hsm"
+              className={`px-3 py-1.5 rounded-lg font-semibold transition-all cursor-pointer flex items-center gap-1.5 ${activeTab === "hsm"
                   ? "bg-slate-800 text-purple-400 border border-slate-700"
                   : "text-slate-400 hover:text-slate-200"
-              }`}
+                }`}
             >
               <span>FIPS 140-2 HSM Certificate</span>
             </button>
@@ -295,7 +292,7 @@ export default function ISO20022Modal({ settlementId, chequeId, onClose }) {
             <div className="flex flex-col items-center justify-center py-24 space-y-3">
               <div className="w-8 h-8 border-3 border-cyan-400 border-t-transparent rounded-full animate-spin" />
               <p className="text-xs text-slate-400 font-mono">
-                Synthesizing ISO 20022 CBPR+ message envelope and signing with HSM...
+                Synthesizing CBPR+ message envelope and signing with HSM...
               </p>
             </div>
           ) : activeTab === "editor" ? (
@@ -323,11 +320,10 @@ export default function ISO20022Modal({ settlementId, chequeId, onClose }) {
                 <div>
                   <div className="flex items-center gap-2 mb-1">
                     <span
-                      className={`px-2.5 py-0.5 rounded text-xs font-bold font-mono ${
-                        validationResult?.isValid
+                      className={`px-2.5 py-0.5 rounded text-xs font-bold font-mono ${validationResult?.isValid
                           ? "bg-emerald-950 text-emerald-300 border border-emerald-700"
                           : "bg-rose-950 text-rose-300 border border-rose-700"
-                      }`}
+                        }`}
                     >
                       {validationResult?.isValid ? "✓ SCHEMA CONFORMANCE PASSED" : "⚠ VALIDATION NOTICE"}
                     </span>
@@ -372,9 +368,8 @@ export default function ISO20022Modal({ settlementId, chequeId, onClose }) {
                     >
                       <div className="flex items-start gap-3">
                         <span
-                          className={`w-5 h-5 rounded-full flex items-center justify-center font-bold text-[11px] shrink-0 mt-0.5 ${
-                            v.passed ? "bg-emerald-900 text-emerald-300" : "bg-rose-900 text-rose-300"
-                          }`}
+                          className={`w-5 h-5 rounded-full flex items-center justify-center font-bold text-[11px] shrink-0 mt-0.5 ${v.passed ? "bg-emerald-900 text-emerald-300" : "bg-rose-900 text-rose-300"
+                            }`}
                         >
                           {v.passed ? "✓" : "✕"}
                         </span>
@@ -384,11 +379,10 @@ export default function ISO20022Modal({ settlementId, chequeId, onClose }) {
                         </div>
                       </div>
                       <span
-                        className={`text-[10px] font-mono font-bold uppercase px-2 py-0.5 rounded border shrink-0 ${
-                          v.passed
+                        className={`text-[10px] font-mono font-bold uppercase px-2 py-0.5 rounded border shrink-0 ${v.passed
                             ? "bg-emerald-950 text-emerald-300 border-emerald-800"
                             : "bg-rose-950 text-rose-300 border-rose-800"
-                        }`}
+                          }`}
                       >
                         {v.passed ? "PASS" : "FAIL"}
                       </span>
@@ -400,7 +394,7 @@ export default function ISO20022Modal({ settlementId, chequeId, onClose }) {
               {/* Statutory ISO Reject Reason Codes Reference */}
               <div className="bg-slate-900/40 border border-slate-800 p-4 rounded-xl space-y-3">
                 <h4 className="text-xs font-bold text-slate-300 uppercase tracking-wider flex items-center justify-between">
-                  <span>Statutory ISO 20022 pacs.002 Return / Reject Code Harmonization</span>
+                  <span>Statutory pacs.002 Return / Reject Code Harmonization</span>
                   <span className="text-[10px] font-mono text-cyan-400">NPCI / RBI MISDESC-2010 MAPPING</span>
                 </h4>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5 text-xs font-mono">
@@ -479,7 +473,7 @@ export default function ISO20022Modal({ settlementId, chequeId, onClose }) {
                 <div className="bg-slate-950/90 p-4 rounded-xl border border-slate-800 text-xs font-mono space-y-2">
                   <span className="text-[10px] text-slate-400 uppercase block">W3C Enveloped Signature Block</span>
                   <p className="text-slate-400 text-[11px] leading-relaxed">
-                    Every ISO 20022 message envelope generated for RBI e-Kuber includes an embedded W3C{" "}
+                    Every message envelope generated for RBI e-Kuber includes an embedded W3C{" "}
                     <code className="text-cyan-400">&lt;ds:Signature&gt;</code> element encompassing the digest value,
                     canonicalized transformation tree, and the hardware-derived RSA signature token ensuring
                     statutory non-repudiation under Section 43A of the IT Act.
@@ -501,7 +495,7 @@ export default function ISO20022Modal({ settlementId, chequeId, onClose }) {
           </div>
 
           <div className="text-[11px] font-mono text-slate-500">
-            NextGen MISDESC 2026 · Compliant with ISO 20022 CBPR+ Release 2.1
+            NextGen MISDESC 2026 · Compliant with CBPR+ Release 2.1
           </div>
         </div>
       </div>

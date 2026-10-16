@@ -50,7 +50,7 @@ export default function ComplianceAuditorDashboard() {
               Regulatory Compliance & Forensic Audit Portal
             </h1>
             <p className="text-xs sm:text-sm text-slate-500 mt-1">
-              SHA-256 ledger verification, Positive Pay System audits, statutory return compliance, and ISO 20022 message certification.
+              SHA-256 ledger verification, Positive Pay System audits, statutory return compliance, and message certification.
             </p>
           </div>
 
@@ -77,8 +77,8 @@ export default function ComplianceAuditorDashboard() {
             type="button"
             onClick={() => setActiveTab("ledger")}
             className={`py-3 px-5 font-bold text-xs sm:text-sm transition-all border-b-2 cursor-pointer flex items-center gap-2 whitespace-nowrap ${activeTab === "ledger"
-                ? "border-amber-600 text-amber-800 bg-amber-50/50 rounded-t-xl"
-                : "border-transparent text-slate-500 hover:text-slate-800"
+              ? "border-amber-600 text-amber-800 bg-amber-50/50 rounded-t-xl"
+              : "border-transparent text-slate-500 hover:text-slate-800"
               }`}
           >
             <span>Cryptographic Ledger Verification</span>
@@ -88,8 +88,8 @@ export default function ComplianceAuditorDashboard() {
             type="button"
             onClick={() => setActiveTab("fraud_flags")}
             className={`py-3 px-5 font-bold text-xs sm:text-sm transition-all border-b-2 cursor-pointer flex items-center gap-2 whitespace-nowrap ${activeTab === "fraud_flags"
-                ? "border-amber-600 text-amber-800 bg-amber-50/50 rounded-t-xl"
-                : "border-transparent text-slate-500 hover:text-slate-800"
+              ? "border-amber-600 text-amber-800 bg-amber-50/50 rounded-t-xl"
+              : "border-transparent text-slate-500 hover:text-slate-800"
               }`}
           >
             <span>Forensic Fraud & Risk Flags</span>
@@ -99,8 +99,8 @@ export default function ComplianceAuditorDashboard() {
             type="button"
             onClick={() => setActiveTab("disputes")}
             className={`py-3 px-5 font-bold text-xs sm:text-sm transition-all border-b-2 cursor-pointer flex items-center gap-2 whitespace-nowrap ${activeTab === "disputes"
-                ? "border-amber-600 text-amber-800 bg-amber-50/50 rounded-t-xl"
-                : "border-transparent text-slate-500 hover:text-slate-800"
+              ? "border-amber-600 text-amber-800 bg-amber-50/50 rounded-t-xl"
+              : "border-transparent text-slate-500 hover:text-slate-800"
               }`}
           >
             <span>Clearing Disputes (DRM Rule 32)</span>
@@ -110,8 +110,8 @@ export default function ComplianceAuditorDashboard() {
             type="button"
             onClick={() => setActiveTab("pki_certs")}
             className={`py-3 px-5 font-bold text-xs sm:text-sm transition-all border-b-2 cursor-pointer flex items-center gap-2 whitespace-nowrap ${activeTab === "pki_certs"
-                ? "border-amber-600 text-amber-800 bg-amber-50/50 rounded-t-xl"
-                : "border-transparent text-slate-500 hover:text-slate-800"
+              ? "border-amber-600 text-amber-800 bg-amber-50/50 rounded-t-xl"
+              : "border-transparent text-slate-500 hover:text-slate-800"
               }`}
           >
             <span>X.509 PKI Trust & Certificates</span>
@@ -121,8 +121,8 @@ export default function ComplianceAuditorDashboard() {
             type="button"
             onClick={() => setActiveTab("audit_trail")}
             className={`py-3 px-5 font-bold text-xs sm:text-sm transition-all border-b-2 cursor-pointer flex items-center gap-2 whitespace-nowrap ${activeTab === "audit_trail"
-                ? "border-amber-600 text-amber-800 bg-amber-50/50 rounded-t-xl"
-                : "border-transparent text-slate-500 hover:text-slate-800"
+              ? "border-amber-600 text-amber-800 bg-amber-50/50 rounded-t-xl"
+              : "border-transparent text-slate-500 hover:text-slate-800"
               }`}
           >
             <span>Immutable Clearing Event Log</span>
@@ -221,7 +221,7 @@ export default function ComplianceAuditorDashboard() {
                             type="button"
                             onClick={() => setSelectedChequeIso(evt.chequeId)}
                             className="px-2 py-1 rounded bg-slate-100 hover:bg-slate-200 text-slate-700 text-[10px] font-bold cursor-pointer transition-colors"
-                            title="Inspect ISO 20022 XML"
+                            title="Inspect XML"
                           >
                             ISO XML
                           </button>

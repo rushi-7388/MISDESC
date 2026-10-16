@@ -5,6 +5,7 @@ import AgentSwarmDocketModal from "./AgentSwarmDocketModal";
 import ZkSolvencyProofModal from "./ZkSolvencyProofModal";
 import SmartChequeEscrowModal from "./SmartChequeEscrowModal";
 import CrossBorderClearingModal from "./CrossBorderClearingModal";
+import ForensicIntelligenceSuiteModal from "./ForensicIntelligenceSuiteModal";
 
 export default function DraweeVerificationCard({
   cheque,
@@ -17,6 +18,7 @@ export default function DraweeVerificationCard({
   const [showZkModal, setShowZkModal] = useState(false);
   const [showSmartModal, setShowSmartModal] = useState(false);
   const [showCrossBorderModal, setShowCrossBorderModal] = useState(false);
+  const [showForensicModal, setShowForensicModal] = useState(false);
   const isHighRiskOrValue = Number(cheque.amount) >= 100000 || cheque.riskTier === "HIGH";
 
 
@@ -223,6 +225,16 @@ export default function DraweeVerificationCard({
             <span>🌐 FX</span>
           </button>
 
+          {/* Option 4: AI Fraud Intelligence & Forensic Biometrics */}
+          <button
+            type="button"
+            onClick={() => setShowForensicModal(true)}
+            className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-indigo-950 hover:bg-indigo-900 text-indigo-300 text-xs font-bold border border-indigo-800 shadow-xs transition-all cursor-pointer"
+            title="AI Siamese Signature Matching & UV 365nm Watermark Inspection"
+          >
+            <span>🧬 Forensics</span>
+          </button>
+
           {/* Statutory tools if already final */}
           {cheque.status === "RETURNED" && (
             <button
@@ -271,6 +283,13 @@ export default function DraweeVerificationCard({
         <CrossBorderClearingModal
           cheque={cheque}
           onClose={() => setShowCrossBorderModal(false)}
+        />
+      )}
+
+      {showForensicModal && (
+        <ForensicIntelligenceSuiteModal
+          cheque={cheque}
+          onClose={() => setShowForensicModal(false)}
         />
       )}
     </div>

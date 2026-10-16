@@ -36,7 +36,7 @@ const SYSTEM_PERMISSIONS = [
   {
     code: "EKUBER_PACS009",
     name: "RBI e-Kuber pacs.009 Generation",
-    description: "Authorize and produce ISO 20022 Financial Institution Credit Transfer XML",
+    description: "Authorize and produce Financial Institution Credit Transfer XML",
     category: "Treasury",
   },
   {

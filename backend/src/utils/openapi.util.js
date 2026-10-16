@@ -8,7 +8,7 @@ const OPENAPI_SPEC = {
     title: "Next-Gen MISDESC (Cheque Truncation System) Open Banking Core API",
     version: "3.0.0",
     description:
-      "Statutory REST & Webhook APIs for Commercial Bank CBS integration (Finacle, TCS BaNCS, Oracle Flexcube). Enforces ISO 20022 CBPR+ compliance, HMAC-SHA256 authenticated webhooks, and sub-500ms clearing pipelines.",
+      "Statutory REST & Webhook APIs for Commercial Bank CBS integration (Finacle, TCS BaNCS, Oracle Flexcube). Enforces CBPR+ compliance, HMAC-SHA256 authenticated webhooks, and sub-500ms clearing pipelines.",
     contact: {
       name: "Reserve Bank of India & NPCI MISDESC Developer Hub",
       url: "https://rbi.org.in/MISDESC/developers",

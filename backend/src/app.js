@@ -28,6 +28,7 @@ const crossborderRoutes = require("./routes/crossborder.routes");
 const stressRoutes = require("./routes/stress.routes");
 const webhookRoutes = require("./routes/webhook.routes");
 const reportRoutes = require("./routes/report.routes");
+const forensicRoutes = require("./routes/forensic.routes");
 
 const app = express();
 
@@ -40,7 +41,19 @@ app.use("/uploads", express.static(path.join(__dirname, "..", "uploads")));
 
 const { initSse } = require("./utils/sse.util");
 
-// Standard health endpoints
+// Root & Standard health endpoints
+app.get("/", (req, res) => {
+  res.json({
+    name: "MISDESC — Bank MIS & Reporting System API",
+    institution: "SURAT PEOPLES CO OP BANK",
+    status: "ONLINE",
+    version: "1.0.0",
+    frontendUrl: "http://localhost:5173",
+    reportsEndpoint: "/api/reports",
+    healthEndpoint: "/health/live",
+    metricsEndpoint: "/metrics",
+  });
+});
 app.get("/health", (req, res) => res.json({ status: "ok" }));
 app.get("/api/health", (req, res) => res.json({ status: "ok" }));
 
@@ -74,6 +87,7 @@ app.use("/api/crossborder", crossborderRoutes);
 app.use("/api/stress", stressRoutes);
 app.use("/api/webhooks", webhookRoutes);
 app.use("/api/reports", reportRoutes);
+app.use("/api/forensics", forensicRoutes);
 
 
 

@@ -138,45 +138,6 @@ export default function LiveSettlementTicker() {
 
   return (
     <div className="bg-slate-950 text-white border-b border-slate-800/80 text-xs shadow-inner select-none">
-      {/* Top Strip: Primary Metrics & Audio Controls */}
-      <div className="px-4 sm:px-6 py-1.5 flex flex-wrap items-center justify-between gap-3 border-b border-slate-900/90">
-        <div className="flex flex-wrap items-center gap-4">
-          <div className="flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
-            <span className="text-[10px] font-black uppercase tracking-wider text-slate-400">
-              NATIONAL SWITCH LIVE TICKER
-            </span>
-          </div>
-
-          <div className={`transition-all duration-300 font-mono text-[11px] ${pulse ? "text-emerald-400 font-bold scale-102" : "text-slate-300"}`}>
-            Cleared Volume: <span className="font-bold text-white">₹{tickerData.clearedVolume.toLocaleString("en-IN")}</span>{" "}
-            <span className="text-slate-400 text-[10px]">({tickerData.clearedCount} instruments)</span>
-          </div>
-
-          <div className="hidden md:flex items-center gap-1.5 font-mono text-[10px] text-cyan-400 bg-cyan-950/40 px-2 py-0.5 rounded border border-cyan-800/50">
-            <span>⚡ LSM Liquidity Conserved:</span>
-            <span className="font-bold text-white">₹{(tickerData.lsmUnlocked / 100000).toFixed(2)} Lakhs</span>
-          </div>
-        </div>
-
-        {/* Audio Chime Synthesizer Toggle */}
-        <div className="flex items-center gap-2">
-          <button
-            type="button"
-            onClick={handleToggleAudio}
-            className={`px-2.5 py-1 rounded-full text-[10px] font-mono font-bold transition-all flex items-center gap-1.5 cursor-pointer shadow-xs ${
-              audioEnabled
-                ? "bg-emerald-950 text-emerald-300 border border-emerald-700/80 hover:bg-emerald-900"
-                : "bg-slate-900 text-slate-400 border border-slate-800 hover:text-white"
-            }`}
-            title="Toggle synthesized clearing chimes via Web Audio API"
-          >
-            <span>{audioEnabled ? "🔊" : "🔇"}</span>
-            <span>{audioEnabled ? "AUDIO CHIMES: ON" : "AUDIO MUTED"}</span>
-          </button>
-        </div>
-      </div>
-
       {/* Bottom Strip: Continuous Multilateral Netting Marquee */}
       <div className="overflow-hidden whitespace-nowrap bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 py-1 px-4 border-t border-slate-900/60 font-mono text-[10px] text-slate-300">
         <div

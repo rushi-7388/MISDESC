@@ -74,7 +74,7 @@ function executeContinuousRealization({ cheque, presentingBank, draweeBank }) {
 }
 
 /**
- * Generates official ISO 20022 pacs.009.001.08 Financial Institution Direct Settlement XML
+ * Generates official pacs.009.001.08 Financial Institution Direct Settlement XML
  */
 function generatePacs009Xml({ settlementRef, utr, cheque, presentingBank, draweeBank, settledAt }) {
   const timestamp = (settledAt || new Date()).toISOString();

@@ -178,7 +178,7 @@ async function getCheque(req, res) {
   return res.json(cheque);
 }
 
-// ISO 20022 XML representation for an individual cheque (pacs.002 on return)
+// XML representation for an individual cheque (pacs.002 on return)
 async function getChequeIso20022(req, res) {
   const cheque = await prisma.cheque.findUnique({
     where: { id: req.params.id },

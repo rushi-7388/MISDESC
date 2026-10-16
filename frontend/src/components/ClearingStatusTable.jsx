@@ -144,11 +144,10 @@ export default function ClearingStatusTable({ cheques, renderActions, onUpdated 
                   />
                   {c.signatureMatchScore && (
                     <span
-                      className={`text-[9px] font-mono font-semibold px-1.5 py-0.5 rounded ${
-                        c.signatureStatus === "SUSPECT_MISMATCH"
+                      className={`text-[9px] font-mono font-semibold px-1.5 py-0.5 rounded ${c.signatureStatus === "SUSPECT_MISMATCH"
                           ? "bg-red-50 text-red-700 font-bold border border-red-200"
                           : "bg-blue-50 text-blue-700"
-                      }`}
+                        }`}
                       title={`Specimen Signature Contour Match Score: ${c.signatureMatchScore}%`}
                     >
                       Sig: {c.signatureMatchScore}%
@@ -159,9 +158,8 @@ export default function ClearingStatusTable({ cheques, renderActions, onUpdated 
 
               <td className="px-4 py-3.5 min-w-[150px]">
                 <span
-                  className={`inline-block px-2.5 py-0.5 rounded-full text-xs font-bold whitespace-nowrap ${
-                    STATUS_STYLES[c.status] || "bg-gray-100 text-gray-700"
-                  }`}
+                  className={`inline-block px-2.5 py-0.5 rounded-full text-xs font-bold whitespace-nowrap ${STATUS_STYLES[c.status] || "bg-gray-100 text-gray-700"
+                    }`}
                 >
                   {c.status}
                 </span>
@@ -230,7 +228,7 @@ export default function ClearingStatusTable({ cheques, renderActions, onUpdated 
                         type="button"
                         onClick={() => setIsoChequeId(c.id)}
                         className="px-3 py-1.5 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold border text-xs transition-all cursor-pointer whitespace-nowrap shadow-2xs"
-                        title="ISO 20022 pacs.002 XML export"
+                        title="pacs.002 XML export"
                       >
                         pacs.002
                       </button>

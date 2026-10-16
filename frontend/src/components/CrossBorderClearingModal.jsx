@@ -70,7 +70,7 @@ export default function CrossBorderClearingModal({ cheque, onClose }) {
             <div>
               <div className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-bold bg-cyan-950 text-cyan-300 border border-cyan-800/60 mb-0.5">
                 <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-ping" />
-                Cross-Border Multi-Currency MISDESC · ISO 20022 CBPR+
+                Cross-Border Multi-Currency MISDESC · CBPR+
               </div>
               <h2 className="text-base font-bold text-white flex items-center gap-2">
                 International Clearing & Sanctions Radar · Cheque #{cheque.chequeNumber}
@@ -99,11 +99,10 @@ export default function CrossBorderClearingModal({ cheque, onClose }) {
                     key={c}
                     type="button"
                     onClick={() => setCurrency(c)}
-                    className={`px-2.5 py-1 rounded-lg font-bold text-xs cursor-pointer transition-all ${
-                      currency === c
+                    className={`px-2.5 py-1 rounded-lg font-bold text-xs cursor-pointer transition-all ${currency === c
                         ? "bg-cyan-600 text-white shadow-md shadow-cyan-950"
                         : "bg-slate-800 text-slate-400 hover:text-white"
-                    }`}
+                      }`}
                   >
                     {c}
                   </button>
@@ -147,11 +146,10 @@ export default function CrossBorderClearingModal({ cheque, onClose }) {
                 <h3 className="font-bold text-sm text-white flex items-center gap-2">
                   <span>🛡️ Real-Time AML & Sanctions Screener</span>
                   <span
-                    className={`px-2 py-0.5 rounded text-[10px] font-bold ${
-                      sanctionsResult?.status === "PASSED"
+                    className={`px-2 py-0.5 rounded text-[10px] font-bold ${sanctionsResult?.status === "PASSED"
                         ? "bg-emerald-950 text-emerald-300 border border-emerald-700"
                         : "bg-rose-950 text-rose-300 border border-rose-700"
-                    }`}
+                      }`}
                   >
                     {sanctionsResult?.status === "PASSED" ? "✓ ZERO MATCH (SANCTIONS CLEARED)" : "SANCTIONS HOLD"}
                   </span>
@@ -189,10 +187,10 @@ export default function CrossBorderClearingModal({ cheque, onClose }) {
             )}
           </div>
 
-          {/* ISO 20022 CBPR+ pacs.009 Message Preview */}
+          {/* CBPR+ pacs.009 Message Preview */}
           {xmlOutput && (
             <div className="space-y-2">
-              <h3 className="font-bold text-white">ISO 20022 pacs.009.001.08 XML</h3>
+              <h3 className="font-bold text-white">pacs.009.001.08 XML</h3>
               <pre className="bg-slate-950 p-4 rounded-xl border border-slate-800 font-mono text-[10px] text-cyan-300 overflow-x-auto max-h-48">
                 {xmlOutput}
               </pre>
@@ -211,7 +209,7 @@ export default function CrossBorderClearingModal({ cheque, onClose }) {
             onClick={handleExportPacs009}
             className="px-4 py-2 rounded-xl text-xs font-bold bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white shadow-lg transition-all cursor-pointer flex items-center gap-2"
           >
-            <span>Generate ISO 20022 pacs.009 XML</span>
+            <span>Generate pacs.009 XML</span>
           </button>
         </div>
       </div>

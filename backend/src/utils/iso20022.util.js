@@ -1,5 +1,5 @@
 /**
- * ISO 20022 Financial Messaging & CBPR+ Central Gateway Engine for MISDESC
+ * Financial Messaging & CBPR+ Central Gateway Engine for MISDESC
  * Conforms to RBI NextGen RTGS & SWIFT Cross-Border Payments and Reporting Plus (CBPR+).
  * 
  * Generates:
@@ -12,7 +12,7 @@
 const crypto = require("crypto");
 
 /**
- * Maps MISDESC clearing return reasons to statutory ISO 20022 reject reason codes
+ * Maps MISDESC clearing return reasons to statutory reject reason codes
  */
 const STATUTORY_ISO_REJECT_CODES = {
   "Insufficient funds": { code: "AM04", description: "Insufficient Funds (Balance Deficient)" },
@@ -284,12 +284,12 @@ ${signature}
 }
 
 /**
- * 4. Server-Side ISO 20022 XML Syntax and Schematron Validator
+ * 4. Server-Side XML Syntax and Schematron Validator
  */
 function validateIso20022Xml(xmlString) {
   const result = {
     isValid: true,
-    schemaStandard: "ISO 20022 CBPR+ / Reserve Bank of India NextGen e-Kuber Standard",
+    schemaStandard: "CBPR+ / Reserve Bank of India NextGen e-Kuber Standard",
     detectedMessageType: "UNKNOWN",
     validations: [],
     errors: [],

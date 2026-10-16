@@ -67,7 +67,7 @@ async function listSettlements(req, res) {
   return res.json(enriched);
 }
 
-// Export ISO 20022 pacs.008 XML for a settlement record
+// Export pacs.008 XML for a settlement record
 async function getSettlementIso20022(req, res) {
   const { id } = req.params;
   const settlement = await prisma.settlement.findUnique({ where: { id } });
@@ -385,7 +385,7 @@ async function getEkuberPacs009Xml(req, res) {
   }
 }
 
-// Live ISO 20022 Schematron & XSD conformance validator
+// Live Schematron & XSD conformance validator
 async function validateSettlementIso20022(req, res) {
   try {
     const { xml } = req.body;

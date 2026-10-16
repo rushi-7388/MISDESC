@@ -27,6 +27,14 @@ router.get("/summary", authorize("ADMIN", "SETTLEMENT_OFFICER", "COMPLIANCE_AUDI
 router.post("/collateral", authorize("ADMIN", "SETTLEMENT_OFFICER"), updateCollateral);
 router.post("/collateral/:bankId", authorize("ADMIN", "SETTLEMENT_OFFICER"), updateCollateral);
 
+// Dynamic Collateral Management (LMS)
+const collateralController = require("../controllers/collateral.controller");
+router.get("/collateral/portfolios", collateralController.getPortfolios);
+router.post("/collateral/pledge", authorize("ADMIN", "SETTLEMENT_OFFICER"), collateralController.pledgeSecurity);
+router.post("/collateral/unpledge", authorize("ADMIN", "SETTLEMENT_OFFICER"), collateralController.unpledgeSecurity);
+router.post("/collateral/repo-drawdown", authorize("ADMIN", "SETTLEMENT_OFFICER"), collateralController.drawdownRepoLine);
+router.post("/collateral/stress-test", authorize("ADMIN", "SETTLEMENT_OFFICER", "IT_STAFF"), collateralController.runStressTest);
+
 // LSM (Liquidity Saving Mechanism) Tarjan Cycle Gridlock Resolution Engine
 router.get("/lsm/gridlock-topology", authorize("ADMIN", "SETTLEMENT_OFFICER", "COMPLIANCE_AUDITOR", "IT_STAFF"), getLsmTopology);
 router.post("/lsm/resolve-gridlock", authorize("ADMIN", "SETTLEMENT_OFFICER", "IT_STAFF"), resolveLsmGridlock);

@@ -15,15 +15,19 @@
 [![Grafana](https://img.shields.io/badge/Grafana-10.4-F46800?logo=grafana&logoColor=white)](https://grafana.com/)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
-An industry-grade, full-stack simulation of an advanced national **Cheque Truncation System (MISDESC)** conforming to **NPCI MISDESC-2010 Standards**, the **RBI Continuous Clearing & On-Realisation Directive**, and **ISO 20022 Financial Messaging (CBPR+)**.
+An industry-grade, full-stack simulation of an advanced national **Cheque Truncation System (MISDESC)** conforming to **NPCI MISDESC-2010 Standards**, the **RBI Continuous Clearing & On-Realisation Directive**, and **Financial Messaging (CBPR+)**.
 
-Beyond legacy cheque processing, **MISDESC-Enterprise** implements **6 revolutionary fintech engines** not yet deployed together by any commercial banking network in the world:
+Beyond legacy cheque processing, **MISDESC-Enterprise** implements **10 revolutionary fintech engines** not yet deployed together by any commercial banking network in the world:
 1. ⚡ **Tarjan Intraday Liquidity Savings Mechanism (LSM)** - Eliminates circular bank gridlock in $O(V+E)$ with zero central bank cash consumed.
 2. 🤖 **Autonomous Multi-Agent Swarm Adjudication** - 4 specialized AI agents providing sub-500ms Straight-Through-Processing (STP).
 3. 🛡️ **NIST FIPS 204 ML-DSA Dilithium / ML-KEM Kyber Post-Quantum Cryptography** - Lattice-based quantum-resistant digital manifests.
 4. 🔐 **Zero-Knowledge Confidential Clearing (zk-MISDESC)** - Groth16 / BN254 zk-SNARKs guaranteeing 100% zero drawer data leakage.
 5. 💎 **Programmable Smart Cheques & CBDC (e-Rupee) Atomic Bridge** - Cryptographic micro-liens, statutory GST withholding & e₹ DvP settlement.
-6. 🌐 **Cross-Border Multi-Currency MISDESC & Sanctions Radar** - ISO 20022 CBPR+ `pacs.009` conversion and sub-100ms OFAC/UN sanctions screening.
+6. 🌐 **Cross-Border Multi-Currency MISDESC & Sanctions Radar** - CBPR+ `pacs.009` conversion and sub-100ms OFAC/UN sanctions screening.
+7. 🧬 **AI Fraud Intelligence & Forensic Biometrics** - Deep Siamese neural network signature matching, 365nm multi-spectral UV fluorescence, and optical payee alteration detection.
+8. 💼 **Dynamic Liquidity & Collateral Management (LMS)** - Intraday G-Sec/T-Bill collateral pledging with statutory RBI haircuts, Net Debit Cap (NDC) monitoring, and instant Repo/MSF drawdowns.
+9. 🏛️ **Automated RBI Regulatory CIMS & Section 138 Hub** - Official RBI CIMS XML returns (CTS-RET-01 to 04), Section 138 Negotiable Instruments Act 30-day dishonour notice memos, and compliance breach escalations.
+10. 🔌 **Core Banking (CBS) & Open Banking Adapter Suite** - Infosys Finacle, TCS BaNCS & Oracle FLEXCUBE connectors with ISO 20022 `camt.053` bank statements & `camt.054` debit/credit notifications.
 
 ---
 
@@ -90,7 +94,7 @@ flowchart TB
         EKUBER["RBI e-Kuber Continuous T+0 Real-Time Realization"]
         CBDC_BRIDGE["RBI Wholesale Digital Rupee (e₹) Atomic Settlement"]
         MNS_ENGINE["Multilateral Net Settlement (MNS) Engine"]
-        ISO_CBPR["ISO 20022 pacs.008 / pacs.002 / pacs.009 CBPR+ Engine"]
+        ISO_CBPR["pacs.008 / pacs.002 / pacs.009 CBPR+ Engine"]
         EKUBER --> CBDC_BRIDGE --> MNS_ENGINE --> ISO_CBPR
     end
 
@@ -164,7 +168,7 @@ flowchart TB
 - **Problem Solved:** Cross-border clearing takes 3–5 business days, involves expensive FX spreads, and is vulnerable to money laundering and international sanctions violations.
 - **Implementation:**
   - Accepts foreign currency cheques (USD, EUR, GBP, AED, SGD) with real-time interbank conversion and forward hedging spreads.
-  - Generates compliant **ISO 20022 pacs.009.001.08 CBPR+** XML messages.
+  - Generates compliant **pacs.009.001.08 CBPR+** XML messages.
   - Built-in **Sub-100ms Sanctions Radar**: Instantaneous fuzzy screening against the **US OFAC Specially Designated Nationals (SDN)** list, **UN Security Council Consolidated List**, and **RBI Statutory AML Blacklist**.
 
 ---
@@ -177,7 +181,7 @@ flowchart TB
 - **Maker-Checker Dual Authorization (4-Eyes Principle):** Strict segregation of duties mandated for high-value (>₹1,00,000) or high-risk instruments. Self-authorization is programmatically blocked.
 - **Cryptographic SHA-256 Hash-Chained Audit Ledger:** Immutable hash-linked blocks (`previousHash` + `currentHash`). Real-time ledger scanner detects manual tampering instantly.
 - **Continuous T+0 Clearing & RBI e-Kuber Settlement:** Produces official central bank transaction references (`EKUBER/MISDESC3/YYYYMMDD/<seq>`) and 22-character RTGS UTR codes (`RBIR5...`).
-- **ISO 20022 Financial Messaging:** Exports compliant `pacs.008` (Customer Credit Transfer), `pacs.002` (Statutory Return Memo), and `pacs.009` (Cross-Border Financial Institution Transfer) XML documents.
+- **Financial Messaging:** Exports compliant `pacs.008` (Customer Credit Transfer), `pacs.002` (Statutory Return Memo), and `pacs.009` (Cross-Border Financial Institution Transfer) XML documents.
 - **Printable Clearance Certificates:** Official bank-sealed certificates with QR codes and cryptographic signatures.
 - **Native Server-Sent Events (SSE) Live Feed:** Real-time push updates (`/api/events`) with audio chimes and a continuous multilateral net settlement ticker.
 
@@ -227,7 +231,7 @@ Located in `monitoring/grafana/dashboards/MISDESC_national_clearing_dashboard.js
 | **Database & ORM**| PostgreSQL 16, Prisma 5.20 | Relational model, connection pooling, seed fixtures, migrations |
 | **Post-Quantum Crypto**| NIST FIPS 204 (ML-DSA-65), FIPS 203 (ML-KEM-768) | Lattice-based polynomial vector dual-signing & key encapsulation |
 | **Zero-Knowledge** | zk-SNARK Groth16, BN254 (Alt-bn128) | Bilinear pairing cryptographic prover and verifier |
-| **Financial Messaging**| ISO 20022 XML (pacs.008, pacs.002, pacs.009 CBPR+) | International SWIFT / NPCI clearing standards |
+| **Financial Messaging**| XML (pacs.008, pacs.002, pacs.009 CBPR+) | International SWIFT / NPCI clearing standards |
 | **Observability** | Prometheus 2.51, Grafana 10.4 | Full-stack PromQL metrics exposition and executive dashboards |
 | **Containerization**| Docker, Docker Compose | Multi-container architecture with health probes |
 | **Cloud-Native** | Kubernetes | Declarative manifests: Namespaces, ConfigMaps, Secrets, Deployments, Services, HPA, Ingress, Monitoring |
@@ -307,7 +311,7 @@ All pre-seeded demo accounts share the password: **`password123`**
 | **Presenting Bank Clerk** | `presenting@snb.com` | SURAT PEOPLES CO OP BANK (SNB) | `/presenting` | Cheque scanning, OCR extraction, presentation, Positive Pay validation |
 | **Drawee Bank (Maker)** | `drawee@hdb.com` | SURAT PEOPLES CO OP BANK (HDB) | `/drawee` | Inward clearing queue, UV blacklight inspection, initial verification, zk-Proof generation |
 | **Drawee Bank (Checker)**| `checker@hdb.com` | SURAT PEOPLES CO OP BANK (HDB) | `/drawee` | **Maker-Checker 4-Eyes** dual authorization, high-risk approval, PQC signing |
-| **Clearing House Admin**| `admin@MISDESC.com` | National Clearing House | `/admin` | Universal oversight, SRE Console, Chaos Simulator, ISO 20022 export |
+| **Clearing House Admin**| `admin@MISDESC.com` | National Clearing House | `/admin` | Universal oversight, SRE Console, Chaos Simulator, export |
 | **Branch Operations Manager**| `manager@snb.com` | SURAT PEOPLES CO OP BANK (Athwa Branch) | `/branch-manager` | Branch batch oversight, high-value counter-signature (>₹50,000), batch dispatch |
 | **Core SRE & IT Staff**| `itops@MISDESC.com` | MISDESC Core Switch Infrastructure | `/it-monitoring` | Switch telemetry, Prometheus scraper, Chaos Engineering, database health |
 | **Compliance & Audit Officer**| `auditor@rbi.org.in` | Regulatory Oversight Wing (RBI) | `/auditor` | Cryptographic SHA-256 ledger verification, Positive Pay & AML audit |
@@ -342,7 +346,7 @@ All pre-seeded demo accounts share the password: **`password123`**
 1. On any inward cheque, click **🌐 International Draft**.
 2. Select foreign currency (e.g. `USD 10,000`) and inspect the live interbank conversion rate and forward hedge spread.
 3. Review the sub-100ms OFAC SDN and UN Security Council sanctions screening verdict.
-4. Export the compliant **ISO 20022 pacs.009.001.08** cross-border XML message.
+4. Export the compliant **pacs.009.001.08** cross-border XML message.
 
 ### Scenario 5: Tarjan Intraday Liquidity Savings Mechanism (LSM)
 1. Log in as `treasury@MISDESC.com` or navigate to `/settlement`.
@@ -382,13 +386,39 @@ All pre-seeded demo accounts share the password: **`password123`**
 - `POST /api/smartcheque/contracts/:id/cbdc-settle` - Execute atomic RBI Wholesale e₹ settlement.
 - `POST /api/crossborder/convert` - Live multi-currency conversion with forward hedging.
 - `POST /api/crossborder/screen-sanctions` - Sub-100ms OFAC, UN & RBI sanctions screening.
-- `GET /api/crossborder/pacs009/:chequeId` - Export ISO 20022 pacs.009.001.08 XML document.
+- `GET /api/crossborder/pacs009/:chequeId` - Export pacs.009.001.08 XML document.
+
+### AI Fraud Intelligence & Forensic Biometrics
+- `POST /api/forensics/analyze-signature` - Match presented signature against reference specimen via Siamese embeddings & DTW contour analysis.
+- `POST /api/forensics/uv-spectral` - 365nm UV spectral luminescence & chemical alteration wash detector.
+- `POST /api/forensics/payee-integrity` - Detect payee alteration, optical kerning discontinuity & micro-print line breaches.
+- `GET /api/forensics/cheque/:id` - Compile composite multi-dimensional forensic dossier.
+
+### Dynamic Liquidity & Collateral Management (LMS)
+- `GET /api/liquidity/collateral/portfolios` - List participant bank collateral holdings with statutory haircuts applied.
+- `POST /api/liquidity/collateral/pledge` - Pledge 10Y GoI Benchmark G-Secs, T-Bills, or Cash margins.
+- `POST /api/liquidity/collateral/unpledge` - Release unencumbered collateral with NDC threshold guardrails.
+- `POST /api/liquidity/collateral/repo-drawdown` - Execute instant intraday Repo / MSF line drawdown at 6.50% p.a.
+- `POST /api/liquidity/collateral/stress-test` - Launch multi-factor liquidity stress simulations.
+
+### Automated RBI Regulatory CIMS & Compliance Hub
+- `POST /api/reports/cims/generate` - Generate official RBI CIMS XML regulatory returns (CTS-RET-01 to 04).
+- `POST /api/reports/memo/section138` - Issue legal Section 138 Negotiable Instruments Act Return Memos.
+- `GET /api/reports/compliance/return-analytics` - Dishonour reason code analytics and branch hotspot rankings.
+- `GET /api/reports/compliance/escalations` - Review active compliance breach escalation tickets.
+- `POST /api/reports/compliance/escalations/:id/action` - Transition escalation tickets through governance stages.
+
+### Core Banking (CBS) & Open Banking Adapter Suite
+- `GET /api/webhooks/cbs/adapters` - Health, latency, and message throughput across Finacle, BaNCS & FLEXCUBE.
+- `POST /api/webhooks/cbs/simulate-inquiry` - Real-time core balance inquiry and intraday clearing lien earmarking.
+- `POST /api/webhooks/iso20022/camt053` - Generate ISO 20022 `camt.053.001.08` Bank-to-Customer Statement XML.
+- `POST /api/webhooks/iso20022/camt054/:chequeId` - Generate ISO 20022 `camt.054.001.08` Debit/Credit Notification XML.
 
 ### Real-Time Streaming & Central Settlement
 - `GET /api/events` - Native Server-Sent Events (SSE) live clearing feed.
 - `GET /api/settlement/summary` - Multilateral net settlement calculations across banks.
 - `GET /api/settlement/ekuber/:id` - RBI e-Kuber central settlement advice and RTGS UTR.
-- `GET /api/cheques/:id/iso20022` - Export ISO 20022 XML (`pacs.008` / `pacs.002` / `pacs.009`).
+- `GET /api/cheques/:id/iso20022` - Export XML (`pacs.008` / `pacs.002` / `pacs.009`).
 
 ### SRE, Observability & Chaos Engineering
 - `GET /metrics` - Prometheus metrics scrape target.
