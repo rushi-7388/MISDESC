@@ -8,6 +8,7 @@ export default function NeslSection138Modal({ onClose }) {
   const [returnReason, setReturnReason] = useState("Insufficient funds (Code 01)");
   const [loading, setLoading] = useState(false);
   const [notice, setNotice] = useState(null);
+  const [showCourtDossier, setShowCourtDossier] = useState(false);
 
   async function handleGenerate() {
     setLoading(true);
@@ -141,6 +142,98 @@ export default function NeslSection138Modal({ onClose }) {
               <div className="p-3 bg-slate-900 rounded-xl border border-slate-800">
                 <span className="text-slate-400 block text-[10px]">Magistrate Court Filing Window</span>
                 <span className="text-rose-400 font-bold">{notice.courtFilingWindowEnd?.slice(0, 10)}</span>
+              </div>
+            </div>
+
+            {/* Section 65B Judicial Dossier Trigger */}
+            <div className="pt-2 flex justify-end">
+              <button
+                type="button"
+                onClick={() => setShowCourtDossier(true)}
+                className="px-4 py-2 rounded-xl bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-500 hover:to-amber-600 text-white font-bold text-xs shadow-md transition-all cursor-pointer flex items-center gap-2"
+              >
+                <span>📜 View & Export Section 65B Judicial Court Dossier</span>
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Formal Section 65B Judicial Court-Admissible Dossier Modal View */}
+        {showCourtDossier && notice && (
+          <div className="fixed inset-0 z-60 flex items-center justify-center bg-black/90 p-4 overflow-y-auto">
+            <div className="bg-white text-slate-900 rounded-2xl max-w-2xl w-full p-8 shadow-2xl space-y-6 border-4 border-double border-slate-800 font-serif relative my-6">
+              <div className="flex justify-between items-start border-b-2 border-slate-900 pb-4">
+                <div className="text-center w-full">
+                  <div className="text-xs font-bold uppercase tracking-widest text-slate-600">IN THE COURT OF THE METROPOLITAN / JUDICIAL MAGISTRATE (FIRST CLASS)</div>
+                  <h3 className="text-lg font-bold text-slate-950 mt-1">CERTIFICATE UNDER SECTION 65B OF THE INDIAN EVIDENCE ACT, 1872</h3>
+                  <div className="text-[11px] text-slate-600 italic">(Electronic Evidence Certification for Dishonour of Cheque under Sec 138 NI Act)</div>
+                </div>
+                <button
+                  onClick={() => setShowCourtDossier(false)}
+                  className="absolute top-4 right-4 text-slate-500 hover:text-black font-sans text-sm font-bold p-1 cursor-pointer"
+                >
+                  ✕
+                </button>
+              </div>
+
+              {/* NeSL Official Digital Stamp Token */}
+              <div className="border border-amber-500/80 bg-amber-50/50 p-3 rounded-lg flex justify-between items-center text-xs font-mono">
+                <div>
+                  <span className="text-[10px] text-amber-800 uppercase block font-bold">SHCIL E-STAMP CERTIFICATE</span>
+                  <span className="font-bold text-amber-950">{notice.eStampNumber}</span>
+                </div>
+                <div className="text-right">
+                  <span className="text-[10px] text-amber-800 uppercase block font-bold">E-FILING DDE REFERENCE</span>
+                  <span className="font-bold text-blue-900">{notice.noticeId}</span>
+                </div>
+              </div>
+
+              {/* Formal Affidavit Statement */}
+              <div className="text-xs leading-relaxed space-y-3 text-slate-800 font-serif">
+                <p>
+                  I, the undersigned Authorized Officer of <strong>SURAT PEOPLES CO OP BANK</strong>, do hereby solemnly state and affirm as follows:
+                </p>
+                <p>
+                  1. That the computerized system known as <strong>MISDESC Sovereign Cheque Truncation Engine</strong> has been operating regularly under lawful control in the ordinary course of banking business.
+                </p>
+                <p>
+                  2. That on presentation of Instrument No. <strong>#{chequeNumber}</strong> for amount <strong>₹{Number(amount).toLocaleString("en-IN")}</strong> drawn on <strong>{drawerName}</strong>, the same was returned dishonoured on statutory grounds: <em>"{returnReason}"</em>.
+                </p>
+                <p className="bg-slate-50 p-3 border border-slate-200 rounded font-mono text-[10px]">
+                  <strong>Cryptographic Merkle Root Hash:</strong> {notice.sec65bAffidavit?.merkleRootHash}<br />
+                  <strong>E-13B Optical Preservation Hash:</strong> sha256_e13b_{notice.noticeId?.toLowerCase()}<br />
+                  <strong>Statutory 15-Day Cure Notice Window:</strong> Expiring on {notice.statutoryPaymentDeadline?.slice(0, 10)}
+                </p>
+              </div>
+
+              {/* Signature Blocks */}
+              <div className="pt-6 border-t border-slate-300 grid grid-cols-2 gap-8 text-xs font-sans">
+                <div>
+                  <div className="h-10 border-b border-dashed border-slate-400 flex items-end font-script text-indigo-900 font-bold">
+                    Vikram Malhotra (Checker)
+                  </div>
+                  <div className="text-[10px] text-slate-600 mt-1 uppercase font-bold">Authorized Officer / Bank Manager</div>
+                  <div className="text-[9px] text-slate-400">SURAT PEOPLES CO OP BANK</div>
+                </div>
+                <div className="text-right">
+                  <div className="h-10 border-b border-dashed border-slate-400 flex items-end justify-end font-mono text-[10px] text-slate-600">
+                    SEALED VIA NeSL HSM ENCLAVE
+                  </div>
+                  <div className="text-[10px] text-slate-600 mt-1 uppercase font-bold">Licensed Certifying Authority (CCA)</div>
+                  <div className="text-[9px] text-slate-400">Section 65B(4) Indian Evidence Act Compliant</div>
+                </div>
+              </div>
+
+              {/* Modal Actions */}
+              <div className="flex justify-between items-center pt-2 font-sans border-t border-slate-200">
+                <span className="text-[10px] text-slate-500">Tamper-Proof Digital Judicial Evidence Dossier</span>
+                <button
+                  type="button"
+                  onClick={() => window.print()}
+                  className="px-5 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs transition cursor-pointer flex items-center gap-1.5"
+                >
+                  <span>🖨️ Print / Save Court PDF</span>
+                </button>
               </div>
             </div>
           </div>

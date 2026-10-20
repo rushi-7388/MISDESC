@@ -94,7 +94,7 @@ export default function DevOpsConsole() {
 
   if (loading && !stats) {
     return (
-      <div className="bg-white rounded-xl shadow p-8 text-center text-gray-500">
+      <div className="bg-slate-900/90 rounded-2xl shadow-xl border border-slate-800 p-8 text-center text-slate-400">
         Loading real-time SRE metrics & observability telemetry...
       </div>
     );
@@ -105,36 +105,36 @@ export default function DevOpsConsole() {
   return (
     <div className="space-y-6">
       {/* Top Bar */}
-      <div className="bg-white rounded-xl shadow p-4 flex flex-wrap items-center justify-between gap-4">
+      <div className="bg-slate-900/90 rounded-2xl shadow-xl border border-slate-800 p-4 flex flex-wrap items-center justify-between gap-4 backdrop-blur-md">
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-2">
             <span className={`w-3 h-3 rounded-full ${isChaosActive ? "bg-rose-500 animate-ping" : "bg-emerald-500"}`}></span>
-            <span className="font-bold text-gray-900 text-sm tracking-wide uppercase">
+            <span className="font-bold text-white text-sm tracking-wide uppercase">
               {isChaosActive ? "Chaos Simulation Active" : "Operational: All Systems Nominal"}
             </span>
           </div>
-          <span className="text-xs text-gray-400">|</span>
-          <span className="text-xs text-gray-500">
-            Node: <span className="font-mono">{stats?.system?.nodeVersion}</span>
+          <span className="text-xs text-slate-600">|</span>
+          <span className="text-xs text-slate-400">
+            Node: <span className="font-mono text-cyan-300">{stats?.system?.nodeVersion}</span>
           </span>
-          <span className="text-xs text-gray-500">
-            Uptime: <span className="font-mono">{stats?.system?.uptimeSeconds}s</span>
+          <span className="text-xs text-slate-400">
+            Uptime: <span className="font-mono text-cyan-300">{stats?.system?.uptimeSeconds}s</span>
           </span>
         </div>
 
         <div className="flex items-center gap-3">
-          <label className="flex items-center gap-1.5 text-xs text-gray-600 cursor-pointer">
+          <label className="flex items-center gap-1.5 text-xs text-slate-400 cursor-pointer">
             <input
               type="checkbox"
               checked={autoRefresh}
               onChange={(e) => setAutoRefresh(e.target.checked)}
-              className="rounded text-brand-600"
+              className="rounded bg-slate-950 border-slate-700 text-cyan-500"
             />
             Live 3s Polling
           </label>
           <button
             onClick={loadData}
-            className="px-3 py-1 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded text-xs font-medium transition-colors"
+            className="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 rounded-xl text-xs font-semibold transition-all cursor-pointer"
           >
             Refresh Now
           </button>
@@ -142,7 +142,7 @@ export default function DevOpsConsole() {
       </div>
 
       {chaosActionMessage && (
-        <div className="bg-brand-50 border border-brand-200 text-brand-900 px-4 py-2.5 rounded-lg text-xs font-medium animate-in fade-in duration-150">
+        <div className="bg-cyan-950/60 border border-cyan-800/80 text-cyan-300 px-4 py-2.5 rounded-xl text-xs font-medium animate-in fade-in duration-150">
           {chaosActionMessage}
         </div>
       )}
@@ -150,24 +150,24 @@ export default function DevOpsConsole() {
       {/* SRE Metrics Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {/* SLO & Error Budget */}
-        <div className="bg-white rounded-xl shadow p-5 border-l-4 border-brand-500">
-          <div className="text-xs text-gray-500 font-semibold uppercase tracking-wider">
+        <div className="bg-slate-900/90 rounded-2xl shadow-xl p-5 border border-slate-800 border-l-4 border-l-cyan-500 backdrop-blur-md">
+          <div className="text-xs text-slate-400 font-semibold uppercase tracking-wider">
             99.9% Target SLO
           </div>
           <div className="mt-2 flex items-baseline justify-between">
-            <div className="text-3xl font-extrabold text-gray-900">
+            <div className="text-3xl font-extrabold text-white">
               {stats?.slo?.currentAvailabilityPercent}%
             </div>
-            <span className="text-xs font-semibold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded">
+            <span className="text-xs font-semibold text-emerald-400 bg-emerald-950/60 border border-emerald-800/80 px-2 py-0.5 rounded">
               Target 99.9%
             </span>
           </div>
           <div className="mt-3">
-            <div className="flex justify-between text-xs text-gray-500 mb-1">
+            <div className="flex justify-between text-xs text-slate-400 mb-1">
               <span>Error Budget Remaining</span>
-              <span className="font-bold">{stats?.slo?.errorBudgetPercentRemaining}%</span>
+              <span className="font-bold text-white">{stats?.slo?.errorBudgetPercentRemaining}%</span>
             </div>
-            <div className="w-full bg-gray-100 rounded-full h-2 overflow-hidden">
+            <div className="w-full bg-slate-950 rounded-full h-2 overflow-hidden border border-slate-800">
               <div
                 className={`h-full transition-all duration-300 ${
                   stats?.slo?.errorBudgetPercentRemaining > 50
@@ -183,74 +183,74 @@ export default function DevOpsConsole() {
         </div>
 
         {/* Latency Percentiles */}
-        <div className="bg-white rounded-xl shadow p-5 border-l-4 border-indigo-500">
-          <div className="text-xs text-gray-500 font-semibold uppercase tracking-wider">
+        <div className="bg-slate-900/90 rounded-2xl shadow-xl p-5 border border-slate-800 border-l-4 border-l-indigo-500 backdrop-blur-md">
+          <div className="text-xs text-slate-400 font-semibold uppercase tracking-wider">
             Response Latency
           </div>
           <div className="mt-2 flex items-baseline justify-between">
-            <div className="text-3xl font-extrabold text-gray-900">
-              {stats?.latency?.p95} <span className="text-sm font-normal text-gray-400">ms</span>
+            <div className="text-3xl font-extrabold text-white">
+              {stats?.latency?.p95} <span className="text-sm font-normal text-slate-400">ms</span>
             </div>
-            <span className="text-xs font-semibold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded">
+            <span className="text-xs font-semibold text-indigo-300 bg-indigo-950/60 border border-indigo-800/80 px-2 py-0.5 rounded">
               P95 Latency
             </span>
           </div>
-          <div className="mt-3 grid grid-cols-3 gap-1 text-center text-xs pt-1 border-t">
+          <div className="mt-3 grid grid-cols-3 gap-1 text-center text-xs pt-1 border-t border-slate-800">
             <div>
-              <div className="text-gray-400 text-[10px]">P50</div>
-              <div className="font-bold text-gray-700">{stats?.latency?.p50}ms</div>
+              <div className="text-slate-500 text-[10px]">P50</div>
+              <div className="font-bold text-slate-300">{stats?.latency?.p50}ms</div>
             </div>
             <div>
-              <div className="text-gray-400 text-[10px]">P99</div>
-              <div className="font-bold text-gray-700">{stats?.latency?.p99}ms</div>
+              <div className="text-slate-500 text-[10px]">P99</div>
+              <div className="font-bold text-slate-300">{stats?.latency?.p99}ms</div>
             </div>
             <div>
-              <div className="text-gray-400 text-[10px]">Avg</div>
-              <div className="font-bold text-gray-700">{stats?.latency?.avg}ms</div>
+              <div className="text-slate-500 text-[10px]">Avg</div>
+              <div className="font-bold text-slate-300">{stats?.latency?.avg}ms</div>
             </div>
           </div>
         </div>
 
         {/* Throughput & Volume */}
-        <div className="bg-white rounded-xl shadow p-5 border-l-4 border-purple-500">
-          <div className="text-xs text-gray-500 font-semibold uppercase tracking-wider">
+        <div className="bg-slate-900/90 rounded-2xl shadow-xl p-5 border border-slate-800 border-l-4 border-l-purple-500 backdrop-blur-md">
+          <div className="text-xs text-slate-400 font-semibold uppercase tracking-wider">
             Throughput & Volume
           </div>
           <div className="mt-2 flex items-baseline justify-between">
-            <div className="text-3xl font-extrabold text-gray-900">
+            <div className="text-3xl font-extrabold text-white">
               {stats?.throughput?.totalRequests}
             </div>
-            <span className="text-xs font-semibold text-purple-600 bg-purple-50 px-2 py-0.5 rounded">
+            <span className="text-xs font-semibold text-purple-300 bg-purple-950/60 border border-purple-800/80 px-2 py-0.5 rounded">
               {stats?.throughput?.requestsPerSecond} req/s
             </span>
           </div>
-          <div className="mt-3 flex items-center justify-between text-xs pt-1 border-t">
-            <span className="text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded font-mono">
+          <div className="mt-3 flex items-center justify-between text-xs pt-1 border-t border-slate-800">
+            <span className="text-emerald-400 bg-emerald-950/60 border border-emerald-800/80 px-1.5 py-0.5 rounded font-mono">
               2xx: {stats?.throughput?.byStatus["2xx"]}
             </span>
-            <span className="text-amber-700 bg-amber-50 px-1.5 py-0.5 rounded font-mono">
+            <span className="text-amber-400 bg-amber-950/60 border border-amber-800/80 px-1.5 py-0.5 rounded font-mono">
               4xx: {stats?.throughput?.byStatus["4xx"]}
             </span>
-            <span className="text-rose-700 bg-rose-50 px-1.5 py-0.5 rounded font-mono">
+            <span className="text-rose-400 bg-rose-950/60 border border-rose-800/80 px-1.5 py-0.5 rounded font-mono">
               5xx: {stats?.throughput?.byStatus["5xx"]}
             </span>
           </div>
         </div>
 
         {/* Memory & MTTC */}
-        <div className="bg-white rounded-xl shadow p-5 border-l-4 border-teal-500">
-          <div className="text-xs text-gray-500 font-semibold uppercase tracking-wider">
+        <div className="bg-slate-900/90 rounded-2xl shadow-xl p-5 border border-slate-800 border-l-4 border-l-teal-500 backdrop-blur-md">
+          <div className="text-xs text-slate-400 font-semibold uppercase tracking-wider">
             Runtime Resources
           </div>
           <div className="mt-2 flex items-baseline justify-between">
-            <div className="text-3xl font-extrabold text-gray-900">
-              {stats?.resources?.heapUsedMb} <span className="text-sm font-normal text-gray-400">MB</span>
+            <div className="text-3xl font-extrabold text-white">
+              {stats?.resources?.heapUsedMb} <span className="text-sm font-normal text-slate-400">MB</span>
             </div>
-            <span className="text-xs font-semibold text-teal-600 bg-teal-50 px-2 py-0.5 rounded">
+            <span className="text-xs font-semibold text-teal-300 bg-teal-950/60 border border-teal-800/80 px-2 py-0.5 rounded">
               Heap Used
             </span>
           </div>
-          <div className="mt-3 flex items-center justify-between text-xs pt-1 border-t text-gray-600">
+          <div className="mt-3 flex items-center justify-between text-xs pt-1 border-t border-slate-800 text-slate-400">
             <span>RSS: {stats?.resources?.rssMb} MB</span>
             <span>MTTC: {stats?.clearingMetrics?.mttcSeconds}s</span>
           </div>
@@ -258,10 +258,10 @@ export default function DevOpsConsole() {
       </div>
 
       {/* Chaos Engineering & Resilience Control Panel */}
-      <div className="bg-white rounded-xl shadow p-6 border border-gray-100">
-        <div className="flex flex-wrap items-center justify-between gap-4 pb-4 border-b">
+      <div className="bg-slate-900/90 rounded-2xl shadow-xl p-6 border border-slate-800 backdrop-blur-md">
+        <div className="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-slate-800">
           <div>
-            <h3 className="text-base font-bold text-gray-900">
+            <h3 className="text-base font-bold text-white">
               System Fault Injection & Resilience Testing
             </h3>
             <p className="text-xs text-gray-500 mt-0.5">
@@ -404,27 +404,27 @@ export default function DevOpsConsole() {
       {/* Database Health & System Info */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Database Health & Ping */}
-        <div className="bg-white rounded-xl shadow p-6 border border-gray-100">
-          <div className="flex items-center justify-between pb-3 border-b mb-4">
-            <h3 className="text-sm font-bold text-gray-900">PostgreSQL Database Diagnostics</h3>
+        <div className="bg-slate-900/90 rounded-2xl shadow-xl p-6 border border-slate-800 backdrop-blur-md">
+          <div className="flex items-center justify-between pb-3 border-b border-slate-800 mb-4">
+            <h3 className="text-sm font-bold text-white">PostgreSQL Database Diagnostics</h3>
             <button
               onClick={handlePingDb}
               disabled={pingingDb}
-              className="px-3 py-1 bg-gray-900 hover:bg-gray-800 text-white text-xs rounded transition-colors disabled:opacity-50"
+              className="px-3.5 py-1.5 bg-cyan-600 hover:bg-cyan-500 text-white text-xs font-bold rounded-xl transition-all shadow-lg shadow-cyan-950/40 disabled:opacity-50 cursor-pointer"
             >
               {pingingDb ? "Pinging..." : "Ping Database"}
             </button>
           </div>
 
           {dbPingResult && (
-            <div className={`p-3 rounded-lg text-xs font-mono mb-4 ${dbPingResult.success ? "bg-emerald-50 text-emerald-800 border border-emerald-200" : "bg-rose-50 text-rose-800 border border-rose-200"}`}>
+            <div className={`p-3 rounded-xl text-xs font-mono mb-4 ${dbPingResult.success ? "bg-emerald-950/60 text-emerald-300 border border-emerald-800/80" : "bg-rose-950/60 text-rose-300 border border-rose-800/80"}`}>
               {dbPingResult.success ? (
                 <div>
                   <div className="flex items-center gap-1.5 font-semibold">
-                    <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
-                    <span>Connection Active · Roundtrip Latency: <span className="font-bold">{dbPingResult.latencyMs}ms</span></span>
+                    <span className="w-2 h-2 rounded-full bg-emerald-400"></span>
+                    <span>Connection Active · Roundtrip Latency: <span className="font-bold text-emerald-300">{dbPingResult.latencyMs}ms</span></span>
                   </div>
-                  <div className="text-[11px] text-emerald-600 mt-1">DB: {dbPingResult.database}</div>
+                  <div className="text-[11px] text-emerald-400 mt-1">DB: {dbPingResult.database}</div>
                 </div>
               ) : (
                 <div className="flex items-center gap-1.5 font-semibold">
@@ -436,45 +436,45 @@ export default function DevOpsConsole() {
           )}
 
           <div className="grid grid-cols-2 gap-3 text-xs">
-            <div className="p-2.5 rounded bg-gray-50 border">
-              <div className="text-gray-500">Database Engine</div>
-              <div className="font-bold text-gray-900 mt-0.5">{systemInfo?.database?.provider}</div>
+            <div className="p-3 rounded-xl bg-slate-950/70 border border-slate-800">
+              <div className="text-slate-400 text-[11px]">Database Engine</div>
+              <div className="font-bold text-white mt-0.5">{systemInfo?.database?.provider}</div>
             </div>
-            <div className="p-2.5 rounded bg-gray-50 border">
-              <div className="text-gray-500">Cheques Recorded</div>
-              <div className="font-bold text-gray-900 mt-0.5">{systemInfo?.tableCounts?.cheques}</div>
+            <div className="p-3 rounded-xl bg-slate-950/70 border border-slate-800">
+              <div className="text-slate-400 text-[11px]">Cheques Recorded</div>
+              <div className="font-bold text-cyan-300 mt-0.5">{systemInfo?.tableCounts?.cheques}</div>
             </div>
-            <div className="p-2.5 rounded bg-gray-50 border">
-              <div className="text-gray-500">Clearing Batches</div>
-              <div className="font-bold text-gray-900 mt-0.5">{systemInfo?.tableCounts?.batches}</div>
+            <div className="p-3 rounded-xl bg-slate-950/70 border border-slate-800">
+              <div className="text-slate-400 text-[11px]">Clearing Batches</div>
+              <div className="font-bold text-cyan-300 mt-0.5">{systemInfo?.tableCounts?.batches}</div>
             </div>
-            <div className="p-2.5 rounded bg-gray-50 border">
-              <div className="text-gray-500">Telemetry Logs</div>
-              <div className="font-bold text-gray-900 mt-0.5">{systemInfo?.tableCounts?.telemetryEvents}</div>
+            <div className="p-3 rounded-xl bg-slate-950/70 border border-slate-800">
+              <div className="text-slate-400 text-[11px]">Telemetry Logs</div>
+              <div className="font-bold text-cyan-300 mt-0.5">{systemInfo?.tableCounts?.telemetryEvents}</div>
             </div>
           </div>
         </div>
 
         {/* Live Telemetry & Error Stream */}
-        <div className="bg-white rounded-xl shadow p-6 border border-gray-100">
-          <div className="flex items-center justify-between pb-3 border-b mb-4">
-            <h3 className="text-sm font-bold text-gray-900">Real-Time Telemetry & Exception Stream</h3>
+        <div className="bg-slate-900/90 rounded-2xl shadow-xl p-6 border border-slate-800 backdrop-blur-md">
+          <div className="flex items-center justify-between pb-3 border-b border-slate-800 mb-4">
+            <h3 className="text-sm font-bold text-white">Real-Time Telemetry & Exception Stream</h3>
           </div>
 
           <div className="space-y-2 max-h-56 overflow-y-auto pr-1">
             {telemetry && telemetry.length > 0 ? (
               telemetry.map((t) => (
-                <div key={t.id} className="p-2 rounded bg-gray-50 border border-gray-100 text-xs">
-                  <div className="flex items-center justify-between text-[11px] text-gray-400">
-                    <span className="font-mono uppercase font-bold text-rose-600">{t.level}</span>
+                <div key={t.id} className="p-2.5 rounded-xl bg-slate-950/70 border border-slate-800 text-xs">
+                  <div className="flex items-center justify-between text-[11px] text-slate-400">
+                    <span className="font-mono uppercase font-bold text-rose-400">{t.level}</span>
                     <span>{new Date(t.createdAt).toLocaleTimeString()}</span>
                   </div>
-                  <div className="font-medium text-gray-800 mt-0.5 truncate">{t.message}</div>
-                  {t.url && <div className="text-[10px] text-gray-400 truncate mt-0.5">{t.url}</div>}
+                  <div className="font-medium text-slate-200 mt-0.5 truncate">{t.message}</div>
+                  {t.url && <div className="text-[10px] text-slate-400 truncate mt-0.5">{t.url}</div>}
                 </div>
               ))
             ) : (
-              <div className="text-xs text-gray-400 text-center py-8">
+              <div className="text-xs text-slate-400 text-center py-8">
                 No exceptions reported. Telemetry pipeline clean.
               </div>
             )}

@@ -185,21 +185,21 @@ export default function RBACManagement() {
   const selectedPolicy = matrixData?.rolePolicies?.[formData.role] || {};
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900 pb-16">
+    <div className="min-h-screen bg-[#080c14] text-slate-100 pb-16">
       <Navbar />
 
       <main className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
         {/* Module Header */}
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white border border-slate-200/80 rounded-2xl p-6 shadow-xs">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-slate-900/90 border border-slate-800 rounded-2xl p-6 shadow-xl backdrop-blur-md">
           <div>
-            <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-brand-50 text-brand-700 border border-brand-200/70 mb-2">
-              <span className="w-1.5 h-1.5 rounded-full bg-brand-600" />
+            <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-cyan-950/60 text-cyan-300 border border-cyan-800/80 mb-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-cyan-400" />
               Enterprise RBAC & Identity Governance
             </div>
-            <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900">
+            <h1 className="text-2xl sm:text-3xl font-black tracking-tight text-white">
               Role-Based Access Control & User Provisioning
             </h1>
-            <p className="text-xs sm:text-sm text-slate-500 mt-1 max-w-3xl">
+            <p className="text-xs sm:text-sm text-slate-400 mt-1 max-w-3xl">
               Centralized identity governance for National Clearing Gateway. Provision users across all branches with strict role-specific permission scopes, high-value transaction approval limits, and cryptographic verification rights.
             </p>
           </div>
@@ -211,7 +211,7 @@ export default function RBACManagement() {
                 setErrorMessage(null);
                 setShowCreateModal(true);
               }}
-              className="bg-brand-600 hover:bg-brand-700 active:bg-brand-800 text-white px-4 py-2.5 rounded-xl font-bold text-xs transition-all shadow-sm cursor-pointer"
+              className="bg-cyan-600 hover:bg-cyan-500 active:bg-cyan-700 text-white px-4 py-2.5 rounded-xl font-bold text-xs transition-all shadow-lg shadow-cyan-950/40 cursor-pointer"
             >
               Provision New User / Role
             </button>

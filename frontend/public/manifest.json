@@ -1,0 +1,22 @@
+{
+  "name": "MISDESC - Sovereign Cheque Truncation & Continuous Clearing",
+  "short_name": "MISDESC CTS",
+  "description": "National Sovereign Cheque Truncation, Continuous Hourly Clearing & Offline PQC Rail",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#020617",
+  "theme_color": "#0284c7",
+  "icons": [
+    {
+      "src": "/logo.jpg",
+      "sizes": "192x192",
+      "type": "image/jpeg"
+    },
+    {
+      "src": "/logo.jpg",
+      "sizes": "512x512",
+      "type": "image/jpeg"
+    }
+  ],
+  "categories": ["finance", "banking", "business"]
+}

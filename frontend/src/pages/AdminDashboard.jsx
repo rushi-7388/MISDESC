@@ -18,9 +18,9 @@ const OpenBankingWebhookPortal = lazy(() => import("../components/OpenBankingWeb
 
 function TabLoader() {
   return (
-    <div className="p-12 flex flex-col items-center justify-center text-slate-400 bg-white rounded-2xl border border-slate-200 shadow-xs">
-      <div className="w-8 h-8 rounded-full border-2 border-blue-600 border-t-transparent animate-spin mb-3" />
-      <span className="text-xs font-semibold uppercase tracking-wider text-slate-500">
+    <div className="p-12 flex flex-col items-center justify-center text-slate-400 bg-slate-900 rounded-2xl border border-slate-800 shadow-lg">
+      <div className="w-8 h-8 rounded-full border-2 border-cyan-500 border-t-transparent animate-spin mb-3" />
+      <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">
         Loading module...
       </span>
     </div>
@@ -29,9 +29,9 @@ function TabLoader() {
 
 function StatCard({ label, value, color }) {
   return (
-    <div className="bg-white rounded-xl shadow-xs border border-slate-200 p-4">
-      <div className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">{label}</div>
-      <div className={`text-2xl font-bold mt-1 ${color || "text-slate-900"}`}>{value}</div>
+    <div className="bg-slate-900/90 rounded-xl shadow-md border border-slate-800 p-4">
+      <div className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">{label}</div>
+      <div className={`text-2xl font-bold mt-1 ${color || "text-white"}`}>{value}</div>
     </div>
   );
 }
@@ -64,35 +64,35 @@ export default function AdminDashboard() {
   });
 
   return (
-    <div className="min-h-screen bg-slate-50 pb-16 text-slate-900">
+    <div className="min-h-screen bg-[#080c14] pb-16 text-slate-100">
       <Navbar />
       <div className="max-w-6xl mx-auto p-6 space-y-6">
         {/* Clean Bank Header */}
-        <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div className="bg-slate-900/90 border border-slate-800 rounded-2xl p-6 shadow-md flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
             <div className="flex items-center gap-2 mb-1">
-              <span className="px-2 py-0.5 rounded text-[10px] font-bold tracking-wider uppercase bg-blue-50 text-blue-800 border border-blue-200">
+              <span className="px-2 py-0.5 rounded text-[10px] font-bold tracking-wider uppercase bg-blue-950 text-blue-300 border border-blue-800">
                 SURAT PEOPLES CO OP BANK
               </span>
               <span className="text-xs text-slate-400 font-mono">Central Clearing Admin</span>
             </div>
-            <h1 className="text-2xl font-bold text-slate-900 tracking-tight">
+            <h1 className="text-2xl font-bold text-white tracking-tight">
               Administrative & Clearing Operations
             </h1>
-            <p className="text-xs text-slate-500 mt-0.5">
+            <p className="text-xs text-slate-400 mt-0.5">
               Cheque Truncation System (CTS), RBI e-Kuber Multilateral Net Settlement & Regulatory Audit
             </p>
           </div>
 
           {/* Clean Segmented Tab Controller */}
-          <div className="flex items-center gap-1.5 bg-slate-100 p-1.5 rounded-xl border border-slate-200 text-xs">
+          <div className="flex items-center gap-1.5 bg-slate-950 p-1.5 rounded-xl border border-slate-800 text-xs">
             <button
               type="button"
               onClick={() => setActiveTab("operations")}
               className={`px-3 py-1.5 rounded-lg font-semibold transition-all cursor-pointer ${
                 activeTab === "operations"
-                  ? "bg-white text-slate-900 shadow-xs"
-                  : "text-slate-600 hover:text-slate-900"
+                  ? "bg-slate-800 text-cyan-300 shadow-sm border border-slate-700"
+                  : "text-slate-400 hover:text-white"
               }`}
             >
               Operations
@@ -102,8 +102,8 @@ export default function AdminDashboard() {
               onClick={() => setActiveTab("batches")}
               className={`px-3 py-1.5 rounded-lg font-semibold transition-all cursor-pointer ${
                 activeTab === "batches"
-                  ? "bg-white text-slate-900 shadow-xs"
-                  : "text-slate-600 hover:text-slate-900"
+                  ? "bg-slate-800 text-cyan-300 shadow-sm border border-slate-700"
+                  : "text-slate-400 hover:text-white"
               }`}
             >
               Sessions
@@ -113,8 +113,8 @@ export default function AdminDashboard() {
               onClick={() => setActiveTab("analytics")}
               className={`px-3 py-1.5 rounded-lg font-semibold transition-all cursor-pointer ${
                 activeTab === "analytics"
-                  ? "bg-white text-slate-900 shadow-xs"
-                  : "text-slate-600 hover:text-slate-900"
+                  ? "bg-slate-800 text-cyan-300 shadow-sm border border-slate-700"
+                  : "text-slate-400 hover:text-white"
               }`}
             >
               Analytics
@@ -124,8 +124,8 @@ export default function AdminDashboard() {
               onClick={() => setActiveTab("ledger")}
               className={`px-3 py-1.5 rounded-lg font-semibold transition-all cursor-pointer ${
                 activeTab === "ledger"
-                  ? "bg-white text-slate-900 shadow-xs"
-                  : "text-slate-600 hover:text-slate-900"
+                  ? "bg-slate-800 text-cyan-300 shadow-sm border border-slate-700"
+                  : "text-slate-400 hover:text-white"
               }`}
             >
               Ledger
@@ -135,8 +135,8 @@ export default function AdminDashboard() {
               onClick={() => setActiveTab("utilities")}
               className={`px-3 py-1.5 rounded-lg font-semibold transition-all cursor-pointer ${
                 activeTab === "utilities"
-                  ? "bg-blue-700 text-white shadow-xs"
-                  : "text-slate-600 hover:text-slate-900"
+                  ? "bg-cyan-950 text-cyan-300 shadow-sm border border-cyan-800"
+                  : "text-slate-400 hover:text-white"
               }`}
             >
               System Utilities
@@ -218,7 +218,7 @@ export default function AdminDashboard() {
           {/* Tab 5: Clean System Utilities Sub-Console */}
           {activeTab === "utilities" && (
             <div className="space-y-6">
-              <div className="bg-white border border-slate-200 rounded-xl p-3 flex flex-wrap gap-2 text-xs">
+              <div className="bg-slate-900/90 border border-slate-800 rounded-xl p-3 flex flex-wrap gap-2 text-xs">
                 {[
                   { id: "devops", label: "DevOps & SRE Diagnostics" },
                   { id: "war_room", label: "DC Failover / War Room" },
@@ -233,8 +233,8 @@ export default function AdminDashboard() {
                     onClick={() => setUtilitySubTab(item.id)}
                     className={`px-3 py-1.5 rounded-lg font-medium transition-all cursor-pointer ${
                       utilitySubTab === item.id
-                        ? "bg-slate-900 text-white"
-                        : "bg-slate-50 text-slate-600 hover:bg-slate-100 hover:text-slate-900 border border-slate-200"
+                        ? "bg-cyan-950 text-cyan-300 font-bold border border-cyan-800"
+                        : "bg-slate-950 text-slate-400 hover:bg-slate-800 hover:text-white border border-slate-800"
                     }`}
                   >
                     {item.label}

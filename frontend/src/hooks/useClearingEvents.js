@@ -54,6 +54,14 @@ export function useClearingEvents(onEvent) {
         eventSource.addEventListener("CBDC_TAX_SPLIT_EXECUTED", (e) => handleIncoming("CBDC_TAX_SPLIT", e));
         eventSource.addEventListener("BILATERAL_DVP_SETTLED", (e) => handleIncoming("BILATERAL_DVP", e));
 
+        // 2025 RBI & Digital Public Infrastructure (DPI) Events
+        eventSource.addEventListener("HOURLY_BATCH_SETTLED", (e) => handleIncoming("HOURLY_BATCH_SETTLED", e, "cleared"));
+        eventSource.addEventListener("MULE_ALERT_TRIGGERED", (e) => handleIncoming("MULE_ALERT_TRIGGERED", e));
+        eventSource.addEventListener("NESL_NOTICE_SEALED", (e) => handleIncoming("NESL_NOTICE_SEALED", e));
+        eventSource.addEventListener("ULI_JIT_OD_DISBURSED", (e) => handleIncoming("ULI_JIT_OD_DISBURSED", e));
+        eventSource.addEventListener("BHASHINI_VOICE_AUTHENTICATED", (e) => handleIncoming("BHASHINI_VOICE_AUTHENTICATED", e));
+        eventSource.addEventListener("SRVA_VOSTRO_SETTLED", (e) => handleIncoming("SRVA_VOSTRO_SETTLED", e, "cleared"));
+
         eventSource.onmessage = (e) => {
           handleIncoming("GENERIC_EVENT", e);
         };

@@ -12,10 +12,10 @@ import client from "../api/client";
 
 function StatCard({ label, value, subtext, color }) {
   return (
-    <div className="bg-white rounded-2xl border border-slate-200/80 p-4 relative overflow-hidden transition-all shadow-xs">
-      <div className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">{label}</div>
-      <div className={`text-2xl font-bold mt-1 tracking-tight ${color || "text-slate-900"}`}>{value}</div>
-      {subtext && <div className="text-[11px] text-slate-400 mt-0.5">{subtext}</div>}
+    <div className="bg-slate-900/90 rounded-2xl border border-slate-800 p-4 relative overflow-hidden transition-all shadow-md">
+      <div className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">{label}</div>
+      <div className={`text-2xl font-bold mt-1 tracking-tight ${color || "text-white"}`}>{value}</div>
+      {subtext && <div className="text-[11px] text-slate-500 mt-0.5">{subtext}</div>}
     </div>
   );
 }
@@ -264,38 +264,38 @@ export default function DraweeBankDashboard() {
   }, [filteredCheques, selectedIndex, hotkeysEnabled]);
 
   return (
-    <div className="min-h-screen bg-gray-50/60 pb-16">
+    <div className="min-h-screen bg-[#080c14] text-slate-100 pb-16">
 
       <Navbar />
 
       <div className="max-w-7xl mx-auto p-4 sm:p-6 space-y-6">
         {/* Executive Header Banner */}
-        <div className="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-xs flex flex-wrap items-center justify-between gap-4">
+        <div className="bg-slate-900/90 rounded-2xl p-5 border border-slate-800 shadow-md flex flex-wrap items-center justify-between gap-4">
           <div>
             <div className="flex flex-wrap items-center gap-2 mb-1">
-              <h1 className="text-xl font-bold text-slate-900 tracking-tight">
+              <h1 className="text-xl font-bold text-white tracking-tight">
                 Inward Clearing & Verification Workbench
               </h1>
-              <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-purple-50 text-purple-700 border border-purple-200">
+              <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-purple-950/80 text-purple-300 border border-purple-800">
                 SURAT PEOPLES CO OP BANK (HDFC0005678)
               </span>
             </div>
-            <p className="text-xs text-slate-500">
+            <p className="text-xs text-slate-400">
               Drawee Scrutiny Desk · MISDESC-2010 Standards · e-Kuber Settlement
             </p>
           </div>
 
           <div className="flex flex-wrap items-center gap-2">
-            <div className="px-3 py-1.5 rounded-xl bg-slate-50 border border-slate-200 text-xs flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
-              <span className="text-slate-500">Officer:</span>
-              <span className="font-semibold text-slate-900">{user?.name || "Drawee Verifier"}</span>
-              <span className="text-[10px] font-mono font-bold bg-purple-50 text-purple-700 px-2 py-0.5 rounded border border-purple-200 uppercase">
+            <div className="px-3 py-1.5 rounded-xl bg-slate-950 border border-slate-800 text-xs flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-emerald-400"></span>
+              <span className="text-slate-400">Officer:</span>
+              <span className="font-semibold text-slate-200">{user?.name || "Drawee Verifier"}</span>
+              <span className="text-[10px] font-mono font-bold bg-purple-950 text-purple-300 px-2 py-0.5 rounded border border-purple-800 uppercase">
                 {user?.email === "checker@hdb.com" ? "Senior Approver (Checker)" : "Verifier (Maker)"}
               </span>
             </div>
 
-            <div className="px-3 py-1.5 rounded-xl bg-blue-50 border border-blue-200 text-xs font-medium text-blue-800">
+            <div className="px-3 py-1.5 rounded-xl bg-blue-950 border border-blue-800 text-xs font-medium text-blue-300">
               e-Kuber T+0 Active
             </div>
           </div>
@@ -303,33 +303,33 @@ export default function DraweeBankDashboard() {
 
         {/* 4-Eyes Governance Operational Banner */}
         {user?.email === "drawee@hdb.com" ? (
-          <div className="bg-indigo-50 border border-indigo-200 rounded-xl p-3.5 flex flex-wrap items-center justify-between gap-3 text-xs">
+          <div className="bg-indigo-950/60 border border-indigo-800/80 rounded-xl p-3.5 flex flex-wrap items-center justify-between gap-3 text-xs text-indigo-200">
             <div>
-              <span className="font-bold text-indigo-950">Maker Mode (Initial Scrutiny):</span>
-              <span className="text-indigo-800 ml-1">
+              <span className="font-bold text-indigo-300">Maker Mode (Initial Scrutiny):</span>
+              <span className="text-indigo-200 ml-1">
                 Verify cheque security and drawer signatures. Instruments exceeding ₹1,00,000 or with fraud risk route to the Senior Checker under Four-Eyes governance.
               </span>
             </div>
             <button
               type="button"
               onClick={() => client.post("/auth/login", { email: "checker@hdb.com", password: "password123" }).then(res => { localStorage.setItem("MISDESC_token", res.data.token); localStorage.setItem("MISDESC_user", JSON.stringify(res.data.user)); window.location.reload(); })}
-              className="px-3 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white font-semibold transition-colors cursor-pointer"
+              className="px-3 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white font-semibold transition-colors cursor-pointer"
             >
               Switch to Checker Mode →
             </button>
           </div>
         ) : user?.email === "checker@hdb.com" ? (
-          <div className="bg-amber-50 border border-amber-200 rounded-xl p-3.5 flex flex-wrap items-center justify-between gap-3 text-xs">
+          <div className="bg-amber-950/60 border border-amber-800/80 rounded-xl p-3.5 flex flex-wrap items-center justify-between gap-3 text-xs text-amber-200">
             <div>
-              <span className="font-bold text-amber-950">Senior Approver Mode (Checker):</span>
-              <span className="text-amber-800 ml-1">
+              <span className="font-bold text-amber-300">Senior Approver Mode (Checker):</span>
+              <span className="text-amber-200 ml-1">
                 Dual authorization authority. Review instruments awaiting senior approval to grant clearance or generate return memos.
               </span>
             </div>
             <button
               type="button"
               onClick={() => client.post("/auth/login", { email: "drawee@hdb.com", password: "password123" }).then(res => { localStorage.setItem("MISDESC_token", res.data.token); localStorage.setItem("MISDESC_user", JSON.stringify(res.data.user)); window.location.reload(); })}
-              className="px-3 py-1.5 rounded-lg bg-amber-600 hover:bg-amber-700 text-white font-semibold transition-colors cursor-pointer"
+              className="px-3 py-1.5 rounded-lg bg-amber-600 hover:bg-amber-500 text-white font-semibold transition-colors cursor-pointer"
             >
               Switch to Maker Mode →
             </button>
@@ -371,7 +371,7 @@ export default function DraweeBankDashboard() {
         </div>
 
         {/* Filter Toolbar */}
-        <div className="bg-white rounded-xl p-3 border border-slate-200/80 shadow-xs flex flex-wrap items-center justify-between gap-3">
+        <div className="bg-slate-900/90 rounded-xl p-3 border border-slate-800 shadow-md flex flex-wrap items-center justify-between gap-3">
           {/* Filter Tabs */}
           <div className="flex flex-wrap items-center gap-1.5">
             <button
@@ -379,13 +379,13 @@ export default function DraweeBankDashboard() {
               onClick={() => setActiveTab("action_needed")}
               className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors cursor-pointer flex items-center gap-1.5 ${
                 activeTab === "action_needed"
-                  ? "bg-amber-600 text-white"
-                  : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                  ? "bg-amber-500 text-slate-950 font-bold"
+                  : "bg-slate-800 text-slate-400 hover:bg-slate-750 hover:text-white"
               }`}
             >
               <span>Action Needed</span>
               <span className={`px-1.5 py-0.2 rounded-full text-[10px] font-mono ${
-                activeTab === "action_needed" ? "bg-amber-800 text-white" : "bg-slate-200 text-slate-700"
+                activeTab === "action_needed" ? "bg-amber-900 text-white" : "bg-slate-700 text-slate-300"
               }`}>
                 {tabCounts.actionNeeded}
               </span>
@@ -396,13 +396,13 @@ export default function DraweeBankDashboard() {
               onClick={() => setActiveTab("awaiting_checker")}
               className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors cursor-pointer flex items-center gap-1.5 ${
                 activeTab === "awaiting_checker"
-                  ? "bg-purple-600 text-white"
-                  : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                  ? "bg-purple-600 text-white font-bold"
+                  : "bg-slate-800 text-slate-400 hover:bg-slate-750 hover:text-white"
               }`}
             >
               <span>Awaiting Checker</span>
               <span className={`px-1.5 py-0.2 rounded-full text-[10px] font-mono ${
-                activeTab === "awaiting_checker" ? "bg-purple-800 text-white" : "bg-slate-200 text-slate-700"
+                activeTab === "awaiting_checker" ? "bg-purple-900 text-white" : "bg-slate-700 text-slate-300"
               }`}>
                 {tabCounts.awaitingChecker}
               </span>
@@ -413,13 +413,13 @@ export default function DraweeBankDashboard() {
               onClick={() => setActiveTab("all")}
               className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors cursor-pointer flex items-center gap-1.5 ${
                 activeTab === "all"
-                  ? "bg-slate-900 text-white"
-                  : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                  ? "bg-slate-700 text-white font-bold"
+                  : "bg-slate-800 text-slate-400 hover:bg-slate-750 hover:text-white"
               }`}
             >
               <span>All Inward</span>
               <span className={`px-1.5 py-0.2 rounded-full text-[10px] font-mono ${
-                activeTab === "all" ? "bg-slate-700 text-white" : "bg-slate-200 text-slate-700"
+                activeTab === "all" ? "bg-slate-900 text-white" : "bg-slate-700 text-slate-300"
               }`}>
                 {tabCounts.total}
               </span>
@@ -430,13 +430,13 @@ export default function DraweeBankDashboard() {
               onClick={() => setActiveTab("cleared")}
               className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors cursor-pointer flex items-center gap-1.5 ${
                 activeTab === "cleared"
-                  ? "bg-emerald-600 text-white"
-                  : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                  ? "bg-emerald-600 text-white font-bold"
+                  : "bg-slate-800 text-slate-400 hover:bg-slate-750 hover:text-white"
               }`}
             >
               <span>Cleared</span>
               <span className={`px-1.5 py-0.2 rounded-full text-[10px] font-mono ${
-                activeTab === "cleared" ? "bg-emerald-800 text-white" : "bg-slate-200 text-slate-700"
+                activeTab === "cleared" ? "bg-emerald-900 text-white" : "bg-slate-700 text-slate-300"
               }`}>
                 {tabCounts.cleared}
               </span>
@@ -447,13 +447,13 @@ export default function DraweeBankDashboard() {
               onClick={() => setActiveTab("returned")}
               className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors cursor-pointer flex items-center gap-1.5 ${
                 activeTab === "returned"
-                  ? "bg-rose-600 text-white"
-                  : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                  ? "bg-rose-600 text-white font-bold"
+                  : "bg-slate-800 text-slate-400 hover:bg-slate-750 hover:text-white"
               }`}
             >
               <span>Returned</span>
               <span className={`px-1.5 py-0.2 rounded-full text-[10px] font-mono ${
-                activeTab === "returned" ? "bg-rose-800 text-white" : "bg-slate-200 text-slate-700"
+                activeTab === "returned" ? "bg-rose-900 text-white" : "bg-slate-700 text-slate-300"
               }`}>
                 {tabCounts.returned}
               </span>
@@ -468,13 +468,13 @@ export default function DraweeBankDashboard() {
                 placeholder="Search Cheque ID, Batch #, Cheque #, Payee..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full bg-slate-50 hover:bg-white focus:bg-white border border-slate-200 rounded-lg px-3 py-1.5 text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500 pr-8 transition-all shadow-2xs"
+                className="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-1.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-cyan-500/30 focus:border-cyan-500 pr-8 transition-all shadow-inner"
               />
               {searchQuery && (
                 <button
                   type="button"
                   onClick={() => setSearchQuery("")}
-                  className="absolute right-2.5 top-1.5 text-slate-400 hover:text-slate-600 text-xs font-bold cursor-pointer"
+                  className="absolute right-2.5 top-1.5 text-slate-400 hover:text-white text-xs font-bold cursor-pointer"
                   title="Clear search"
                 >
                   [x]
@@ -483,14 +483,14 @@ export default function DraweeBankDashboard() {
             </div>
 
             {/* View Mode Switcher */}
-            <div className="bg-slate-100 p-0.5 rounded-lg flex items-center border border-slate-200 text-xs">
+            <div className="bg-slate-950 p-0.5 rounded-lg flex items-center border border-slate-800 text-xs">
               <button
                 type="button"
                 onClick={() => setViewMode("cards")}
                 className={`px-2.5 py-1 rounded-md font-medium transition-colors cursor-pointer ${
                   viewMode === "cards"
-                    ? "bg-white text-purple-800 shadow-xs"
-                    : "text-slate-600 hover:text-slate-900"
+                    ? "bg-purple-950 text-purple-300 font-bold border border-purple-800"
+                    : "text-slate-400 hover:text-white"
                 }`}
               >
                 Cards
@@ -500,8 +500,8 @@ export default function DraweeBankDashboard() {
                 onClick={() => setViewMode("table")}
                 className={`px-2.5 py-1 rounded-md font-medium transition-colors cursor-pointer ${
                   viewMode === "table"
-                    ? "bg-white text-purple-800 shadow-xs"
-                    : "text-slate-600 hover:text-slate-900"
+                    ? "bg-purple-950 text-purple-300 font-bold border border-purple-800"
+                    : "text-slate-400 hover:text-white"
                 }`}
               >
                 Table
@@ -512,12 +512,12 @@ export default function DraweeBankDashboard() {
 
         {/* Active Search Context Indicator */}
         {searchQuery.trim() && (
-          <div className="bg-purple-50/80 border border-purple-200/90 rounded-xl p-3 flex flex-wrap items-center justify-between gap-3 text-xs shadow-2xs">
+          <div className="bg-purple-950/60 border border-purple-800/80 rounded-xl p-3 flex flex-wrap items-center justify-between gap-3 text-xs text-purple-200">
             <div className="flex flex-wrap items-center gap-2">
-              <span className="text-purple-900 font-medium">
-                Searching: <span className="font-mono font-bold text-purple-950 bg-white px-2 py-0.5 rounded border border-purple-200">"{searchQuery.trim()}"</span>
+              <span className="text-purple-300 font-medium">
+                Searching: <span className="font-mono font-bold text-white bg-slate-900 px-2 py-0.5 rounded border border-purple-700">"{searchQuery.trim()}"</span>
               </span>
-              <span className="px-2 py-0.5 rounded-full font-bold bg-purple-200/80 text-purple-900 font-mono text-[11px]">
+              <span className="px-2 py-0.5 rounded-full font-bold bg-purple-900 text-purple-200 font-mono text-[11px]">
                 {filteredCheques.length} match{filteredCheques.length === 1 ? "" : "es"}
               </span>
               {isCrossTabSearch && (
@@ -541,15 +541,15 @@ export default function DraweeBankDashboard() {
 
         {/* Content Area */}
         {loading ? (
-          <div className="text-center p-12 bg-white rounded-2xl border border-gray-200/80 text-gray-500">
+          <div className="text-center p-12 bg-slate-900 rounded-2xl border border-slate-800 text-slate-400">
             <p className="text-xs font-semibold">Loading Inward Clearing Queue...</p>
           </div>
         ) : filteredCheques.length === 0 ? (
-          <div className="bg-white rounded-2xl p-12 text-center border border-gray-200/80 shadow-xs space-y-3">
-            <h3 className="text-base font-bold text-gray-900">
+          <div className="bg-slate-900 rounded-2xl p-12 text-center border border-slate-800 shadow-md space-y-3">
+            <h3 className="text-base font-bold text-white">
               {searchQuery.trim() ? "No Instruments Matched Your Search" : "No Instruments in this Queue"}
             </h3>
-            <p className="text-xs text-gray-500 max-w-md mx-auto">
+            <p className="text-xs text-slate-400 max-w-md mx-auto">
               {searchQuery.trim()
                 ? `No instruments matched "${searchQuery.trim()}". You can search by Cheque UUID, Batch Code (e.g. BATCH-20260922-9507), Cheque Number, Payee Name, Account Number, or Bank IFSC.`
                 : activeTab === "action_needed"
@@ -560,7 +560,7 @@ export default function DraweeBankDashboard() {
               <button
                 type="button"
                 onClick={() => setSearchQuery("")}
-                className="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white text-xs font-bold rounded-xl transition-colors cursor-pointer shadow-xs"
+                className="px-4 py-2 bg-purple-600 hover:bg-purple-500 text-white text-xs font-bold rounded-xl transition-colors cursor-pointer shadow-md"
               >
                 Clear Search & Show All
               </button>
@@ -571,7 +571,7 @@ export default function DraweeBankDashboard() {
                   setActiveTab("all");
                   setSearchQuery("");
                 }}
-                className="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-800 text-xs font-bold rounded-xl transition-colors cursor-pointer"
+                className="px-4 py-2 bg-slate-850 hover:bg-slate-800 text-slate-200 text-xs font-bold rounded-xl transition-colors cursor-pointer border border-slate-700"
               >
                 View All Inward Instruments
               </button>
@@ -586,8 +586,8 @@ export default function DraweeBankDashboard() {
                 onClick={() => setSelectedIndex(idx)}
                 className={`relative rounded-2xl transition-all duration-150 cursor-pointer ${
                   idx === selectedIndex && hotkeysEnabled
-                    ? "ring-2 ring-purple-600 ring-offset-2 ring-offset-gray-50 shadow-md"
-                    : "hover:ring-1 hover:ring-purple-200"
+                    ? "ring-2 ring-purple-500 ring-offset-2 ring-offset-[#080c14] shadow-lg"
+                    : "hover:ring-1 hover:ring-purple-700"
                 }`}
               >
                 {idx === selectedIndex && hotkeysEnabled && (

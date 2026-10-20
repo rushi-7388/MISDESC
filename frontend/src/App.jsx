@@ -19,13 +19,13 @@ const ReportingHub = lazy(() => import("./pages/ReportingHub"));
 
 function PageLoader() {
   return (
-    <div className="flex-1 min-h-[60vh] flex flex-col items-center justify-center p-8">
+    <div className="flex-1 min-h-[60vh] flex flex-col items-center justify-center p-8 bg-[#080c14] text-slate-100">
       <div className="relative w-12 h-12">
-        <div className="absolute inset-0 rounded-full border-4 border-slate-200" />
-        <div className="absolute inset-0 rounded-full border-4 border-indigo-600 border-t-transparent animate-spin" />
+        <div className="absolute inset-0 rounded-full border-4 border-slate-800" />
+        <div className="absolute inset-0 rounded-full border-4 border-cyan-500 border-t-transparent animate-spin" />
       </div>
-      <p className="mt-4 text-xs font-semibold text-slate-500 uppercase tracking-widest animate-pulse">
-        Loading MISDESC Portal...
+      <p className="mt-4 text-xs font-semibold text-cyan-400 uppercase tracking-widest animate-pulse font-mono">
+        Loading MISDESC Sovereign Rails...
       </p>
     </div>
   );
@@ -42,9 +42,9 @@ export default function App() {
   const { user } = useAuth();
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-[#080c14] text-slate-100 selection:bg-cyan-500/30 selection:text-cyan-200">
       {user && <LiveSettlementTicker />}
-      <div className="flex-1 flex flex-col">
+      <div className="flex-1 flex flex-col bg-[#080c14]">
         <Suspense fallback={<PageLoader />}>
           <Routes>
             <Route path="/" element={<Home />} />

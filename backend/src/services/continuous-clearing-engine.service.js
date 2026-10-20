@@ -88,7 +88,7 @@ function executeHourlySettlementBatch({ batchId, eligibleCheques = [] }) {
   const totalVolume = eligibleCheques.reduce((sum, c) => sum + Number(c.amount || 0), 0);
   const slaDeadline = new Date(executionTime.getTime() + 60 * 60 * 1000); // +60 mins
 
-  return {
+  const result = {
     success: true,
     batchRef,
     utr,
@@ -101,6 +101,15 @@ function executeHourlySettlementBatch({ batchId, eligibleCheques = [] }) {
     status: "SETTLED_RTGS_REALIZED",
     statutoryCertificate: `CERT-RBI-CTS-T0-${batchRef}-${executionTime.getTime()}`,
   };
+
+  try {
+    const { broadcastEvent } = require("../utils/sse.util");
+    broadcastEvent("HOURLY_BATCH_SETTLED", result);
+  } catch {
+    // Non-blocking in isolated unit tests
+  }
+
+  return result;
 }
 
 module.exports = {

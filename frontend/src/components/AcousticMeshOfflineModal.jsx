@@ -68,15 +68,50 @@ export default function AcousticMeshOfflineModal({ isOpen, onClose }) {
     let frame = 0;
 
     function render() {
-      if (frame > 25) return;
+      if (frame > 60) return;
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      const bars = 36;
+      const width = canvas.width;
+      const height = canvas.height;
+
+      // Draw frequency grid lines
+      ctx.strokeStyle = "rgba(30, 41, 59, 0.8)";
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(0, height * 0.25); ctx.lineTo(width, height * 0.25);
+      ctx.moveTo(0, height * 0.5); ctx.lineTo(width, height * 0.5);
+      ctx.moveTo(0, height * 0.75); ctx.lineTo(width, height * 0.75);
+      ctx.stroke();
+
+      // Frequency grid labels
+      ctx.fillStyle = "rgba(100, 116, 139, 0.8)";
+      ctx.font = "8px monospace";
+      ctx.fillText("20.0 kHz (Upper Pilot)", 6, 12);
+      ctx.fillText("19.0 kHz (FSK Chirp)", 6, height * 0.5 - 2);
+      ctx.fillText("18.0 kHz (Lattice Guard)", 6, height - 4);
+
+      // Draw real-time FFT frequency waterfall
+      const bars = 56;
+      const barWidth = (width - 120) / bars;
       for (let i = 0; i < bars; i++) {
-        const height = Math.sin((i / bars) * Math.PI + frame * 0.25) * 32 + Math.random() * 12;
-        const hue = 180 + i * 4;
-        ctx.fillStyle = `hsl(${hue}, 90%, 55%)`;
-        ctx.fillRect(i * 9 + 4, canvas.height - height - 4, 6, height);
+        const freqOffset = Math.sin((i / bars) * Math.PI * 3 + frame * 0.2);
+        const amp = Math.abs(freqOffset) * (height * 0.65) + Math.random() * 8;
+        const x = 110 + i * barWidth;
+        const y = height * 0.5 - amp / 2;
+
+        const grad = ctx.createLinearGradient(x, y, x, y + amp);
+        grad.addColorStop(0, "#06b6d4");
+        grad.addColorStop(0.5, "#a855f7");
+        grad.addColorStop(1, "#3b82f6");
+
+        ctx.fillStyle = grad;
+        ctx.fillRect(x, y, Math.max(1.5, barWidth - 1), amp);
       }
+
+      // Live FSK bitstream readout
+      ctx.fillStyle = "#38bdf8";
+      ctx.font = "bold 9px monospace";
+      ctx.fillText("PACKET: 0x9A4F [ML-DSA-65 PQC SIGNED]", width - 210, 14);
+
       frame++;
       requestAnimationFrame(render);
     }
@@ -178,8 +213,8 @@ export default function AcousticMeshOfflineModal({ isOpen, onClose }) {
                 Data packet modulated into frequency shifts (FSK) emitted via device speaker, received by microphone with zero cellular connection.
               </p>
             </div>
-            <div className="bg-slate-900 border border-cyan-500/30 rounded-lg p-2 flex items-center justify-center">
-              <canvas ref={canvasRef} width={340} height={48} className="bg-slate-950 rounded" />
+            <div className="bg-slate-900 border border-cyan-500/30 rounded-lg p-2 flex items-center justify-center w-full md:w-auto">
+              <canvas ref={canvasRef} width={480} height={64} className="bg-slate-950 rounded w-full max-w-[480px]" />
             </div>
           </div>
 

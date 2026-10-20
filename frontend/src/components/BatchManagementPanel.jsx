@@ -88,11 +88,11 @@ export default function BatchManagementPanel() {
   }
 
   return (
-    <div className="bg-white rounded-xl shadow p-6 space-y-6">
-      <div className="flex flex-wrap items-center justify-between gap-4 pb-4 border-b">
+    <div className="bg-slate-900/90 rounded-2xl shadow-xl border border-slate-800 p-6 space-y-6 backdrop-blur-md">
+      <div className="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-slate-800">
         <div>
-          <h2 className="text-lg font-bold text-gray-900">Clearing Batch Sessions</h2>
-          <p className="text-xs text-gray-500">
+          <h2 className="text-lg font-black text-white">Clearing Batch Sessions</h2>
+          <p className="text-xs text-slate-400">
             Clearing batch management and reconciliation sessions
           </p>
         </div>
@@ -103,12 +103,12 @@ export default function BatchManagementPanel() {
             placeholder="e.g. Afternoon Clearing Session"
             value={newSessionName}
             onChange={(e) => setNewSessionName(e.target.value)}
-            className="border rounded-lg px-3 py-1.5 text-xs w-64 focus:ring-2 focus:ring-brand-500 outline-none"
+            className="bg-slate-950 border border-slate-700 text-slate-100 rounded-xl px-3 py-2 text-xs w-64 focus:ring-2 focus:ring-cyan-500 outline-none"
           />
           <button
             type="submit"
             disabled={creating || !newSessionName.trim()}
-            className="bg-brand-600 hover:bg-brand-700 disabled:opacity-50 text-white text-xs font-semibold px-4 py-1.5 rounded-lg transition-colors"
+            className="bg-cyan-600 hover:bg-cyan-500 disabled:opacity-50 text-white text-xs font-bold px-4 py-2 rounded-xl transition-all shadow-lg shadow-cyan-950/40 cursor-pointer"
           >
             {creating ? "Opening..." : "Open New Session"}
           </button>
@@ -116,19 +116,19 @@ export default function BatchManagementPanel() {
       </div>
 
       {actionMessage && (
-        <div className="bg-brand-50 border border-brand-200 text-brand-900 px-4 py-2 rounded-lg text-xs font-medium">
+        <div className="bg-cyan-950/60 border border-cyan-800/80 text-cyan-300 px-4 py-2 rounded-xl text-xs font-medium">
           {actionMessage}
         </div>
       )}
 
       {loading ? (
-        <div className="text-xs text-gray-400 text-center py-6">Loading clearing sessions...</div>
+        <div className="text-xs text-slate-400 text-center py-6">Loading clearing sessions...</div>
       ) : batches.length === 0 ? (
-        <div className="text-xs text-gray-400 text-center py-6">No clearing sessions created yet.</div>
+        <div className="text-xs text-slate-400 text-center py-6">No clearing sessions created yet.</div>
       ) : (
-        <div className="overflow-x-auto border border-gray-200 rounded-xl">
+        <div className="overflow-x-auto border border-slate-800 rounded-xl">
           <table className="w-full text-left text-xs">
-            <thead className="bg-gray-50 text-gray-500 uppercase tracking-wider text-[10px] border-b">
+            <thead className="bg-slate-950 text-slate-400 uppercase tracking-wider text-[10px] border-b border-slate-800">
               <tr>
                 <th className="py-2.5 px-3">Session Code</th>
                 <th className="py-2.5 px-3">Session Name</th>

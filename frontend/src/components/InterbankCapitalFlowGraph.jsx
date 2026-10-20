@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import client from "../api/client";
+import Interbank3DTopologyCanvas from "./Interbank3DTopologyCanvas";
+import { sovereignAudio } from "../utils/settlement-sound.util";
 
 export default function InterbankCapitalFlowGraph() {
   const [data, setData] = useState(null);
@@ -8,6 +10,7 @@ export default function InterbankCapitalFlowGraph() {
   const [lastReceipt, setLastReceipt] = useState(null);
   const [selectedNode, setSelectedNode] = useState(null);
   const [activeTab, setActiveTab] = useState("topology"); // "topology" | "bilateral" | "daemon"
+  const [view3D, setView3D] = useState(true);
   const [daemonState, setDaemonState] = useState({ enabled: false, autoSolve: false, intervalMs: 15000 });
   const [daemonTicking, setDaemonTicking] = useState(false);
   const [cycleBurstPulse, setCycleBurstPulse] = useState(false);
@@ -40,6 +43,8 @@ export default function InterbankCapitalFlowGraph() {
       if (res.data.receipt) {
         setLastReceipt(res.data.receipt);
         setCycleBurstPulse(true);
+        sovereignAudio.playTarjanGridlockChime();
+        sovereignAudio.playSettlementChime(res.data.receipt.netReliefAmount || 1500000);
         setTimeout(() => setCycleBurstPulse(false), 5000);
       }
       setData(res.data.topology);
@@ -274,19 +279,60 @@ export default function InterbankCapitalFlowGraph() {
 
       {/* TAB 1: GRAPH TOPOLOGY CANVAS */}
       {activeTab === "topology" && (
-        <div className="relative bg-slate-950/80 rounded-2xl border border-slate-800 p-4 overflow-hidden min-h-[440px] flex items-center justify-center">
-          <div className="absolute inset-0 bg-[radial-gradient(#1e293b_1px,transparent_1px)] [background-size:24px_24px] opacity-40 pointer-events-none" />
-
-          {isGridlocked && (
-            <div className="absolute top-4 left-4 bg-rose-950/80 border border-rose-800 text-rose-300 text-[11px] px-3 py-1.5 rounded-xl backdrop-blur-md flex items-center gap-2 shadow-lg z-10">
-              <span className="w-2 h-2 rounded-full bg-rose-500 animate-ping" />
-              <span>
-                <strong>Circular Debt Cycle:</strong> [SRT ➔ SBI ➔ HDFC ➔ SRT] holding ₹{(data.metrics.gridlockGrossVolume / 100000).toFixed(0)}L queued.
-              </span>
+        <div className="space-y-3">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={() => setView3D(true)}
+                className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
+                  view3D
+                    ? "bg-gradient-to-r from-cyan-600 to-blue-600 text-white shadow-md shadow-cyan-600/20"
+                    : "bg-slate-900 border border-slate-800 text-slate-400 hover:text-white"
+                }`}
+              >
+                <span>🌐 3D WebGL Orbital Canvas</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setView3D(false)}
+                className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
+                  !view3D
+                    ? "bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-md shadow-emerald-600/20"
+                    : "bg-slate-900 border border-slate-800 text-slate-400 hover:text-white"
+                }`}
+              >
+                <span>📐 2D Schematic Topology</span>
+              </button>
             </div>
-          )}
+            <span className="text-[11px] text-slate-400">
+              {view3D ? "Real-time 60 FPS 3D Euclidian Projection with Particle Beams" : "High-precision vector coordinates"}
+            </span>
+          </div>
 
-          <svg viewBox="0 0 780 430" className="w-full h-full max-h-[440px] select-none">
+          {view3D ? (
+            <Interbank3DTopologyCanvas
+              nodes={data?.nodes || []}
+              edges={data?.edges || []}
+              isGridlocked={isGridlocked}
+              cycleBurstPulse={cycleBurstPulse}
+              selectedNodeId={selectedNode?.id}
+              onSelectNode={(node) => setSelectedNode(node)}
+            />
+          ) : (
+            <div className="relative bg-slate-950/80 rounded-2xl border border-slate-800 p-4 overflow-hidden min-h-[440px] flex items-center justify-center">
+              <div className="absolute inset-0 bg-[radial-gradient(#1e293b_1px,transparent_1px)] [background-size:24px_24px] opacity-40 pointer-events-none" />
+
+              {isGridlocked && (
+                <div className="absolute top-4 left-4 bg-rose-950/80 border border-rose-800 text-rose-300 text-[11px] px-3 py-1.5 rounded-xl backdrop-blur-md flex items-center gap-2 shadow-lg z-10">
+                  <span className="w-2 h-2 rounded-full bg-rose-500 animate-ping" />
+                  <span>
+                    <strong>Circular Debt Cycle:</strong> [SRT ➔ SBI ➔ HDFC ➔ SRT] holding ₹{(data.metrics.gridlockGrossVolume / 100000).toFixed(0)}L queued.
+                  </span>
+                </div>
+              )}
+
+              <svg viewBox="0 0 780 430" className="w-full h-full max-h-[440px] select-none">
             <defs>
               <marker id="arrow-default" viewBox="0 0 10 10" refX="22" refY="5" markerWidth="6" markerHeight="6" orient="auto">
                 <path d="M 0 1 L 10 5 L 0 9 z" fill="#64748b" />
@@ -514,6 +560,8 @@ export default function InterbankCapitalFlowGraph() {
                   <span className="text-cyan-400 font-semibold">{selectedNode.status}</span>
                 </div>
               </div>
+            </div>
+          )}
             </div>
           )}
         </div>

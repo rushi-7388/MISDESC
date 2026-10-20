@@ -28,18 +28,18 @@ export default function PresentingBankDashboard() {
   });
 
   return (
-    <div className="min-h-screen bg-slate-50/50 pb-16">
+    <div className="min-h-screen bg-[#080c14] text-slate-100 pb-16">
       <Navbar />
       <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
         {/* Tab Switcher */}
-        <div className="flex border-b border-slate-200 gap-2">
+        <div className="flex border-b border-slate-800 gap-2">
           <button
             type="button"
             onClick={() => setActiveTab("batch")}
             className={`py-3.5 px-6 font-semibold text-sm transition-all border-b-2 cursor-pointer whitespace-nowrap ${
               activeTab === "batch"
-                ? "border-brand-600 text-brand-700 bg-brand-50/60 rounded-t-xl"
-                : "border-transparent text-slate-500 hover:text-slate-800 hover:border-slate-300"
+                ? "border-cyan-500 text-cyan-300 bg-cyan-950/40 rounded-t-xl"
+                : "border-transparent text-slate-400 hover:text-slate-200 hover:border-slate-700"
             }`}
           >
             Batch Ingestion (CSV)
@@ -49,8 +49,8 @@ export default function PresentingBankDashboard() {
             onClick={() => setActiveTab("single")}
             className={`py-3.5 px-6 font-semibold text-sm transition-all border-b-2 cursor-pointer whitespace-nowrap ${
               activeTab === "single"
-                ? "border-brand-600 text-brand-700 bg-brand-50/60 rounded-t-xl"
-                : "border-transparent text-slate-500 hover:text-slate-800 hover:border-slate-300"
+                ? "border-cyan-500 text-cyan-300 bg-cyan-950/40 rounded-t-xl"
+                : "border-transparent text-slate-400 hover:text-slate-200 hover:border-slate-700"
             }`}
           >
             Single Instrument Presentation
@@ -67,10 +67,10 @@ export default function PresentingBankDashboard() {
         {/* Clearing Status Table */}
         <div className="space-y-4">
           <div className="flex flex-wrap items-center justify-between gap-3">
-            <h2 className="font-bold text-xl text-slate-900 tracking-tight">
+            <h2 className="font-bold text-xl text-white tracking-tight">
               Cheques Presented in Clearing
             </h2>
-            <span className="text-xs font-mono font-semibold text-slate-600 bg-white border border-slate-200 px-3 py-1.5 rounded-lg shadow-2xs">
+            <span className="text-xs font-mono font-semibold text-cyan-300 bg-slate-900 border border-slate-800 px-3 py-1.5 rounded-lg shadow-sm">
               Total Presented: {cheques.length} instruments
             </span>
           </div>

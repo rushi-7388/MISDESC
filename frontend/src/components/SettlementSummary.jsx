@@ -52,18 +52,18 @@ export default function SettlementSummary() {
   return (
     <div className="space-y-6">
       {/* 1. Interbank Liquidity Cap & Settlement Credit Limit Monitor */}
-      <div className="bg-white rounded-xl shadow border border-gray-100 p-6 space-y-6">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-gray-100 pb-4">
+      <div className="bg-slate-900/90 rounded-2xl shadow-xl border border-slate-800 p-6 space-y-6 backdrop-blur-md">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-4">
           <div>
             <div className="flex items-center gap-2">
-              <span className="inline-flex items-center justify-center px-2 py-0.5 bg-indigo-50 text-indigo-700 rounded text-xs font-mono font-semibold">
+              <span className="inline-flex items-center justify-center px-2 py-0.5 bg-cyan-950/60 text-cyan-300 border border-cyan-800/80 rounded text-xs font-mono font-semibold">
                 RBI/MISDESC MONITOR
               </span>
-              <h2 className="font-bold text-base text-gray-900">
+              <h2 className="font-bold text-base text-white">
                 Interbank Liquidity Cap & Central Bank Settlement Credit Monitor
               </h2>
             </div>
-            <p className="text-xs text-gray-500 mt-1">
+            <p className="text-xs text-slate-400 mt-1">
               Real-time Bilateral Exposure Caps & Intraday Multilateral Net Settlement Collateral Limits
             </p>
           </div>
@@ -312,11 +312,11 @@ export default function SettlementSummary() {
       </div>
 
       {/* 2. Multilateral Net Settlement Ledger */}
-      <div className="bg-white rounded-xl shadow border border-gray-100 p-6">
+      <div className="bg-slate-900/90 rounded-2xl shadow-xl border border-slate-800 p-6 backdrop-blur-md">
         <div className="flex items-center justify-between mb-4">
           <div>
-            <h2 className="font-bold text-base text-gray-900">Multilateral Net Settlement Ledger</h2>
-            <p className="text-xs text-gray-500 mt-0.5">
+            <h2 className="font-bold text-base text-white">Multilateral Net Settlement Ledger</h2>
+            <p className="text-xs text-slate-400 mt-0.5">
               Interbank clearing bilateral netting and pacs.008 export
             </p>
           </div>
@@ -324,26 +324,26 @@ export default function SettlementSummary() {
             type="button"
             onClick={handleRun}
             disabled={running}
-            className="bg-brand-600 hover:bg-brand-700 text-white rounded-lg px-4 py-2 text-xs font-bold disabled:opacity-50 transition-colors shadow-xs cursor-pointer"
+            className="bg-cyan-600 hover:bg-cyan-500 text-white rounded-xl px-4 py-2.5 text-xs font-bold disabled:opacity-50 transition-all shadow-lg shadow-cyan-950/40 cursor-pointer"
           >
             {running ? "Executing Settlement..." : "Run Net Settlement Cycle"}
           </button>
         </div>
 
         {message && (
-          <div className="text-xs font-medium p-2.5 rounded-lg bg-blue-50 text-blue-800 border border-blue-200 mb-3">
+          <div className="text-xs font-medium p-2.5 rounded-xl bg-cyan-950/60 text-cyan-300 border border-cyan-800/80 mb-3">
             {message}
           </div>
         )}
 
         {settlements.length === 0 ? (
-          <div className="text-xs text-gray-500 p-4 bg-gray-50 rounded-lg text-center">
+          <div className="text-xs text-slate-400 p-6 bg-slate-950/60 rounded-xl text-center border border-slate-800/60">
             No settlement cycles have been executed yet. Cleared cheques will be netted and reconciled here.
           </div>
         ) : (
-          <div className="overflow-x-auto border border-gray-200 rounded-xl">
+          <div className="overflow-x-auto border border-slate-800 rounded-xl">
             <table className="min-w-full text-xs">
-              <thead className="bg-gray-50 text-gray-500 text-[10px] uppercase tracking-wider border-b">
+              <thead className="bg-slate-950 text-slate-400 text-[10px] uppercase tracking-wider border-b border-slate-800">
                 <tr>
                   <th className="text-left px-3 py-2.5">Cycle Date</th>
                   <th className="text-left px-3 py-2.5">Creditor Bank</th>
@@ -353,7 +353,7 @@ export default function SettlementSummary() {
                   <th className="text-right px-3 py-2.5">Standard</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-100">
+              <tbody className="divide-y divide-slate-800">
                 {settlements.map((s) => (
                   <tr key={s.id} className="hover:bg-gray-50/50">
                     <td className="px-3 py-2.5 font-mono text-[11px] text-gray-500">

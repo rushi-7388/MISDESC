@@ -29,17 +29,17 @@ export default function FraudFlagsPanel() {
   }
 
   return (
-    <div className="bg-white rounded-lg shadow p-6">
-      <div className="flex items-center justify-between mb-4">
-        <h2 className="font-semibold text-lg">Fraud flags</h2>
-        <label className="text-xs flex items-center gap-2 text-gray-500">
-          <input type="checkbox" checked={showResolved} onChange={(e) => setShowResolved(e.target.checked)} />
+    <div className="bg-slate-900/90 rounded-2xl shadow-xl border border-slate-800 p-6 backdrop-blur-md">
+      <div className="flex items-center justify-between mb-4 pb-3 border-b border-slate-800">
+        <h2 className="font-black text-lg text-white">Fraud Flags & Risk Incidents</h2>
+        <label className="text-xs flex items-center gap-2 text-slate-400">
+          <input type="checkbox" checked={showResolved} onChange={(e) => setShowResolved(e.target.checked)} className="rounded bg-slate-950 border-slate-700 text-cyan-500" />
           Show resolved
         </label>
       </div>
 
       {flags.length === 0 ? (
-        <div className="text-sm text-gray-500">No {showResolved ? "" : "unresolved "}fraud flags.</div>
+        <div className="text-sm text-slate-400">No {showResolved ? "" : "unresolved "}fraud flags.</div>
       ) : (
         <div className="space-y-3">
           {flags.map((f) => (

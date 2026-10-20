@@ -4,44 +4,74 @@
 
 @layer base {
   body {
-    @apply bg-slate-50 text-slate-900 font-sans;
+    @apply bg-[#080c14] text-slate-100 font-sans;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    background-color: #080c14;
+    color: #f1f5f9;
   }
 }
 
-/* Custom Sleek Scrollbar */
+/* Bulletproof Sovereign Dark Theme Overrides:
+   Ensure zero bright/white cards, panels, or backgrounds anywhere in the platform */
+.bg-white {
+  background-color: rgba(15, 23, 42, 0.95) !important;
+  color: #f1f5f9;
+}
+
+.bg-slate-50, .bg-gray-50, .bg-zinc-50 {
+  background-color: #080c14 !important;
+}
+
+.bg-slate-100, .bg-gray-100 {
+  background-color: rgba(30, 41, 59, 0.7) !important;
+  color: #e2e8f0;
+}
+
+.text-slate-900, .text-gray-900, .text-slate-800, .text-gray-800 {
+  color: #f8fafc !important;
+}
+
+.border-slate-200, .border-gray-200 {
+  border-color: rgba(51, 65, 85, 0.6) !important;
+}
+
+.divide-slate-200 > :not([hidden]) ~ :not([hidden]) {
+  border-color: rgba(51, 65, 85, 0.5) !important;
+}
+
+/* Custom Sleek Dark Scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: transparent;
+  background: #080c14;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(148, 163, 184, 0.4);
+  background: rgba(71, 85, 105, 0.5);
   border-radius: 9999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(100, 116, 139, 0.7);
+  background: rgba(100, 116, 139, 0.8);
 }
 
-/* Glassmorphism helpers */
+/* Glassmorphism helpers for heavy dark theme */
 .glass-panel {
-  background: rgba(255, 255, 255, 0.85);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(226, 232, 240, 0.8);
+  background: rgba(15, 23, 42, 0.92);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(51, 65, 85, 0.65);
 }
 
 .glass-panel-dark {
-  background: rgba(15, 23, 42, 0.85);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(51, 65, 85, 0.6);
+  background: rgba(8, 12, 20, 0.95);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(30, 41, 59, 0.8);
 }
 
 /* Continuous Marquee Animation */
@@ -58,4 +88,3 @@
 .animate-marquee:hover {
   animation-play-state: paused;
 }
-

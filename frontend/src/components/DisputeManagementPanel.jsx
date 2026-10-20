@@ -85,29 +85,29 @@ export default function DisputeManagementPanel() {
       )}
 
       {/* Control bar */}
-      <div className="bg-white rounded-2xl border border-slate-200/80 p-5 shadow-xs flex flex-wrap items-center justify-between gap-4">
+      <div className="bg-slate-900/90 rounded-2xl border border-slate-800 p-5 shadow-xl backdrop-blur-md flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h2 className="text-base font-bold text-slate-900 flex items-center gap-2">
+          <h2 className="text-base font-black text-white flex items-center gap-2">
             <span>Clearing Dispute Resolution Claims Registry</span>
-            <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-50 text-amber-800 border border-amber-200">
+            <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-950/60 text-amber-300 border border-amber-800/80">
               NPCI MISDESC DRM Rule 32
             </span>
           </h2>
-          <p className="text-xs text-slate-500 mt-0.5">
+          <p className="text-xs text-slate-400 mt-0.5">
             Interbank chargeback claims, forged endorsement challenges, and statutory 72-hour regulatory arbitrations.
           </p>
         </div>
 
         {/* Status Filter */}
-        <div className="flex items-center gap-1.5 bg-slate-100 p-1 rounded-xl text-xs font-semibold">
+        <div className="flex items-center gap-1.5 bg-slate-950 p-1 border border-slate-800 rounded-xl text-xs font-semibold">
           {["ALL", "FILED", "UNDER_REVIEW", "RESOLVED_CLAIMANT", "RESOLVED_RESPONDENT"].map((st) => (
             <button
               key={st}
               onClick={() => setFilterStatus(st)}
               className={`px-3 py-1.5 rounded-lg transition-all cursor-pointer ${
                 filterStatus === st
-                  ? "bg-white text-slate-900 shadow-xs font-bold"
-                  : "text-slate-500 hover:text-slate-800"
+                  ? "bg-cyan-950/80 text-cyan-300 border border-cyan-800/80 font-bold"
+                  : "text-slate-400 hover:text-slate-200"
               }`}
             >
               {st.replace(/_/g, " ")}
@@ -117,9 +117,9 @@ export default function DisputeManagementPanel() {
       </div>
 
       {/* Table */}
-      <div className="bg-white rounded-2xl border border-slate-200/80 shadow-xs overflow-hidden">
+      <div className="bg-slate-900/90 rounded-2xl border border-slate-800 shadow-xl overflow-hidden backdrop-blur-md">
         {loading ? (
-          <div className="p-8 text-center text-slate-500 text-xs font-semibold">
+          <div className="p-8 text-center text-slate-400 text-xs font-semibold">
             Loading active disputes...
           </div>
         ) : filteredDisputes.length === 0 ? (
@@ -129,7 +129,7 @@ export default function DisputeManagementPanel() {
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs">
-              <thead className="bg-slate-50/80 text-slate-500 border-b border-slate-200 font-semibold uppercase tracking-wider text-[10px]">
+              <thead className="bg-slate-950 text-slate-400 border-b border-slate-800 font-semibold uppercase tracking-wider text-[10px]">
                 <tr>
                   <th className="py-3 px-4">Claim Reference</th>
                   <th className="py-3 px-4">Dispute Type</th>

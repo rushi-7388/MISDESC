@@ -1,11 +1,22 @@
 import React, { useState, useEffect } from "react";
 import client from "../api/client";
+import { sovereignAudio } from "../utils/settlement-sound.util";
+import { useClearingEvents } from "../hooks/useClearingEvents";
 
 export default function HourlyContinuousClearingModal({ onClose }) {
   const [status, setStatus] = useState(null);
   const [loading, setLoading] = useState(true);
   const [settling, setSettling] = useState(false);
   const [settledResult, setSettledResult] = useState(null);
+
+  // Real-time listener for incoming settlements
+  useClearingEvents((event) => {
+    if (event.type === "HOURLY_BATCH_SETTLED") {
+      setSettledResult(event.data);
+      sovereignAudio.playSettlementChime(event.data?.totalVolumeInr || 555000);
+      loadStatus();
+    }
+  });
 
   async function loadStatus() {
     try {
@@ -31,6 +42,7 @@ export default function HourlyContinuousClearingModal({ onClose }) {
         ],
       });
       setSettledResult(res.data);
+      sovereignAudio.playSettlementChime(res.data.totalVolumeInr || 555000);
       await loadStatus();
     } catch (err) {
       alert("Hourly settlement failed: " + (err.response?.data?.error || err.message));

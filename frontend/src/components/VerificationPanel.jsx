@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import client from "../api/client";
 import { useAuth } from "../context/AuthContext";
+import { authenticateWithWebAuthn } from "../utils/webauthn.util";
+import { sovereignAudio } from "../utils/settlement-sound.util";
 
 const COMMON_REASONS = [
   { code: "01", label: "01: Insufficient funds" },
@@ -46,11 +48,26 @@ export default function VerificationPanel({ cheque, onUpdated, layout = "compact
     }
     setBusy(true);
     try {
+      let fido2Proof = null;
+      // High-Value Statutory Clearance (> ₹10 Lakhs) requires FIDO2 / WebAuthn Hardware Token
+      if (toStatus === "CLEARED" && Number(cheque.amount) >= 1000000) {
+        fido2Proof = await authenticateWithWebAuthn({
+          username: user?.email || "checker@hdb.com",
+          amount: Number(cheque.amount),
+          action: "CLEAR_HIGH_VALUE_INSTRUMENT",
+        });
+      }
+
       const { data } = await client.patch(`/clearing/${cheque.id}/transition`, {
         toStatus,
         returnReasonCode: toStatus === "RETURNED" ? returnReason : undefined,
-        remarks: remarks || undefined,
+        remarks: remarks || (fido2Proof ? `FIDO2 Hardware Authenticated [${fido2Proof.credentialId.slice(0, 16)}...]` : undefined),
       });
+
+      if (toStatus === "CLEARED") {
+        sovereignAudio.playSettlementChime(Number(cheque.amount));
+      }
+
       setShowReturnModal(false);
       onUpdated?.(data);
     } catch (err) {
@@ -140,44 +157,44 @@ export default function VerificationPanel({ cheque, onUpdated, layout = "compact
       {showReturnModal && (
         <div
           onClick={() => setShowReturnModal(false)}
-          className="fixed inset-0 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 z-50 animate-in fade-in duration-150"
+          className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 z-50 animate-in fade-in duration-150"
         >
           <div
             onClick={(e) => e.stopPropagation()}
-            className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 border border-gray-100 text-left"
+            className="bg-slate-900 rounded-2xl shadow-2xl max-w-md w-full p-6 border border-slate-800 text-left text-slate-100"
           >
-            <div className="flex items-center justify-between pb-3 border-b border-gray-100">
+            <div className="flex items-center justify-between pb-3 border-b border-slate-800">
               <div>
-                <h3 className="font-bold text-gray-900 text-sm">Statutory Cheque Dishonour</h3>
-                <p className="text-[11px] text-gray-500">Section 138 Negotiable Instruments Act, 1881</p>
+                <h3 className="font-bold text-white text-sm">Statutory Cheque Dishonour</h3>
+                <p className="text-[11px] text-slate-400">Section 138 Negotiable Instruments Act, 1881</p>
               </div>
               <button
                 type="button"
                 onClick={() => setShowReturnModal(false)}
-                className="text-xs text-gray-500 hover:text-gray-800 px-2 py-1 rounded hover:bg-gray-100 transition-colors cursor-pointer"
+                className="text-xs text-slate-400 hover:text-white px-2 py-1 rounded hover:bg-slate-800 transition-colors cursor-pointer"
               >
                 Close
               </button>
             </div>
 
             <div className="py-4 space-y-4">
-              <div className="bg-gray-50 p-3 rounded-xl border border-gray-100 flex items-center justify-between text-xs">
+              <div className="bg-slate-950 p-3 rounded-xl border border-slate-800 flex items-center justify-between text-xs">
                 <div>
-                  <div className="text-gray-400 text-[10px]">INSTRUMENT</div>
-                  <div className="font-mono font-bold text-gray-900">Cheque #{cheque.chequeNumber}</div>
+                  <div className="text-slate-500 text-[10px]">INSTRUMENT</div>
+                  <div className="font-mono font-bold text-white">Cheque #{cheque.chequeNumber}</div>
                 </div>
                 <div>
-                  <div className="text-gray-400 text-[10px]">PAYEE</div>
-                  <div className="font-semibold text-gray-800">{cheque.payeeName}</div>
+                  <div className="text-slate-500 text-[10px]">PAYEE</div>
+                  <div className="font-semibold text-slate-200">{cheque.payeeName}</div>
                 </div>
                 <div className="text-right">
-                  <div className="text-gray-400 text-[10px]">AMOUNT</div>
-                  <div className="font-mono font-bold text-gray-900">₹{Number(cheque.amount).toLocaleString("en-IN")}</div>
+                  <div className="text-slate-500 text-[10px]">AMOUNT</div>
+                  <div className="font-mono font-bold text-cyan-400">₹{Number(cheque.amount).toLocaleString("en-IN")}</div>
                 </div>
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-gray-700 mb-1.5">
+                <label className="block text-xs font-semibold text-slate-300 mb-1.5">
                   Select RBI Clearing Return Reason Code:
                 </label>
                 <div className="flex flex-wrap gap-1 mb-2">
@@ -189,7 +206,7 @@ export default function VerificationPanel({ cheque, onUpdated, layout = "compact
                       className={`text-[10px] px-2 py-1 rounded-md font-medium transition-colors cursor-pointer ${
                         selectedReason === r.code
                           ? "bg-rose-600 text-white font-bold"
-                          : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                          : "bg-slate-800 text-slate-300 hover:bg-slate-750"
                       }`}
                     >
                       {r.code}
@@ -200,7 +217,7 @@ export default function VerificationPanel({ cheque, onUpdated, layout = "compact
                 <select
                   value={selectedReason}
                   onChange={(e) => setSelectedReason(e.target.value)}
-                  className="w-full border border-gray-300 rounded-lg px-3 py-2 text-xs bg-white focus:ring-2 focus:ring-rose-500 focus:outline-none"
+                  className="w-full border border-slate-700 rounded-lg px-3 py-2 text-xs bg-slate-950 text-white focus:ring-2 focus:ring-rose-500 focus:outline-none"
                 >
                   {Object.entries(reasonCodes).map(([code, label]) => (
                     <option key={code} value={code}>
@@ -213,7 +230,7 @@ export default function VerificationPanel({ cheque, onUpdated, layout = "compact
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-gray-700 mb-1">
+                <label className="block text-xs font-semibold text-slate-300 mb-1">
                   Bank Return Remarks / Auditor Note:
                 </label>
                 <input
@@ -221,20 +238,20 @@ export default function VerificationPanel({ cheque, onUpdated, layout = "compact
                   value={remarks}
                   onChange={(e) => setRemarks(e.target.value)}
                   placeholder="e.g. Insufficient cleared balance in account"
-                  className="w-full border border-gray-300 rounded-lg px-3 py-2 text-xs focus:ring-2 focus:ring-rose-500 focus:outline-none"
+                  className="w-full border border-slate-700 bg-slate-950 text-white rounded-lg px-3 py-2 text-xs focus:ring-2 focus:ring-rose-500 focus:outline-none"
                 />
               </div>
 
-              <div className="p-2.5 bg-amber-50 border border-amber-200 rounded-lg text-[11px] text-amber-900 leading-snug">
+              <div className="p-2.5 bg-amber-950/60 border border-amber-800/80 rounded-lg text-[11px] text-amber-200 leading-snug">
                 Confirming this dishonour generates a Section 138 statutory return memo.
               </div>
             </div>
 
-            <div className="flex items-center justify-end gap-2 pt-3 border-t border-gray-100">
+            <div className="flex items-center justify-end gap-2 pt-3 border-t border-slate-800">
               <button
                 type="button"
                 onClick={() => setShowReturnModal(false)}
-                className="px-3 py-1.5 text-xs text-gray-600 hover:text-gray-800 font-medium cursor-pointer"
+                className="px-3 py-1.5 text-xs text-slate-400 hover:text-white font-medium cursor-pointer"
               >
                 Cancel
               </button>
@@ -242,7 +259,7 @@ export default function VerificationPanel({ cheque, onUpdated, layout = "compact
                 type="button"
                 disabled={busy}
                 onClick={() => transition("RETURNED")}
-                className="px-4 py-1.5 text-xs font-bold text-white bg-rose-600 hover:bg-rose-700 rounded-lg shadow-sm transition-colors disabled:opacity-50 cursor-pointer flex items-center gap-1.5"
+                className="px-4 py-1.5 text-xs font-bold text-white bg-rose-600 hover:bg-rose-500 rounded-lg shadow-sm transition-colors disabled:opacity-50 cursor-pointer flex items-center gap-1.5"
               >
                 {busy ? "Dishonouring..." : "Confirm Statutory Return"}
               </button>

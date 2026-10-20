@@ -173,15 +173,15 @@ export default function BulkBatchUploadPanel({ onBatchIngested }) {
   }
 
   return (
-    <div className="bg-white rounded-2xl shadow-xs border border-slate-200/90 p-6 sm:p-8 space-y-7">
+    <div className="bg-slate-900/90 rounded-2xl shadow-xl border border-slate-800 p-6 sm:p-8 space-y-7 backdrop-blur-md">
       {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-100 pb-5">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-800 pb-5">
         <div>
           <div className="flex items-center gap-2.5">
-            <span className="inline-flex items-center justify-center px-2.5 py-1 bg-blue-50 text-blue-700 rounded-lg text-xs font-mono font-bold">
+            <span className="inline-flex items-center justify-center px-2.5 py-1 bg-cyan-950/60 text-cyan-300 border border-cyan-800/80 rounded-lg text-xs font-mono font-bold">
               BATCH INGESTION
             </span>
-            <h2 className="font-bold text-slate-900 text-lg">
+            <h2 className="font-black text-white text-lg">
               Batch File Ingestion (CSV)
             </h2>
           </div>
@@ -191,7 +191,7 @@ export default function BulkBatchUploadPanel({ onBatchIngested }) {
             type="button"
             onClick={handleLoadSampleBatch}
             disabled={isProcessing}
-            className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 text-xs font-semibold rounded-xl transition-all cursor-pointer whitespace-nowrap shadow-2xs"
+            className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 text-xs font-semibold rounded-xl transition-all cursor-pointer whitespace-nowrap shadow-lg shadow-black/40"
           >
             Load Sample Data
           </button>
@@ -201,18 +201,18 @@ export default function BulkBatchUploadPanel({ onBatchIngested }) {
       {/* Batch Ingestion Configuration Form */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div>
-          <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Batch Session Code</label>
+          <label className="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-2">Batch Session Code</label>
           <input
             type="text"
             value={batchName}
             onChange={(e) => setBatchName(e.target.value)}
             disabled={isProcessing}
-            className="w-full border border-slate-300 rounded-xl px-4 py-2.5 font-mono text-sm text-slate-800 focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 focus:outline-none transition-all"
+            className="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-2.5 font-mono text-sm text-slate-100 focus:ring-2 focus:ring-cyan-500/20 focus:border-cyan-500 focus:outline-none transition-all"
             placeholder="SURAT-MAIN-EVE-BATCH"
           />
         </div>
         <div>
-          <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Drawee Clearing IFSC</label>
+          <label className="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-2">Drawee Clearing IFSC</label>
           <input
             type="text"
             value={draweeIfsc}

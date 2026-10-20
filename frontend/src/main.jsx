@@ -10,6 +10,13 @@ import "./index.css";
 // Initialize client-side unhandled exception and rejection capturing
 initGlobalTelemetry();
 
+// Register PWA Service Worker for Offline Banking & Background Sync
+if ("serviceWorker" in navigator && process.env.NODE_ENV !== "development") {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("/sw.js").catch(() => {});
+  });
+}
+
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <ErrorBoundary>

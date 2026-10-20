@@ -498,7 +498,7 @@ export default function ReportingHub() {
   ];
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900 pb-28">
+    <div className="min-h-screen bg-[#080c14] text-slate-100 pb-28">
       <Navbar />
 
       {/* Floating Institutional Toast Notification */}
@@ -534,20 +534,20 @@ export default function ReportingHub() {
 
       <main className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
         {/* Enterprise Bank Header */}
-        <div className="bg-white border border-slate-200 rounded-2xl p-6 sm:p-8 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-6">
+        <div className="bg-slate-900/90 border border-slate-800 rounded-2xl p-6 sm:p-8 shadow-xl backdrop-blur-md flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div className="space-y-1.5">
             <div className="flex items-center gap-2">
-              <span className="px-2.5 py-0.5 rounded text-[11px] font-extrabold tracking-wider uppercase bg-blue-50 text-blue-800 border border-blue-200">
+              <span className="px-2.5 py-0.5 rounded text-[11px] font-extrabold tracking-wider uppercase bg-cyan-950/60 text-cyan-300 border border-cyan-800/80">
                 SURAT PEOPLES CO OP BANK
               </span>
               <span className="text-xs font-mono text-slate-400">
                 · MISDESC 2.0 Enterprise Reporting Suite
               </span>
             </div>
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+            <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
               Bank MIS & Statutory Reporting Suite
             </h1>
-            <p className="text-xs sm:text-sm text-slate-500 max-w-4xl leading-relaxed">
+            <p className="text-xs sm:text-sm text-slate-400 max-w-4xl leading-relaxed">
               Institutional clearing analytics, RBI statutory return generation, Positive Pay System reconciliations, branch network performance, and interbank e-Kuber multilateral net settlement governance.
             </p>
           </div>
@@ -557,7 +557,7 @@ export default function ReportingHub() {
               type="button"
               onClick={loadData}
               disabled={loading}
-              className="px-4 py-2.5 text-xs font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-xl transition-all border border-slate-200 cursor-pointer"
+              className="px-4 py-2.5 text-xs font-semibold text-slate-300 bg-slate-800/80 hover:bg-slate-700/80 rounded-xl transition-all border border-slate-700 cursor-pointer"
             >
               Refresh Data
             </button>
@@ -565,7 +565,7 @@ export default function ReportingHub() {
               type="button"
               onClick={() => handleGenerate(selectedTemplate)}
               disabled={generating || !selectedTemplate}
-              className="px-5 py-2.5 text-xs font-bold text-white bg-blue-700 hover:bg-blue-800 active:bg-blue-900 rounded-xl transition-all shadow-xs cursor-pointer flex items-center gap-2 disabled:opacity-50"
+              className="px-5 py-2.5 text-xs font-bold text-white bg-cyan-600 hover:bg-cyan-500 active:bg-cyan-700 rounded-xl transition-all shadow-lg shadow-cyan-950/40 cursor-pointer flex items-center gap-2 disabled:opacity-50"
             >
               {generating ? (
                 <>

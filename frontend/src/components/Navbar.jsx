@@ -3,6 +3,8 @@ import { useNavigate, useLocation, Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import client from "../api/client";
 import logo from "../assets/logo.jpg";
+
+// Modals for Institutional Services & Innovations
 import PositivePayRegistryModal from "./PositivePayRegistryModal";
 import DynamicCollateralManagementModal from "./DynamicCollateralManagementModal";
 import RbiCimsRegulatoryModal from "./RbiCimsRegulatoryModal";
@@ -11,12 +13,16 @@ import WhatsAppBankingModal from "./WhatsAppBankingModal";
 import RegionalVoiceBankingModal from "./RegionalVoiceBankingModal";
 import GeospatialTransitRadarModal from "./GeospatialTransitRadarModal";
 import AutonomousSelfHealingModal from "./AutonomousSelfHealingModal";
+
+// Sovereign 6 Pillars Modals
 import AcousticMeshOfflineModal from "./AcousticMeshOfflineModal";
 import AutonomousLiquiditySwarmModal from "./AutonomousLiquiditySwarmModal";
 import DeepfakeForensicLabModal from "./DeepfakeForensicLabModal";
 import ProgrammableCbdcSplitterModal from "./ProgrammableCbdcSplitterModal";
 import CrossBorderCorridorModal from "./CrossBorderCorridorModal";
 import DeveloperSdkPortalModal from "./DeveloperSdkPortalModal";
+
+// 2025 RBI & Digital Public Infrastructure (DPI) Modals
 import MuleHunterRadarModal from "./MuleHunterRadarModal";
 import HourlyContinuousClearingModal from "./HourlyContinuousClearingModal";
 import NeslSection138Modal from "./NeslSection138Modal";
@@ -24,61 +30,60 @@ import UliAccountAggregatorModal from "./UliAccountAggregatorModal";
 import BhashiniVoiceBankingModal from "./BhashiniVoiceBankingModal";
 import SrvaVostroSettlementModal from "./SrvaVostroSettlementModal";
 
-
 const DEMO_ROLES = [
   {
     role: "PRESENTING_BANK",
-    label: "Presenting Bank Clerk",
-    sublabel: "SURAT PEOPLES CO OP BANK (SNB)",
+    label: "Presenting Clerk",
+    sublabel: "SURAT PEOPLES CO OP (SNB)",
     email: "presenting@snb.com",
     path: "/presenting",
   },
   {
     role: "DRAWEE_BANK",
-    label: "Drawee Bank Verifier (Maker)",
-    sublabel: "SURAT PEOPLES CO OP BANK (HDB)",
+    label: "Drawee Verifier (Maker)",
+    sublabel: "SURAT PEOPLES CO OP (HDB)",
     email: "drawee@hdb.com",
     path: "/drawee",
   },
   {
     role: "DRAWEE_BANK",
-    label: "Senior Approver (Checker)",
-    sublabel: "SURAT PEOPLES CO OP BANK (HDB)",
+    label: "Approver (Checker)",
+    sublabel: "SURAT PEOPLES CO OP (HDB)",
     email: "checker@hdb.com",
     path: "/drawee",
   },
   {
     role: "ADMIN",
-    label: "Clearing House Admin",
-    sublabel: "National Clearing House (MISDESC)",
+    label: "Clearing Switch Admin",
+    sublabel: "National Grid (MISDESC)",
     email: "admin@MISDESC.com",
     path: "/admin",
   },
   {
     role: "BRANCH_MANAGER",
-    label: "Branch Operations Manager",
-    sublabel: "SURAT PEOPLES CO OP BANK (Athwa Branch)",
+    label: "Branch Manager",
+    sublabel: "Athwa Branch Operations",
     email: "manager@snb.com",
     path: "/branch-manager",
   },
   {
     role: "IT_STAFF",
-    label: "Core SRE & IT Staff",
-    sublabel: "Central Switch Infrastructure",
+    label: "Core SRE & IT Ops",
+    sublabel: "Switch Infrastructure",
     email: "itops@MISDESC.com",
     path: "/it-monitoring",
   },
   {
     role: "COMPLIANCE_AUDITOR",
-    label: "Compliance & Audit Officer",
-    sublabel: "Regulatory Oversight Wing",
+    label: "Compliance Auditor",
+    sublabel: "RBI Regulatory Wing",
     email: "auditor@rbi.org.in",
     path: "/auditor",
   },
   {
     role: "SETTLEMENT_OFFICER",
-    label: "Settlement & Treasury Officer",
-    sublabel: "National Treasury Settlement Desk",
+    label: "Treasury Officer",
+    sublabel: "National Treasury Settlement",
     email: "treasury@MISDESC.com",
     path: "/settlement",
   },
@@ -88,8 +93,8 @@ export default function Navbar() {
   const { user, logout, switchUser } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
-  const [systemHealthy, setSystemHealthy] = useState(true);
-  const [chaosActive, setChaosActive] = useState(false);
+
+  // Modal States
   const [showPpsModal, setShowPpsModal] = useState(false);
   const [showCollateralModal, setShowCollateralModal] = useState(false);
   const [showCimsModal, setShowCimsModal] = useState(false);
@@ -98,59 +103,47 @@ export default function Navbar() {
   const [showVoiceModal, setShowVoiceModal] = useState(false);
   const [showRadarModal, setShowRadarModal] = useState(false);
   const [showSelfHealingModal, setShowSelfHealingModal] = useState(false);
+
+  // Sovereign 6 Pillars Modals
   const [showAcousticModal, setShowAcousticModal] = useState(false);
   const [showLiquiditySwarmModal, setShowLiquiditySwarmModal] = useState(false);
   const [showDeepfakeModal, setShowDeepfakeModal] = useState(false);
   const [showCbdcSplitterModal, setShowCbdcSplitterModal] = useState(false);
   const [showCrossBorderCorridorModal, setShowCrossBorderCorridorModal] = useState(false);
   const [showDeveloperSdkModal, setShowDeveloperSdkModal] = useState(false);
-  const [showSovereignDropdown, setShowSovereignDropdown] = useState(false);
+
+  // 2025 DPI Modals
   const [showMuleHunterModal, setShowMuleHunterModal] = useState(false);
   const [showHourlyClearingModal, setShowHourlyClearingModal] = useState(false);
   const [showNeslModal, setShowNeslModal] = useState(false);
   const [showUliModal, setShowUliModal] = useState(false);
   const [showBhashiniModal, setShowBhashiniModal] = useState(false);
   const [showSrvaModal, setShowSrvaModal] = useState(false);
-  const [showDpiDropdown, setShowDpiDropdown] = useState(false);
+
+  // UI States
+  const [showServicesMenu, setShowServicesMenu] = useState(false);
+  const [activeTab, setActiveTab] = useState("sovereign"); // "sovereign" | "dpi" | "adapters"
+  const [searchQuery, setSearchQuery] = useState("");
   const [showRoleDropdown, setShowRoleDropdown] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [switching, setSwitching] = useState(false);
-  const dropdownRef = useRef(null);
-  const sovereignDropdownRef = useRef(null);
-  const dpiDropdownRef = useRef(null);
 
+  // Refs for click outside
+  const servicesMenuRef = useRef(null);
+  const roleDropdownRef = useRef(null);
 
-  useEffect(() => {
-    async function checkHealth() {
-      try {
-        const res = await client.get("/devops/chaos");
-        setChaosActive(res.data?.enabled);
-        setSystemHealthy(true);
-      } catch (err) {
-        setSystemHealthy(false);
-      }
-    }
-    checkHealth();
-    const interval = setInterval(checkHealth, 5000);
-    return () => clearInterval(interval);
-  }, []);
-
-  // Close dropdown on outside click
   useEffect(() => {
     function handleClickOutside(event) {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+      if (servicesMenuRef.current && !servicesMenuRef.current.contains(event.target)) {
+        setShowServicesMenu(false);
+      }
+      if (roleDropdownRef.current && !roleDropdownRef.current.contains(event.target)) {
         setShowRoleDropdown(false);
-      }
-      if (sovereignDropdownRef.current && !sovereignDropdownRef.current.contains(event.target)) {
-        setShowSovereignDropdown(false);
-      }
-      if (dpiDropdownRef.current && !dpiDropdownRef.current.contains(event.target)) {
-        setShowDpiDropdown(false);
       }
     }
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
-
 
   async function handleQuickSwitch(item) {
     if (user?.email === item.email) {
@@ -175,8 +168,6 @@ export default function Navbar() {
     navigate("/login");
   }
 
-  const isAdmin = user?.role === "ADMIN";
-  const canManageRBAC = user?.role === "BRANCH_MANAGER" || user?.role === "ADMIN";
   const clearingDeskPath = {
     PRESENTING_BANK: "/presenting",
     DRAWEE_BANK: "/drawee",
@@ -187,566 +178,561 @@ export default function Navbar() {
     SETTLEMENT_OFFICER: "/settlement",
   }[user?.role] || "/admin";
 
+  const currentRoleItem = DEMO_ROLES.find((r) => r.email === user?.email);
+  const canManageRBAC = user?.role === "BRANCH_MANAGER" || user?.role === "ADMIN";
+
+  // Catalog of services for clean rendering and search
+  const sovereignItems = [
+    {
+      id: "acoustic",
+      icon: "📡",
+      name: "Acoustic Offline PQC Rail",
+      desc: "18-20 kHz ultrasonic sound payments without internet",
+      tag: "PQC Lattice",
+      action: () => setShowAcousticModal(true),
+    },
+    {
+      id: "swarm",
+      icon: "⚡",
+      name: "AI Liquidity Swarm & Tarjan",
+      desc: "₹0 cash circular gridlock resolution engine",
+      tag: "Cycle Elimination",
+      action: () => setShowLiquiditySwarmModal(true),
+    },
+    {
+      id: "deepfake",
+      icon: "🧬",
+      name: "Deepfake & 365nm Optical AI",
+      desc: "Synthetic voice and chemical alteration defense",
+      tag: "Forensic Vision",
+      action: () => setShowDeepfakeModal(true),
+    },
+    {
+      id: "cbdc",
+      icon: "💎",
+      name: "Programmable CBDC Splitter",
+      desc: "18% GST + 1% TDS automatic smart-contract split",
+      tag: "e-Rupee",
+      action: () => setShowCbdcSplitterModal(true),
+    },
+    {
+      id: "dvp",
+      icon: "🌐",
+      name: "De-Dollarized Bilateral DvP",
+      desc: "Direct INR-AED cross-border corridor settlement",
+      tag: "Cross-Border",
+      action: () => setShowCrossBorderCorridorModal(true),
+    },
+    {
+      id: "sdk",
+      icon: "🛠️",
+      name: "Sovereign Developer SDK",
+      desc: "3-line CBS embedded clearing integration",
+      tag: "Finacle Ready",
+      action: () => setShowDeveloperSdkModal(true),
+    },
+  ];
+
+  const dpiItems = [
+    {
+      id: "mule",
+      icon: "🛡️",
+      name: "MuleHunter.AI Graph Radar",
+      desc: "RBIH graph centrality money mule hold advisor",
+      tag: "RBIH Mandate",
+      action: () => setShowMuleHunterModal(true),
+    },
+    {
+      id: "hourly",
+      icon: "⏱️",
+      name: "Hourly Continuous T+0 Engine",
+      desc: "10 AM - 7 PM rolling clearing with 60m credit SLA",
+      tag: "T+0 Rolling",
+      action: () => setShowHourlyClearingModal(true),
+    },
+    {
+      id: "nesl",
+      icon: "⚖️",
+      name: "NeSL DDE & Sec 65B Dossier",
+      desc: "30-day statutory demand notice + court affidavit",
+      tag: "Section 138",
+      action: () => setShowNeslModal(true),
+    },
+    {
+      id: "uli",
+      icon: "💳",
+      name: "ULI JIT-OD Overdraft Bridge",
+      desc: "Unified Lending GSTN backed 0% bounce guarantee",
+      tag: "ULI / GSTN",
+      action: () => setShowUliModal(true),
+    },
+    {
+      id: "bhashini",
+      icon: "🗣️",
+      name: "Bhashini 22-Language Voice AI",
+      desc: "Conversational regional voice biometrics & IVR",
+      tag: "Voice AI",
+      action: () => setShowBhashiniModal(true),
+    },
+    {
+      id: "srva",
+      icon: "🏦",
+      name: "SRVA Rupee Vostro Clearing",
+      desc: "Direct non-SWIFT cross-border DvP rupee settlement",
+      tag: "SRVA Vostro",
+      action: () => setShowSrvaModal(true),
+    },
+  ];
+
+  const adapterItems = [
+    {
+      id: "pps",
+      icon: "🛡️",
+      name: "Positive Pay System (PPS)",
+      desc: "High-value cheque pre-verification registry",
+      tag: "PPS Registry",
+      action: () => setShowPpsModal(true),
+    },
+    {
+      id: "lms",
+      icon: "💼",
+      name: "Collateral & Liquidity (LMS)",
+      desc: "Dynamic treasury collateral management portal",
+      tag: "LMS Portal",
+      action: () => setShowCollateralModal(true),
+    },
+    {
+      id: "cbs",
+      icon: "🌐",
+      name: "Core Banking (CBS) Gateway",
+      desc: "Finacle, BaNCS & Flexcube ISO 20022 adapter",
+      tag: "ISO 20022",
+      action: () => setShowCbsModal(true),
+    },
+    {
+      id: "whatsapp",
+      icon: "💬",
+      name: "WhatsApp & DLT SMS Alert Rail",
+      desc: "Instant customer notification & clearance receipts",
+      tag: "DLT Alerts",
+      action: () => setShowWhatsAppModal(true),
+    },
+    {
+      id: "cit",
+      icon: "🗺️",
+      name: "Geospatial CIT Transit Radar",
+      desc: "Live GPS escort & armored vault transit security",
+      tag: "Armored CIT",
+      action: () => setShowRadarModal(true),
+    },
+    {
+      id: "aiops",
+      icon: "🤖",
+      name: "Autonomous SRE AIOps Console",
+      desc: "Self-healing clearing node infrastructure",
+      tag: "Self-Healing",
+      action: () => setShowSelfHealingModal(true),
+    },
+    {
+      id: "cims",
+      icon: "🏛️",
+      name: "Automated RBI CIMS Hub",
+      desc: "One-click regulatory XML & XBRL filing pipeline",
+      tag: "RBI CIMS",
+      action: () => setShowCimsModal(true),
+    },
+    ...(canManageRBAC
+      ? [
+          {
+            id: "rbac",
+            icon: "🔐",
+            name: "RBAC Governance & Branch Ops",
+            desc: "Role permissions and dual-control approvals",
+            tag: "Governance",
+            action: () => navigate("/rbac"),
+          },
+        ]
+      : []),
+  ];
+
+  // Filter items if user typed in search query
+  const allServices = [...sovereignItems, ...dpiItems, ...adapterItems];
+  const filteredServices = searchQuery.trim()
+    ? allServices.filter(
+        (item) =>
+          item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          item.desc.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          item.tag.toLowerCase().includes(searchQuery.toLowerCase())
+      )
+    : null;
+
+  const currentTabItems =
+    activeTab === "sovereign"
+      ? sovereignItems
+      : activeTab === "dpi"
+      ? dpiItems
+      : adapterItems;
+
   return (
     <>
-      <nav className="bg-slate-900 border-b border-slate-800 text-white px-4 sm:px-6 py-2.5 flex items-center justify-between shadow-lg sticky top-0 z-40 backdrop-blur-md bg-slate-900/95">
-        {/* Left: Branding & Status */}
-        <div className="flex items-center gap-4">
-          <div
-            onClick={() => navigate("/")}
-            className="flex items-center gap-3 cursor-pointer group select-none"
-          >
-            <img
-              src={logo}
-              alt="MISDESC Logo"
-              className="w-8 h-8 sm:w-9 sm:h-9 rounded-lg object-cover border border-slate-700"
-            />
-            <div className="flex flex-col">
-              <div className="font-bold tracking-tight text-sm sm:text-base leading-none flex items-center gap-2">
-                <span className="text-white font-extrabold">SURAT PEOPLES CO OP BANK</span>
-                <span className="text-slate-600 font-light hidden sm:inline">|</span>
-                <span className="text-xs font-semibold text-slate-300 hidden sm:inline tracking-normal">
-                  MISDESC Reporting & CTS Portal
+      <header className="bg-slate-900/95 backdrop-blur-md border-b border-slate-800 text-slate-100 sticky top-0 z-40 select-none shadow-lg">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between">
+          {/* 1. Left: Brand & Bank Identity */}
+          <div className="flex items-center gap-3">
+            <Link to="/" className="flex items-center gap-2.5 group">
+              <img
+                src={logo}
+                alt="MISDESC"
+                className="w-8 h-8 rounded-lg object-cover ring-1 ring-slate-700/80 group-hover:ring-cyan-500 transition shadow-sm"
+              />
+              <div className="flex flex-col leading-tight">
+                <div className="flex items-center gap-1.5">
+                  <span className="font-extrabold text-sm sm:text-base font-mono tracking-tight text-white group-hover:text-cyan-400 transition-colors">
+                    MISDESC
+                  </span>
+                  <span className="text-[10px] font-bold px-1.5 py-0.2 rounded bg-cyan-950 text-cyan-300 border border-cyan-800/80 font-mono hidden sm:inline-block">
+                    CTS
+                  </span>
+                </div>
+                <span className="text-[11px] text-slate-400 font-medium hidden sm:inline truncate max-w-[200px] lg:max-w-none">
+                  Surat Peoples Co-op Bank · Clearing Switch
                 </span>
               </div>
-            </div>
+            </Link>
           </div>
 
-          {/* Cross-portal quick tabs for Admin */}
-          {isAdmin && (
-            <div className="hidden 2xl:flex items-center gap-1 ml-2 bg-slate-800/60 p-1 rounded-lg border border-slate-700/60 text-xs">
-              <Link
-                to="/presenting"
-                className={`px-2 py-0.5 rounded-md transition-colors ${location.pathname === "/presenting"
-                    ? "bg-brand-600 text-white font-semibold"
-                    : "text-slate-400 hover:text-white"
-                  }`}
-              >
-                Presenting
-              </Link>
-              <Link
-                to="/drawee"
-                className={`px-2 py-0.5 rounded-md transition-colors ${location.pathname === "/drawee"
-                    ? "bg-brand-600 text-white font-semibold"
-                    : "text-slate-400 hover:text-white"
-                  }`}
-              >
-                Drawee
-              </Link>
-              <Link
-                to="/admin"
-                className={`px-2 py-0.5 rounded-md transition-colors ${location.pathname === "/admin"
-                    ? "bg-brand-600 text-white font-semibold"
-                    : "text-slate-400 hover:text-white"
-                  }`}
-              >
-                Switch
-              </Link>
-              <Link
-                to="/branch-manager"
-                className={`px-2 py-0.5 rounded-md transition-colors ${location.pathname === "/branch-manager"
-                    ? "bg-brand-600 text-white font-semibold"
-                    : "text-slate-400 hover:text-white"
-                  }`}
-              >
-                Branch
-              </Link>
-              <Link
-                to="/it-monitoring"
-                className={`px-2 py-0.5 rounded-md transition-colors ${location.pathname === "/it-monitoring"
-                    ? "bg-brand-600 text-white font-semibold"
-                    : "text-slate-400 hover:text-white"
-                  }`}
-              >
-                SRE
-              </Link>
-              <Link
-                to="/auditor"
-                className={`px-2 py-0.5 rounded-md transition-colors ${location.pathname === "/auditor"
-                    ? "bg-brand-600 text-white font-semibold"
-                    : "text-slate-400 hover:text-white"
-                  }`}
-              >
-                Audit
-              </Link>
-              <Link
-                to="/settlement"
-                className={`px-2 py-0.5 rounded-md transition-colors ${location.pathname === "/settlement"
-                    ? "bg-brand-600 text-white font-semibold"
-                    : "text-slate-400 hover:text-white"
-                  }`}
-              >
-                Settlement
-              </Link>
-              <Link
-                to="/reports"
-                className={`px-2 py-0.5 rounded-md transition-colors ${location.pathname === "/reports"
-                    ? "bg-blue-600 text-white font-semibold"
-                    : "text-blue-300 hover:text-white"
-                  }`}
-              >
-                Reports
-              </Link>
-              <Link
-                to="/rbac"
-                className={`px-2 py-0.5 rounded-md transition-colors ${location.pathname === "/rbac"
-                    ? "bg-purple-600 text-white font-semibold"
-                    : "text-purple-300 hover:text-white"
-                  }`}
-              >
-                RBAC
-              </Link>
-            </div>
-          )}
-        </div>
-
-        {/* Right: Actions & User Info */}
-        {user && (
-          <div className="flex items-center gap-2.5 sm:gap-3 text-xs">
-            {/* Primary MIS Reporting Desk */}
-            <Link
-              to="/reports"
-              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 ${
-                location.pathname === "/reports"
-                  ? "bg-blue-600 text-white shadow-xs"
-                  : "bg-slate-800 border border-slate-700 text-blue-300 hover:text-white hover:bg-slate-750"
-              }`}
-              title="Bank MIS & Regulatory Reports"
-            >
-              <span>MIS Reports</span>
-            </Link>
-
-            {/* CTS Clearing Operations Desk */}
+          {/* 2. Center: Sleek Minimal Navigation */}
+          <nav className="hidden md:flex items-center gap-1 text-xs font-medium text-slate-300">
+            {/* Direct Link: Operations Desk */}
             <Link
               to={clearingDeskPath}
-              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 ${
+              className={`px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5 ${
                 location.pathname === clearingDeskPath
-                  ? "bg-slate-700 text-white shadow-xs"
-                  : "bg-slate-800 border border-slate-700 text-slate-300 hover:text-white hover:bg-slate-750"
+                  ? "bg-slate-800 text-white font-semibold border border-slate-700 shadow-xs"
+                  : "hover:bg-slate-800/60 hover:text-white text-slate-400"
               }`}
-              title="CTS Cheque Clearing & Operational Desk"
             >
-              <span>CTS Operations</span>
+              <span>📋 Desk</span>
             </Link>
 
-            {/* Dynamic Liquidity & Collateral (LMS) */}
-            <button
-              type="button"
-              onClick={() => setShowCollateralModal(true)}
-              className="hidden lg:flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-emerald-950/80 border border-emerald-800/80 text-emerald-300 hover:text-white hover:bg-emerald-900 text-xs font-bold transition-colors cursor-pointer"
-              title="Dynamic Liquidity & Collateral Management (LMS)"
+            {/* Direct Link: MIS Reports */}
+            <Link
+              to="/reports"
+              className={`px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5 ${
+                location.pathname === "/reports"
+                  ? "bg-slate-800 text-white font-semibold border border-slate-700 shadow-xs"
+                  : "hover:bg-slate-800/60 hover:text-white text-slate-400"
+              }`}
             >
-              <span>💼 LMS</span>
-            </button>
+              <span>📊 Reports</span>
+            </Link>
 
-            {/* Automated RBI CIMS Hub */}
-            <button
-              type="button"
-              onClick={() => setShowCimsModal(true)}
-              className="hidden lg:flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-blue-950/80 border border-blue-800/80 text-blue-300 hover:text-white hover:bg-blue-900 text-xs font-bold transition-colors cursor-pointer"
-              title="Automated RBI CIMS & Section 138 Hub"
-            >
-              <span>🏛️ CIMS</span>
-            </button>
-
-            {/* Core Banking (CBS) Adapter */}
-            <button
-              type="button"
-              onClick={() => setShowCbsModal(true)}
-              className="hidden lg:flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-teal-950/80 border border-teal-800/80 text-teal-300 hover:text-white hover:bg-teal-900 text-xs font-bold transition-colors cursor-pointer"
-              title="Core Banking (CBS) & Open Banking Adapter Suite"
-            >
-              <span>🌐 CBS</span>
-            </button>
-
-            {/* WhatsApp Banking & SMS Multi-Channel Suite (100% Free) */}
-            <button
-              type="button"
-              onClick={() => setShowWhatsAppModal(true)}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition-all shadow-md shadow-emerald-950/40 cursor-pointer"
-              title="Interactive WhatsApp Banking Bot & DLT SMS Suite (100% Free)"
-            >
-              <span>💬 WhatsApp & SMS</span>
-            </button>
-
-            {/* Regional AI Voice Banking Assistant */}
-            <button
-              type="button"
-              onClick={() => setShowVoiceModal(true)}
-              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold transition-all shadow-md shadow-indigo-950/40 cursor-pointer"
-              title="Regional AI Voice Banking Assistant (Gujarati, Hindi, English)"
-            >
-              <span>🎙️ Voice AI</span>
-            </button>
-
-            {/* Geospatial Branch Radar & Armed CIT Escort */}
-            <button
-              type="button"
-              onClick={() => setShowRadarModal(true)}
-              className="hidden lg:flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-emerald-950/80 border border-emerald-700/80 text-emerald-300 hover:text-white hover:bg-emerald-900 text-xs font-bold transition-colors cursor-pointer"
-              title="Geospatial Branch Radar & Armed CIT Transit Telemetry"
-            >
-              <span>🗺️ CIT Radar</span>
-            </button>
-
-            {/* Autonomous AI SRE Self-Healing Engine */}
-            <button
-              type="button"
-              onClick={() => setShowSelfHealingModal(true)}
-              className="hidden xl:flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-cyan-950/80 border border-cyan-700/80 text-cyan-300 hover:text-white hover:bg-cyan-900 text-xs font-bold transition-colors cursor-pointer"
-              title="Autonomous AI SRE Self-Healing Engine & Incident Auto-Remediation"
-            >
-              <span>🤖 AIOps</span>
-            </button>
-
-            {/* RBAC Portal Link for Managers and Admins */}
-            {canManageRBAC && (
-              <Link
-                to="/rbac"
-                className={`px-2.5 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center ${
-                  location.pathname === "/rbac"
-                    ? "bg-purple-600 text-white shadow-xs"
-                    : "bg-purple-950/70 border border-purple-800/80 text-purple-300 hover:text-white hover:bg-purple-900"
+            {/* Unified Services Dropdown Menu */}
+            <div className="relative" ref={servicesMenuRef}>
+              <button
+                type="button"
+                onClick={() => {
+                  setShowServicesMenu(!showServicesMenu);
+                  setShowRoleDropdown(false);
+                  setSearchQuery("");
+                }}
+                className={`px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5 cursor-pointer ${
+                  showServicesMenu
+                    ? "bg-cyan-950 text-cyan-300 border border-cyan-800 font-semibold"
+                    : "hover:bg-slate-800/60 hover:text-white text-slate-400"
                 }`}
-                title="Manage RBAC, User Roles & Branch Limits"
               >
-                <span>RBAC</span>
-              </Link>
-            )}
-
-            {/* Sovereign 6 Pillars ($1T FinTech Innovations Menu) */}
-            <div className="relative" ref={sovereignDropdownRef}>
-              <button
-                type="button"
-                onClick={() => setShowSovereignDropdown(!showSovereignDropdown)}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-gradient-to-r from-amber-600 via-purple-600 to-cyan-600 hover:from-amber-500 hover:to-cyan-500 text-white text-xs font-black tracking-wide transition-all shadow-md shadow-cyan-950/50 cursor-pointer"
-                title="6 World-First Sovereign FinTech Breakthroughs ($1T - $50T Scale)"
-              >
-                <span>⚡ Sovereign 6 Pillars</span>
-                <span className="text-[10px] bg-black/40 px-1.5 py-0.5 rounded font-mono">NEW</span>
+                <span>⚡ Grid Services & Rails</span>
+                <span className={`text-[9px] transition-transform duration-150 ${showServicesMenu ? "rotate-180" : ""}`}>
+                  ▼
+                </span>
               </button>
 
-              {showSovereignDropdown && (
-                <div className="absolute right-0 mt-2 w-80 bg-slate-900 border border-cyan-500/50 rounded-xl shadow-2xl py-2 z-50 text-slate-200">
-                  <div className="px-3.5 py-2 border-b border-slate-800 flex items-center justify-between">
-                    <span className="text-[11px] font-bold text-cyan-400 uppercase tracking-wider">
-                      Sovereign FinTech Engines
-                    </span>
-                    <span className="text-[10px] bg-cyan-950 text-cyan-300 border border-cyan-500/40 px-2 py-0.5 rounded-full font-mono">
-                      $1T Scale
-                    </span>
+              {/* Clean Tabbed Services Dropdown */}
+              {showServicesMenu && (
+                <div className="absolute left-1/2 -translate-x-1/2 mt-2 w-[480px] bg-slate-900 border border-slate-700/80 rounded-2xl shadow-2xl overflow-hidden z-50 animate-in fade-in duration-150 text-slate-200">
+                  {/* Top Search Input */}
+                  <div className="p-2.5 border-b border-slate-800 bg-slate-950/60">
+                    <div className="relative">
+                      <span className="absolute inset-y-0 left-0 pl-2.5 flex items-center pointer-events-none text-slate-400 text-xs">
+                        🔍
+                      </span>
+                      <input
+                        type="text"
+                        placeholder="Search 20+ rails, DPI & adapters (e.g. PQC, Mule, CBS)..."
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        className="w-full pl-8 pr-3 py-1.5 bg-slate-900 border border-slate-700 rounded-lg text-xs text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500"
+                        autoFocus
+                      />
+                    </div>
                   </div>
 
-                  <div className="py-1">
-                    <button
-                      onClick={() => { setShowAcousticModal(true); setShowSovereignDropdown(false); }}
-                      className="w-full text-left px-3.5 py-2 hover:bg-slate-800 flex items-start gap-2.5 transition"
-                    >
-                      <span className="text-base">📡</span>
-                      <div>
-                        <div className="text-xs font-bold text-white">1. Acoustic Zero-Internet Offline Pay</div>
-                        <div className="text-[11px] text-slate-400">18-20 kHz ultrasonic FSK + PQC Dilithium</div>
+                  {/* Filtered Search Results OR Clean Tabs */}
+                  {filteredServices ? (
+                    <div className="p-2 max-h-[380px] overflow-y-auto space-y-1">
+                      <div className="text-[10px] uppercase font-bold text-slate-400 px-2 py-1">
+                        Search Results ({filteredServices.length})
                       </div>
-                    </button>
+                      {filteredServices.length === 0 ? (
+                        <div className="py-6 text-center text-xs text-slate-500">
+                          No matching rails or services found.
+                        </div>
+                      ) : (
+                        filteredServices.map((item) => (
+                          <button
+                            key={item.id}
+                            type="button"
+                            onClick={() => {
+                              item.action();
+                              setShowServicesMenu(false);
+                            }}
+                            className="w-full flex items-center justify-between p-2 rounded-xl hover:bg-slate-800/90 transition text-left cursor-pointer group"
+                          >
+                            <div className="flex items-center gap-2.5 min-w-0">
+                              <span className="w-7 h-7 rounded-lg bg-slate-800 border border-slate-700 flex items-center justify-center text-sm shrink-0">
+                                {item.icon}
+                              </span>
+                              <div className="min-w-0">
+                                <div className="text-xs font-semibold text-slate-200 group-hover:text-cyan-300 transition-colors truncate">
+                                  {item.name}
+                                </div>
+                                <div className="text-[10px] text-slate-400 truncate">
+                                  {item.desc}
+                                </div>
+                              </div>
+                            </div>
+                            <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-slate-800 border border-slate-700 text-slate-300 shrink-0 ml-2">
+                              {item.tag}
+                            </span>
+                          </button>
+                        ))
+                      )}
+                    </div>
+                  ) : (
+                    <>
+                      {/* Clean Segmented Tabs */}
+                      <div className="grid grid-cols-3 gap-1 p-2 bg-slate-950/40 border-b border-slate-800 text-xs">
+                        <button
+                          type="button"
+                          onClick={() => setActiveTab("sovereign")}
+                          className={`py-1.5 px-2 rounded-lg font-semibold transition cursor-pointer text-center truncate ${
+                            activeTab === "sovereign"
+                              ? "bg-slate-800 text-cyan-300 border border-slate-700 shadow-xs"
+                              : "text-slate-400 hover:text-slate-200"
+                          }`}
+                        >
+                          ⚡ Sovereign 6
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setActiveTab("dpi")}
+                          className={`py-1.5 px-2 rounded-lg font-semibold transition cursor-pointer text-center truncate ${
+                            activeTab === "dpi"
+                              ? "bg-slate-800 text-cyan-300 border border-slate-700 shadow-xs"
+                              : "text-slate-400 hover:text-slate-200"
+                          }`}
+                        >
+                          🇮🇳 RBI DPI (2025)
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setActiveTab("adapters")}
+                          className={`py-1.5 px-2 rounded-lg font-semibold transition cursor-pointer text-center truncate ${
+                            activeTab === "adapters"
+                              ? "bg-slate-800 text-cyan-300 border border-slate-700 shadow-xs"
+                              : "text-slate-400 hover:text-slate-200"
+                          }`}
+                        >
+                          ⚙️ Adapters
+                        </button>
+                      </div>
 
-                    <button
-                      onClick={() => { setShowLiquiditySwarmModal(true); setShowSovereignDropdown(false); }}
-                      className="w-full text-left px-3.5 py-2 hover:bg-slate-800 flex items-start gap-2.5 transition"
-                    >
-                      <span className="text-base">⚡</span>
-                      <div>
-                        <div className="text-xs font-bold text-white">2. AI Liquidity Swarm & Tarjan LSM</div>
-                        <div className="text-[11px] text-slate-400">100ms gridlock resolver with ₹0 cash + G-Sec repo</div>
+                      {/* Items List */}
+                      <div className="p-2 max-h-[380px] overflow-y-auto space-y-1">
+                        {currentTabItems.map((item) => (
+                          <button
+                            key={item.id}
+                            type="button"
+                            onClick={() => {
+                              item.action();
+                              setShowServicesMenu(false);
+                            }}
+                            className="w-full flex items-center justify-between p-2 rounded-xl hover:bg-slate-800/90 transition text-left cursor-pointer group"
+                          >
+                            <div className="flex items-center gap-2.5 min-w-0">
+                              <span className="w-7 h-7 rounded-lg bg-slate-800 border border-slate-700/80 flex items-center justify-center text-sm shrink-0 group-hover:scale-105 transition-transform">
+                                {item.icon}
+                              </span>
+                              <div className="min-w-0">
+                                <div className="text-xs font-semibold text-slate-200 group-hover:text-cyan-300 transition-colors truncate">
+                                  {item.name}
+                                </div>
+                                <div className="text-[10px] text-slate-400 truncate">
+                                  {item.desc}
+                                </div>
+                              </div>
+                            </div>
+                            <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-slate-800 border border-slate-700 text-slate-300 shrink-0 ml-2">
+                              {item.tag}
+                            </span>
+                          </button>
+                        ))}
                       </div>
-                    </button>
-
-                    <button
-                      onClick={() => { setShowDeepfakeModal(true); setShowSovereignDropdown(false); }}
-                      className="w-full text-left px-3.5 py-2 hover:bg-slate-800 flex items-start gap-2.5 transition"
-                    >
-                      <span className="text-base">🧬</span>
-                      <div>
-                        <div className="text-xs font-bold text-white">3. AI Deepfake & 365nm Optical Forensics</div>
-                        <div className="text-[11px] text-slate-400">Acoustic throat tremor + Fourier kerning radar</div>
-                      </div>
-                    </button>
-
-                    <button
-                      onClick={() => { setShowCbdcSplitterModal(true); setShowSovereignDropdown(false); }}
-                      className="w-full text-left px-3.5 py-2 hover:bg-slate-800 flex items-start gap-2.5 transition"
-                    >
-                      <span className="text-base">💎</span>
-                      <div>
-                        <div className="text-xs font-bold text-white">4. Programmable e-Rupee & Tax Splitter</div>
-                        <div className="text-[11px] text-slate-400">18% GSTN + 1% TDS auto-split + Geofence escrow</div>
-                      </div>
-                    </button>
-
-                    <button
-                      onClick={() => { setShowCrossBorderCorridorModal(true); setShowSovereignDropdown(false); }}
-                      className="w-full text-left px-3.5 py-2 hover:bg-slate-800 flex items-start gap-2.5 transition"
-                    >
-                      <span className="text-base">🌐</span>
-                      <div>
-                        <div className="text-xs font-bold text-white">5. De-Dollarized Cross-Border DvP</div>
-                        <div className="text-[11px] text-slate-400">INR-AED / INR-SGD non-USD + sub-50ms sanctions</div>
-                      </div>
-                    </button>
-
-                    <button
-                      onClick={() => { setShowDeveloperSdkModal(true); setShowSovereignDropdown(false); }}
-                      className="w-full text-left px-3.5 py-2 hover:bg-slate-800 flex items-start gap-2.5 transition"
-                    >
-                      <span className="text-base">🛠️</span>
-                      <div>
-                        <div className="text-xs font-bold text-white">6. Sovereign Developer SDK & APIs</div>
-                        <div className="text-[11px] text-slate-400">@misdesc/sdk in 3 lines of code + API keys</div>
-                      </div>
-                    </button>
-                  </div>
+                    </>
+                  )}
                 </div>
               )}
             </div>
+          </nav>
 
-            {/* Indian DPI & RBI Innovation Rail Menu */}
-            <div className="relative" ref={dpiDropdownRef}>
-              <button
-                type="button"
-                onClick={() => setShowDpiDropdown(!showDpiDropdown)}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-gradient-to-r from-emerald-600 via-teal-600 to-blue-600 hover:from-emerald-500 hover:to-blue-500 text-white text-xs font-black tracking-wide transition-all shadow-md shadow-emerald-950/50 cursor-pointer"
-                title="6 RBI & DPI Sovereign Banking Breakthroughs"
-              >
-                <span>🏛️ RBI & DPI Rail</span>
-                <span className="text-[10px] bg-black/40 px-1.5 py-0.5 rounded font-mono">2025</span>
-              </button>
-
-              {showDpiDropdown && (
-                <div className="absolute right-0 mt-2 w-84 bg-slate-900 border border-emerald-500/50 rounded-xl shadow-2xl py-2 z-50 text-slate-200">
-                  <div className="px-3.5 py-2 border-b border-slate-800 flex items-center justify-between">
-                    <span className="text-[11px] font-bold text-emerald-400 uppercase tracking-wider">
-                      RBI & NPCI Sovereign DPI Stack
-                    </span>
-                    <span className="text-[10px] bg-emerald-950 text-emerald-300 border border-emerald-500/40 px-2 py-0.5 rounded-full font-mono">
-                      Dec 2024 / 2025
-                    </span>
-                  </div>
-
-                  <div className="py-1">
-                    <button
-                      onClick={() => { setShowMuleHunterModal(true); setShowDpiDropdown(false); }}
-                      className="w-full text-left px-3.5 py-2 hover:bg-slate-800 flex items-start gap-2.5 transition cursor-pointer"
-                    >
-                      <span className="text-base">🛡️</span>
-                      <div>
-                        <div className="text-xs font-bold text-white">1. MuleHunter.AI Graph Radar</div>
-                        <div className="text-[11px] text-slate-400">RBIH mule account interception & 24h freeze</div>
-                      </div>
-                    </button>
-
-                    <button
-                      onClick={() => { setShowHourlyClearingModal(true); setShowDpiDropdown(false); }}
-                      className="w-full text-left px-3.5 py-2 hover:bg-slate-800 flex items-start gap-2.5 transition cursor-pointer"
-                    >
-                      <span className="text-base">⏱️</span>
-                      <div>
-                        <div className="text-xs font-bold text-white">2. Hourly T+0 Realization Clock</div>
-                        <div className="text-[11px] text-slate-400">RBI 10 AM-7 PM hourly batches + 60m credit SLA</div>
-                      </div>
-                    </button>
-
-                    <button
-                      onClick={() => { setShowNeslModal(true); setShowDpiDropdown(false); }}
-                      className="w-full text-left px-3.5 py-2 hover:bg-slate-800 flex items-start gap-2.5 transition cursor-pointer"
-                    >
-                      <span className="text-base">⚖️</span>
-                      <div>
-                        <div className="text-xs font-bold text-white">3. NeSL DDE & Section 138 Notice</div>
-                        <div className="text-[11px] text-slate-400">SHCIL e-Stamp + Sec 65B court certificate</div>
-                      </div>
-                    </button>
-
-                    <button
-                      onClick={() => { setShowUliModal(true); setShowDpiDropdown(false); }}
-                      className="w-full text-left px-3.5 py-2 hover:bg-slate-800 flex items-start gap-2.5 transition cursor-pointer"
-                    >
-                      <span className="text-base">💳</span>
-                      <div>
-                        <div className="text-xs font-bold text-white">4. ULI & Account Aggregator JIT-OD</div>
-                        <div className="text-[11px] text-slate-400">72h credit line on GST receivables (0% bounce)</div>
-                      </div>
-                    </button>
-
-                    <button
-                      onClick={() => { setShowBhashiniModal(true); setShowDpiDropdown(false); }}
-                      className="w-full text-left px-3.5 py-2 hover:bg-slate-800 flex items-start gap-2.5 transition cursor-pointer"
-                    >
-                      <span className="text-base">🗣️</span>
-                      <div>
-                        <div className="text-xs font-bold text-white">5. Bhashini 22-Language Voice AI</div>
-                        <div className="text-[11px] text-slate-400">Speech-to-Intent in Hindi, Gujarati, Tamil etc.</div>
-                      </div>
-                    </button>
-
-                    <button
-                      onClick={() => { setShowSrvaModal(true); setShowDpiDropdown(false); }}
-                      className="w-full text-left px-3.5 py-2 hover:bg-slate-800 flex items-start gap-2.5 transition cursor-pointer"
-                    >
-                      <span className="text-base">🌐</span>
-                      <div>
-                        <div className="text-xs font-bold text-white">6. Special Rupee Vostro (SRVA) DvP</div>
-                        <div className="text-[11px] text-slate-400">Direct AED/SGD/SAR DvP without SWIFT markups</div>
-                      </div>
-                    </button>
-                  </div>
-                </div>
-              )}
+          {/* 3. Right: Live Pulse, Role Switcher & User Profile */}
+          <div className="flex items-center gap-2.5 text-xs">
+            {/* Live Indicator */}
+            <div className="hidden lg:flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-slate-800/80 border border-slate-700 text-slate-300 font-mono text-[11px]">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+              <span>e-Kuber Live</span>
             </div>
 
-            {/* Role Switcher Dropdown */}
-
-            <div className="relative" ref={dropdownRef}>
+            {/* Role Switcher */}
+            <div className="relative" ref={roleDropdownRef}>
               <button
                 type="button"
-                onClick={() => setShowRoleDropdown(!showRoleDropdown)}
-                className="bg-slate-800 hover:bg-slate-750 border border-slate-700 text-slate-200 px-2.5 py-1.5 rounded-lg text-xs font-medium transition-colors flex items-center gap-1.5 cursor-pointer"
-                title="Switch active role"
+                onClick={() => {
+                  setShowRoleDropdown(!showRoleDropdown);
+                  setShowServicesMenu(false);
+                }}
+                className="flex items-center gap-2 px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-750 border border-slate-700 text-slate-200 transition font-medium cursor-pointer"
+                title="Switch Active Clearing Persona"
               >
-                <span>Switch Role</span>
-                <span className="text-[10px] text-slate-400 font-mono">▼</span>
+                <span className="w-1.5 h-1.5 rounded-full bg-cyan-400" />
+                <span className="truncate max-w-[120px] font-semibold text-xs">
+                  {currentRoleItem?.label || user?.role || "Switch Role"}
+                </span>
+                <span className={`text-[9px] text-slate-400 transition-transform ${showRoleDropdown ? "rotate-180" : ""}`}>
+                  ▼
+                </span>
               </button>
 
               {showRoleDropdown && (
-                <div className="absolute right-0 mt-2 w-64 bg-slate-900 border border-slate-700 rounded-xl shadow-2xl p-1.5 z-50 animate-in fade-in duration-150">
-                  <div className="text-[10px] font-semibold uppercase tracking-wider text-slate-400 px-2.5 py-1 border-b border-slate-800 mb-1">
-                    Select Active Role
+                <div className="absolute right-0 mt-2 w-72 bg-slate-900 border border-slate-700/80 rounded-2xl shadow-2xl p-2 z-50 text-slate-200 animate-in fade-in duration-150">
+                  <div className="text-[10px] font-bold uppercase tracking-wider text-slate-400 px-2 py-1 border-b border-slate-800 mb-1">
+                    Select Active Persona
                   </div>
-                  {DEMO_ROLES.map((roleItem) => {
-                    const isCurrent = user?.email === roleItem.email;
-                    return (
-                      <button
-                        key={roleItem.email}
-                        type="button"
-                        onClick={() => handleQuickSwitch(roleItem)}
-                        disabled={switching}
-                        className={`w-full text-left px-2.5 py-2 rounded-lg text-xs transition-colors flex items-start gap-2 cursor-pointer ${isCurrent
-                            ? "bg-brand-600/20 text-brand-300 font-semibold border border-brand-500/30"
-                            : "text-slate-300 hover:bg-slate-800 hover:text-white"
+                  <div className="max-h-[320px] overflow-y-auto space-y-0.5">
+                    {DEMO_ROLES.map((roleItem) => {
+                      const isCurrent = user?.email === roleItem.email;
+                      return (
+                        <button
+                          key={roleItem.email}
+                          type="button"
+                          onClick={() => handleQuickSwitch(roleItem)}
+                          disabled={switching}
+                          className={`w-full text-left px-2.5 py-1.5 rounded-xl text-xs transition flex items-center justify-between cursor-pointer ${
+                            isCurrent
+                              ? "bg-cyan-950 text-cyan-300 font-semibold border border-cyan-800/80"
+                              : "text-slate-300 hover:bg-slate-800 hover:text-white"
                           }`}
-                      >
-                        <span className={`w-1.5 h-1.5 rounded-full mt-1.5 shrink-0 ${isCurrent ? "bg-brand-400" : "bg-slate-600"}`}></span>
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-center justify-between">
-                            <span className="truncate">{roleItem.label}</span>
-                            {isCurrent && (
-                              <span className="text-[10px] text-emerald-400 font-mono">Active</span>
-                            )}
+                        >
+                          <div className="min-w-0 pr-2">
+                            <div className="truncate font-semibold">{roleItem.label}</div>
+                            <div className="text-[10px] text-slate-400 truncate">{roleItem.sublabel}</div>
                           </div>
-                          <div className="text-[10px] text-slate-400 truncate">{roleItem.sublabel}</div>
-                        </div>
-                      </button>
-                    );
-                  })}
+                          {isCurrent && (
+                            <span className="text-[9px] bg-emerald-950 text-emerald-400 px-1.5 py-0.2 rounded font-mono shrink-0">
+                              Active
+                            </span>
+                          )}
+                        </button>
+                      );
+                    })}
+                  </div>
                 </div>
               )}
             </div>
 
-            {/* Current User Card */}
-            <div className="hidden md:flex items-center gap-2 pl-2 border-l border-slate-800 text-xs">
-              <div className="text-right">
-                <div className="font-semibold text-slate-200 leading-none">{user.name}</div>
-                <div className="text-[10px] text-slate-400 mt-0.5">{user.bank?.name}</div>
+            {/* Profile Avatar & Sign Out */}
+            {user && (
+              <div className="flex items-center gap-2 pl-2 border-l border-slate-800">
+                <div
+                  className="w-7 h-7 rounded-lg bg-gradient-to-tr from-cyan-600 to-indigo-600 flex items-center justify-center font-bold text-white text-xs font-mono shadow-xs"
+                  title={user.email}
+                >
+                  {user.name?.charAt(0) || "U"}
+                </div>
+                <button
+                  type="button"
+                  onClick={handleLogout}
+                  className="px-2 py-1 rounded-lg bg-slate-800 hover:bg-rose-950 hover:text-rose-300 hover:border-rose-800 text-slate-300 text-xs font-medium border border-slate-700 transition cursor-pointer"
+                  title="Sign out of session"
+                >
+                  Logout
+                </button>
               </div>
-              <span className="uppercase text-[10px] font-mono font-bold bg-slate-800 border border-slate-700 text-brand-300 px-2 py-0.5 rounded">
-                {user.role}
-              </span>
-            </div>
+            )}
 
-            {/* Logout */}
+            {/* Mobile Hamburger Button */}
             <button
               type="button"
-              onClick={handleLogout}
-              className="bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white px-2.5 py-1.5 rounded-lg text-xs font-medium border border-slate-700 transition-colors cursor-pointer"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="md:hidden p-1.5 rounded-lg bg-slate-800 border border-slate-700 text-slate-300 hover:text-white cursor-pointer"
+              title="Toggle mobile menu"
             >
-              Sign out
+              ☰
+            </button>
+          </div>
+        </div>
+
+        {/* Mobile Dropdown Menu */}
+        {mobileMenuOpen && (
+          <div className="md:hidden border-t border-slate-800 bg-slate-900 px-4 py-3 space-y-2 text-xs">
+            <Link
+              to={clearingDeskPath}
+              onClick={() => setMobileMenuOpen(false)}
+              className="block py-1.5 text-slate-200 hover:text-cyan-300 font-semibold"
+            >
+              📋 Operations Desk
+            </Link>
+            <Link
+              to="/reports"
+              onClick={() => setMobileMenuOpen(false)}
+              className="block py-1.5 text-slate-200 hover:text-cyan-300 font-semibold"
+            >
+              📊 MIS Reports
+            </Link>
+            <button
+              type="button"
+              onClick={() => {
+                setMobileMenuOpen(false);
+                setShowServicesMenu(true);
+              }}
+              className="w-full text-left py-1.5 text-cyan-300 font-semibold"
+            >
+              ⚡ Grid Services & Rails (Open Launcher)
             </button>
           </div>
         )}
-      </nav>
+      </header>
 
-      {showPpsModal && (
-        <PositivePayRegistryModal onClose={() => setShowPpsModal(false)} />
-      )}
+      {/* Keep all Institutional Modals mounted & accessible */}
+      {showPpsModal && <PositivePayRegistryModal onClose={() => setShowPpsModal(false)} />}
+      {showCollateralModal && <DynamicCollateralManagementModal onClose={() => setShowCollateralModal(false)} />}
+      {showCimsModal && <RbiCimsRegulatoryModal onClose={() => setShowCimsModal(false)} />}
+      {showCbsModal && <CoreBankingAdapterModal onClose={() => setShowCbsModal(false)} />}
+      {showWhatsAppModal && <WhatsAppBankingModal onClose={() => setShowWhatsAppModal(false)} />}
+      {showVoiceModal && <RegionalVoiceBankingModal onClose={() => setShowVoiceModal(false)} />}
+      {showRadarModal && <GeospatialTransitRadarModal onClose={() => setShowRadarModal(false)} />}
+      {showSelfHealingModal && <AutonomousSelfHealingModal onClose={() => setShowSelfHealingModal(false)} />}
 
-      {showCollateralModal && (
-        <DynamicCollateralManagementModal onClose={() => setShowCollateralModal(false)} />
-      )}
+      {/* Sovereign 6 Pillars Modals */}
+      {showAcousticModal && <AcousticMeshOfflineModal isOpen={showAcousticModal} onClose={() => setShowAcousticModal(false)} />}
+      {showLiquiditySwarmModal && <AutonomousLiquiditySwarmModal isOpen={showLiquiditySwarmModal} onClose={() => setShowLiquiditySwarmModal(false)} />}
+      {showDeepfakeModal && <DeepfakeForensicLabModal isOpen={showDeepfakeModal} onClose={() => setShowDeepfakeModal(false)} />}
+      {showCbdcSplitterModal && <ProgrammableCbdcSplitterModal isOpen={showCbdcSplitterModal} onClose={() => setShowCbdcSplitterModal(false)} />}
+      {showCrossBorderCorridorModal && <CrossBorderCorridorModal isOpen={showCrossBorderCorridorModal} onClose={() => setShowCrossBorderCorridorModal(false)} />}
+      {showDeveloperSdkModal && <DeveloperSdkPortalModal isOpen={showDeveloperSdkModal} onClose={() => setShowDeveloperSdkModal(false)} />}
 
-      {showCimsModal && (
-        <RbiCimsRegulatoryModal onClose={() => setShowCimsModal(false)} />
-      )}
-
-      {showCbsModal && (
-        <CoreBankingAdapterModal onClose={() => setShowCbsModal(false)} />
-      )}
-
-      {showWhatsAppModal && (
-        <WhatsAppBankingModal onClose={() => setShowWhatsAppModal(false)} />
-      )}
-
-      {showVoiceModal && (
-        <RegionalVoiceBankingModal onClose={() => setShowVoiceModal(false)} />
-      )}
-
-      {showRadarModal && (
-        <GeospatialTransitRadarModal onClose={() => setShowRadarModal(false)} />
-      )}
-
-      {showSelfHealingModal && (
-        <AutonomousSelfHealingModal onClose={() => setShowSelfHealingModal(false)} />
-      )}
-
-      {showAcousticModal && (
-        <AcousticMeshOfflineModal
-          isOpen={showAcousticModal}
-          onClose={() => setShowAcousticModal(false)}
-        />
-      )}
-
-      {showLiquiditySwarmModal && (
-        <AutonomousLiquiditySwarmModal
-          isOpen={showLiquiditySwarmModal}
-          onClose={() => setShowLiquiditySwarmModal(false)}
-        />
-      )}
-
-      {showDeepfakeModal && (
-        <DeepfakeForensicLabModal
-          isOpen={showDeepfakeModal}
-          onClose={() => setShowDeepfakeModal(false)}
-        />
-      )}
-
-      {showCbdcSplitterModal && (
-        <ProgrammableCbdcSplitterModal
-          isOpen={showCbdcSplitterModal}
-          onClose={() => setShowCbdcSplitterModal(false)}
-        />
-      )}
-
-      {showCrossBorderCorridorModal && (
-        <CrossBorderCorridorModal
-          isOpen={showCrossBorderCorridorModal}
-          onClose={() => setShowCrossBorderCorridorModal(false)}
-        />
-      )}
-
-      {showDeveloperSdkModal && (
-        <DeveloperSdkPortalModal
-          isOpen={showDeveloperSdkModal}
-          onClose={() => setShowDeveloperSdkModal(false)}
-        />
-      )}
-
+      {/* 2025 DPI Modals */}
       {showMuleHunterModal && <MuleHunterRadarModal onClose={() => setShowMuleHunterModal(false)} />}
       {showHourlyClearingModal && <HourlyContinuousClearingModal onClose={() => setShowHourlyClearingModal(false)} />}
       {showNeslModal && <NeslSection138Modal onClose={() => setShowNeslModal(false)} />}
@@ -756,4 +742,3 @@ export default function Navbar() {
     </>
   );
 }
-

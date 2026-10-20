@@ -163,14 +163,14 @@ export default function PKICertificatesPanel() {
       </div>
 
       {/* Tabs */}
-      <div className="flex items-center gap-3 border-b border-slate-200 text-xs font-semibold">
+      <div className="flex items-center gap-3 border-b border-slate-800 text-xs font-semibold">
         <button
           type="button"
           onClick={() => setActiveTab("certificates")}
           className={`pb-2 border-b-2 transition-all cursor-pointer ${
             activeTab === "certificates"
-              ? "border-purple-600 text-purple-800 font-bold"
-              : "border-transparent text-slate-500 hover:text-slate-800"
+              ? "border-cyan-400 text-cyan-300 font-bold"
+              : "border-transparent text-slate-400 hover:text-slate-200"
           }`}
         >
           Registered X.509 Certificates ({certificates.length})
@@ -180,8 +180,8 @@ export default function PKICertificatesPanel() {
           onClick={() => setActiveTab("pqc")}
           className={`pb-2 border-b-2 transition-all cursor-pointer ${
             activeTab === "pqc"
-              ? "border-purple-600 text-purple-800 font-bold"
-              : "border-transparent text-slate-500 hover:text-slate-800"
+              ? "border-cyan-400 text-cyan-300 font-bold"
+              : "border-transparent text-slate-400 hover:text-slate-200"
           }`}
         >
           Lattice Vector Inspector & Standards Compliance
@@ -192,7 +192,7 @@ export default function PKICertificatesPanel() {
       {activeTab === "certificates" && (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           {loading ? (
-            <div className="col-span-2 p-8 text-center text-slate-500 text-xs font-semibold">
+            <div className="col-span-2 p-8 text-center text-slate-400 text-xs font-semibold">
               Loading certificate registry...
             </div>
           ) : certificates.length === 0 ? (
@@ -207,28 +207,28 @@ export default function PKICertificatesPanel() {
               return (
                 <div
                   key={cert.id}
-                  className="bg-white rounded-2xl border border-slate-200/80 p-5 shadow-xs flex flex-col justify-between space-y-4 hover:border-purple-300 transition-all"
+                  className="bg-slate-900/90 rounded-2xl border border-slate-800 p-5 shadow-xl flex flex-col justify-between space-y-4 hover:border-cyan-500/50 transition-all backdrop-blur-md"
                 >
                   <div className="space-y-3">
                     <div className="flex items-start justify-between gap-2">
                       <div>
-                        <div className="text-[10px] font-bold text-purple-700 uppercase tracking-wider font-mono">
+                        <div className="text-[10px] font-bold text-cyan-400 uppercase tracking-wider font-mono">
                           {cert.bank?.code} · {cert.bank?.name}
                         </div>
-                        <h3 className="text-sm font-bold text-slate-900 mt-0.5 truncate max-w-xs" title={cert.subject}>
+                        <h3 className="text-sm font-bold text-white mt-0.5 truncate max-w-xs" title={cert.subject}>
                           {cert.subject}
                         </h3>
                       </div>
 
                       <div className="flex items-center gap-1.5">
-                        <span className="px-2 py-0.5 rounded-full text-[9px] font-bold bg-purple-100 text-purple-800 border border-purple-200">
+                        <span className="px-2 py-0.5 rounded-full text-[9px] font-bold bg-purple-950/80 text-purple-300 border border-purple-800/80">
                           HYBRID PQC READY
                         </span>
                         <span
                           className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
                             cert.status === "ACTIVE" && !isExpired
-                              ? "bg-emerald-50 text-emerald-700 border border-emerald-200"
-                              : "bg-rose-50 text-rose-700 border border-rose-200"
+                              ? "bg-emerald-950/60 text-emerald-300 border border-emerald-800/80"
+                              : "bg-rose-950/60 text-rose-300 border border-rose-800/80"
                           }`}
                         >
                           {cert.status}
@@ -236,7 +236,7 @@ export default function PKICertificatesPanel() {
                       </div>
                     </div>
 
-                    <div className="bg-slate-50 p-3 rounded-xl border border-slate-100 text-[11px] font-mono space-y-1.5">
+                    <div className="bg-slate-950/70 p-3 rounded-xl border border-slate-800 text-[11px] font-mono space-y-1.5 text-slate-300">
                       <div className="flex justify-between">
                         <span className="text-slate-400">Serial #:</span>
                         <span className="text-slate-800 font-bold">{cert.serialNumber}</span>
