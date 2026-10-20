@@ -68,9 +68,32 @@ async function getChequeDossier(req, res) {
   }
 }
 
+async function analyzeVoiceDeepfake(req, res) {
+  try {
+    const result = forensicService.analyzeVoiceDeepfakeLiveness(req.body);
+    return res.json({ success: true, result });
+  } catch (err) {
+    console.error("Voice deepfake analysis failed:", err);
+    return res.status(500).json({ error: "Failed to analyze voice liveness" });
+  }
+}
+
+async function analyzeMicroKerning(req, res) {
+  try {
+    const result = forensicService.analyzeMicroKerningFourier(req.body);
+    return res.json({ success: true, result });
+  } catch (err) {
+    console.error("Micro-kerning analysis failed:", err);
+    return res.status(500).json({ error: "Failed to analyze micro-kerning" });
+  }
+}
+
 module.exports = {
   analyzeSignature,
   analyzeUvSpectral,
   analyzePayeeIntegrity,
   getChequeDossier,
+  analyzeVoiceDeepfake,
+  analyzeMicroKerning,
 };
+

@@ -7,6 +7,23 @@ import PositivePayRegistryModal from "./PositivePayRegistryModal";
 import DynamicCollateralManagementModal from "./DynamicCollateralManagementModal";
 import RbiCimsRegulatoryModal from "./RbiCimsRegulatoryModal";
 import CoreBankingAdapterModal from "./CoreBankingAdapterModal";
+import WhatsAppBankingModal from "./WhatsAppBankingModal";
+import RegionalVoiceBankingModal from "./RegionalVoiceBankingModal";
+import GeospatialTransitRadarModal from "./GeospatialTransitRadarModal";
+import AutonomousSelfHealingModal from "./AutonomousSelfHealingModal";
+import AcousticMeshOfflineModal from "./AcousticMeshOfflineModal";
+import AutonomousLiquiditySwarmModal from "./AutonomousLiquiditySwarmModal";
+import DeepfakeForensicLabModal from "./DeepfakeForensicLabModal";
+import ProgrammableCbdcSplitterModal from "./ProgrammableCbdcSplitterModal";
+import CrossBorderCorridorModal from "./CrossBorderCorridorModal";
+import DeveloperSdkPortalModal from "./DeveloperSdkPortalModal";
+import MuleHunterRadarModal from "./MuleHunterRadarModal";
+import HourlyContinuousClearingModal from "./HourlyContinuousClearingModal";
+import NeslSection138Modal from "./NeslSection138Modal";
+import UliAccountAggregatorModal from "./UliAccountAggregatorModal";
+import BhashiniVoiceBankingModal from "./BhashiniVoiceBankingModal";
+import SrvaVostroSettlementModal from "./SrvaVostroSettlementModal";
+
 
 const DEMO_ROLES = [
   {
@@ -77,9 +94,30 @@ export default function Navbar() {
   const [showCollateralModal, setShowCollateralModal] = useState(false);
   const [showCimsModal, setShowCimsModal] = useState(false);
   const [showCbsModal, setShowCbsModal] = useState(false);
+  const [showWhatsAppModal, setShowWhatsAppModal] = useState(false);
+  const [showVoiceModal, setShowVoiceModal] = useState(false);
+  const [showRadarModal, setShowRadarModal] = useState(false);
+  const [showSelfHealingModal, setShowSelfHealingModal] = useState(false);
+  const [showAcousticModal, setShowAcousticModal] = useState(false);
+  const [showLiquiditySwarmModal, setShowLiquiditySwarmModal] = useState(false);
+  const [showDeepfakeModal, setShowDeepfakeModal] = useState(false);
+  const [showCbdcSplitterModal, setShowCbdcSplitterModal] = useState(false);
+  const [showCrossBorderCorridorModal, setShowCrossBorderCorridorModal] = useState(false);
+  const [showDeveloperSdkModal, setShowDeveloperSdkModal] = useState(false);
+  const [showSovereignDropdown, setShowSovereignDropdown] = useState(false);
+  const [showMuleHunterModal, setShowMuleHunterModal] = useState(false);
+  const [showHourlyClearingModal, setShowHourlyClearingModal] = useState(false);
+  const [showNeslModal, setShowNeslModal] = useState(false);
+  const [showUliModal, setShowUliModal] = useState(false);
+  const [showBhashiniModal, setShowBhashiniModal] = useState(false);
+  const [showSrvaModal, setShowSrvaModal] = useState(false);
+  const [showDpiDropdown, setShowDpiDropdown] = useState(false);
   const [showRoleDropdown, setShowRoleDropdown] = useState(false);
   const [switching, setSwitching] = useState(false);
   const dropdownRef = useRef(null);
+  const sovereignDropdownRef = useRef(null);
+  const dpiDropdownRef = useRef(null);
+
 
   useEffect(() => {
     async function checkHealth() {
@@ -102,10 +140,17 @@ export default function Navbar() {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
         setShowRoleDropdown(false);
       }
+      if (sovereignDropdownRef.current && !sovereignDropdownRef.current.contains(event.target)) {
+        setShowSovereignDropdown(false);
+      }
+      if (dpiDropdownRef.current && !dpiDropdownRef.current.contains(event.target)) {
+        setShowDpiDropdown(false);
+      }
     }
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+
 
   async function handleQuickSwitch(item) {
     if (user?.email === item.email) {
@@ -314,6 +359,46 @@ export default function Navbar() {
               <span>🌐 CBS</span>
             </button>
 
+            {/* WhatsApp Banking & SMS Multi-Channel Suite (100% Free) */}
+            <button
+              type="button"
+              onClick={() => setShowWhatsAppModal(true)}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition-all shadow-md shadow-emerald-950/40 cursor-pointer"
+              title="Interactive WhatsApp Banking Bot & DLT SMS Suite (100% Free)"
+            >
+              <span>💬 WhatsApp & SMS</span>
+            </button>
+
+            {/* Regional AI Voice Banking Assistant */}
+            <button
+              type="button"
+              onClick={() => setShowVoiceModal(true)}
+              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold transition-all shadow-md shadow-indigo-950/40 cursor-pointer"
+              title="Regional AI Voice Banking Assistant (Gujarati, Hindi, English)"
+            >
+              <span>🎙️ Voice AI</span>
+            </button>
+
+            {/* Geospatial Branch Radar & Armed CIT Escort */}
+            <button
+              type="button"
+              onClick={() => setShowRadarModal(true)}
+              className="hidden lg:flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-emerald-950/80 border border-emerald-700/80 text-emerald-300 hover:text-white hover:bg-emerald-900 text-xs font-bold transition-colors cursor-pointer"
+              title="Geospatial Branch Radar & Armed CIT Transit Telemetry"
+            >
+              <span>🗺️ CIT Radar</span>
+            </button>
+
+            {/* Autonomous AI SRE Self-Healing Engine */}
+            <button
+              type="button"
+              onClick={() => setShowSelfHealingModal(true)}
+              className="hidden xl:flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-cyan-950/80 border border-cyan-700/80 text-cyan-300 hover:text-white hover:bg-cyan-900 text-xs font-bold transition-colors cursor-pointer"
+              title="Autonomous AI SRE Self-Healing Engine & Incident Auto-Remediation"
+            >
+              <span>🤖 AIOps</span>
+            </button>
+
             {/* RBAC Portal Link for Managers and Admins */}
             {canManageRBAC && (
               <Link
@@ -329,7 +414,196 @@ export default function Navbar() {
               </Link>
             )}
 
+            {/* Sovereign 6 Pillars ($1T FinTech Innovations Menu) */}
+            <div className="relative" ref={sovereignDropdownRef}>
+              <button
+                type="button"
+                onClick={() => setShowSovereignDropdown(!showSovereignDropdown)}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-gradient-to-r from-amber-600 via-purple-600 to-cyan-600 hover:from-amber-500 hover:to-cyan-500 text-white text-xs font-black tracking-wide transition-all shadow-md shadow-cyan-950/50 cursor-pointer"
+                title="6 World-First Sovereign FinTech Breakthroughs ($1T - $50T Scale)"
+              >
+                <span>⚡ Sovereign 6 Pillars</span>
+                <span className="text-[10px] bg-black/40 px-1.5 py-0.5 rounded font-mono">NEW</span>
+              </button>
+
+              {showSovereignDropdown && (
+                <div className="absolute right-0 mt-2 w-80 bg-slate-900 border border-cyan-500/50 rounded-xl shadow-2xl py-2 z-50 text-slate-200">
+                  <div className="px-3.5 py-2 border-b border-slate-800 flex items-center justify-between">
+                    <span className="text-[11px] font-bold text-cyan-400 uppercase tracking-wider">
+                      Sovereign FinTech Engines
+                    </span>
+                    <span className="text-[10px] bg-cyan-950 text-cyan-300 border border-cyan-500/40 px-2 py-0.5 rounded-full font-mono">
+                      $1T Scale
+                    </span>
+                  </div>
+
+                  <div className="py-1">
+                    <button
+                      onClick={() => { setShowAcousticModal(true); setShowSovereignDropdown(false); }}
+                      className="w-full text-left px-3.5 py-2 hover:bg-slate-800 flex items-start gap-2.5 transition"
+                    >
+                      <span className="text-base">📡</span>
+                      <div>
+                        <div className="text-xs font-bold text-white">1. Acoustic Zero-Internet Offline Pay</div>
+                        <div className="text-[11px] text-slate-400">18-20 kHz ultrasonic FSK + PQC Dilithium</div>
+                      </div>
+                    </button>
+
+                    <button
+                      onClick={() => { setShowLiquiditySwarmModal(true); setShowSovereignDropdown(false); }}
+                      className="w-full text-left px-3.5 py-2 hover:bg-slate-800 flex items-start gap-2.5 transition"
+                    >
+                      <span className="text-base">⚡</span>
+                      <div>
+                        <div className="text-xs font-bold text-white">2. AI Liquidity Swarm & Tarjan LSM</div>
+                        <div className="text-[11px] text-slate-400">100ms gridlock resolver with ₹0 cash + G-Sec repo</div>
+                      </div>
+                    </button>
+
+                    <button
+                      onClick={() => { setShowDeepfakeModal(true); setShowSovereignDropdown(false); }}
+                      className="w-full text-left px-3.5 py-2 hover:bg-slate-800 flex items-start gap-2.5 transition"
+                    >
+                      <span className="text-base">🧬</span>
+                      <div>
+                        <div className="text-xs font-bold text-white">3. AI Deepfake & 365nm Optical Forensics</div>
+                        <div className="text-[11px] text-slate-400">Acoustic throat tremor + Fourier kerning radar</div>
+                      </div>
+                    </button>
+
+                    <button
+                      onClick={() => { setShowCbdcSplitterModal(true); setShowSovereignDropdown(false); }}
+                      className="w-full text-left px-3.5 py-2 hover:bg-slate-800 flex items-start gap-2.5 transition"
+                    >
+                      <span className="text-base">💎</span>
+                      <div>
+                        <div className="text-xs font-bold text-white">4. Programmable e-Rupee & Tax Splitter</div>
+                        <div className="text-[11px] text-slate-400">18% GSTN + 1% TDS auto-split + Geofence escrow</div>
+                      </div>
+                    </button>
+
+                    <button
+                      onClick={() => { setShowCrossBorderCorridorModal(true); setShowSovereignDropdown(false); }}
+                      className="w-full text-left px-3.5 py-2 hover:bg-slate-800 flex items-start gap-2.5 transition"
+                    >
+                      <span className="text-base">🌐</span>
+                      <div>
+                        <div className="text-xs font-bold text-white">5. De-Dollarized Cross-Border DvP</div>
+                        <div className="text-[11px] text-slate-400">INR-AED / INR-SGD non-USD + sub-50ms sanctions</div>
+                      </div>
+                    </button>
+
+                    <button
+                      onClick={() => { setShowDeveloperSdkModal(true); setShowSovereignDropdown(false); }}
+                      className="w-full text-left px-3.5 py-2 hover:bg-slate-800 flex items-start gap-2.5 transition"
+                    >
+                      <span className="text-base">🛠️</span>
+                      <div>
+                        <div className="text-xs font-bold text-white">6. Sovereign Developer SDK & APIs</div>
+                        <div className="text-[11px] text-slate-400">@misdesc/sdk in 3 lines of code + API keys</div>
+                      </div>
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Indian DPI & RBI Innovation Rail Menu */}
+            <div className="relative" ref={dpiDropdownRef}>
+              <button
+                type="button"
+                onClick={() => setShowDpiDropdown(!showDpiDropdown)}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-gradient-to-r from-emerald-600 via-teal-600 to-blue-600 hover:from-emerald-500 hover:to-blue-500 text-white text-xs font-black tracking-wide transition-all shadow-md shadow-emerald-950/50 cursor-pointer"
+                title="6 RBI & DPI Sovereign Banking Breakthroughs"
+              >
+                <span>🏛️ RBI & DPI Rail</span>
+                <span className="text-[10px] bg-black/40 px-1.5 py-0.5 rounded font-mono">2025</span>
+              </button>
+
+              {showDpiDropdown && (
+                <div className="absolute right-0 mt-2 w-84 bg-slate-900 border border-emerald-500/50 rounded-xl shadow-2xl py-2 z-50 text-slate-200">
+                  <div className="px-3.5 py-2 border-b border-slate-800 flex items-center justify-between">
+                    <span className="text-[11px] font-bold text-emerald-400 uppercase tracking-wider">
+                      RBI & NPCI Sovereign DPI Stack
+                    </span>
+                    <span className="text-[10px] bg-emerald-950 text-emerald-300 border border-emerald-500/40 px-2 py-0.5 rounded-full font-mono">
+                      Dec 2024 / 2025
+                    </span>
+                  </div>
+
+                  <div className="py-1">
+                    <button
+                      onClick={() => { setShowMuleHunterModal(true); setShowDpiDropdown(false); }}
+                      className="w-full text-left px-3.5 py-2 hover:bg-slate-800 flex items-start gap-2.5 transition cursor-pointer"
+                    >
+                      <span className="text-base">🛡️</span>
+                      <div>
+                        <div className="text-xs font-bold text-white">1. MuleHunter.AI Graph Radar</div>
+                        <div className="text-[11px] text-slate-400">RBIH mule account interception & 24h freeze</div>
+                      </div>
+                    </button>
+
+                    <button
+                      onClick={() => { setShowHourlyClearingModal(true); setShowDpiDropdown(false); }}
+                      className="w-full text-left px-3.5 py-2 hover:bg-slate-800 flex items-start gap-2.5 transition cursor-pointer"
+                    >
+                      <span className="text-base">⏱️</span>
+                      <div>
+                        <div className="text-xs font-bold text-white">2. Hourly T+0 Realization Clock</div>
+                        <div className="text-[11px] text-slate-400">RBI 10 AM-7 PM hourly batches + 60m credit SLA</div>
+                      </div>
+                    </button>
+
+                    <button
+                      onClick={() => { setShowNeslModal(true); setShowDpiDropdown(false); }}
+                      className="w-full text-left px-3.5 py-2 hover:bg-slate-800 flex items-start gap-2.5 transition cursor-pointer"
+                    >
+                      <span className="text-base">⚖️</span>
+                      <div>
+                        <div className="text-xs font-bold text-white">3. NeSL DDE & Section 138 Notice</div>
+                        <div className="text-[11px] text-slate-400">SHCIL e-Stamp + Sec 65B court certificate</div>
+                      </div>
+                    </button>
+
+                    <button
+                      onClick={() => { setShowUliModal(true); setShowDpiDropdown(false); }}
+                      className="w-full text-left px-3.5 py-2 hover:bg-slate-800 flex items-start gap-2.5 transition cursor-pointer"
+                    >
+                      <span className="text-base">💳</span>
+                      <div>
+                        <div className="text-xs font-bold text-white">4. ULI & Account Aggregator JIT-OD</div>
+                        <div className="text-[11px] text-slate-400">72h credit line on GST receivables (0% bounce)</div>
+                      </div>
+                    </button>
+
+                    <button
+                      onClick={() => { setShowBhashiniModal(true); setShowDpiDropdown(false); }}
+                      className="w-full text-left px-3.5 py-2 hover:bg-slate-800 flex items-start gap-2.5 transition cursor-pointer"
+                    >
+                      <span className="text-base">🗣️</span>
+                      <div>
+                        <div className="text-xs font-bold text-white">5. Bhashini 22-Language Voice AI</div>
+                        <div className="text-[11px] text-slate-400">Speech-to-Intent in Hindi, Gujarati, Tamil etc.</div>
+                      </div>
+                    </button>
+
+                    <button
+                      onClick={() => { setShowSrvaModal(true); setShowDpiDropdown(false); }}
+                      className="w-full text-left px-3.5 py-2 hover:bg-slate-800 flex items-start gap-2.5 transition cursor-pointer"
+                    >
+                      <span className="text-base">🌐</span>
+                      <div>
+                        <div className="text-xs font-bold text-white">6. Special Rupee Vostro (SRVA) DvP</div>
+                        <div className="text-[11px] text-slate-400">Direct AED/SGD/SAR DvP without SWIFT markups</div>
+                      </div>
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+
             {/* Role Switcher Dropdown */}
+
             <div className="relative" ref={dropdownRef}>
               <button
                 type="button"
@@ -414,6 +688,72 @@ export default function Navbar() {
       {showCbsModal && (
         <CoreBankingAdapterModal onClose={() => setShowCbsModal(false)} />
       )}
+
+      {showWhatsAppModal && (
+        <WhatsAppBankingModal onClose={() => setShowWhatsAppModal(false)} />
+      )}
+
+      {showVoiceModal && (
+        <RegionalVoiceBankingModal onClose={() => setShowVoiceModal(false)} />
+      )}
+
+      {showRadarModal && (
+        <GeospatialTransitRadarModal onClose={() => setShowRadarModal(false)} />
+      )}
+
+      {showSelfHealingModal && (
+        <AutonomousSelfHealingModal onClose={() => setShowSelfHealingModal(false)} />
+      )}
+
+      {showAcousticModal && (
+        <AcousticMeshOfflineModal
+          isOpen={showAcousticModal}
+          onClose={() => setShowAcousticModal(false)}
+        />
+      )}
+
+      {showLiquiditySwarmModal && (
+        <AutonomousLiquiditySwarmModal
+          isOpen={showLiquiditySwarmModal}
+          onClose={() => setShowLiquiditySwarmModal(false)}
+        />
+      )}
+
+      {showDeepfakeModal && (
+        <DeepfakeForensicLabModal
+          isOpen={showDeepfakeModal}
+          onClose={() => setShowDeepfakeModal(false)}
+        />
+      )}
+
+      {showCbdcSplitterModal && (
+        <ProgrammableCbdcSplitterModal
+          isOpen={showCbdcSplitterModal}
+          onClose={() => setShowCbdcSplitterModal(false)}
+        />
+      )}
+
+      {showCrossBorderCorridorModal && (
+        <CrossBorderCorridorModal
+          isOpen={showCrossBorderCorridorModal}
+          onClose={() => setShowCrossBorderCorridorModal(false)}
+        />
+      )}
+
+      {showDeveloperSdkModal && (
+        <DeveloperSdkPortalModal
+          isOpen={showDeveloperSdkModal}
+          onClose={() => setShowDeveloperSdkModal(false)}
+        />
+      )}
+
+      {showMuleHunterModal && <MuleHunterRadarModal onClose={() => setShowMuleHunterModal(false)} />}
+      {showHourlyClearingModal && <HourlyContinuousClearingModal onClose={() => setShowHourlyClearingModal(false)} />}
+      {showNeslModal && <NeslSection138Modal onClose={() => setShowNeslModal(false)} />}
+      {showUliModal && <UliAccountAggregatorModal onClose={() => setShowUliModal(false)} />}
+      {showBhashiniModal && <BhashiniVoiceBankingModal onClose={() => setShowBhashiniModal(false)} />}
+      {showSrvaModal && <SrvaVostroSettlementModal onClose={() => setShowSrvaModal(false)} />}
     </>
   );
 }
+

@@ -42,9 +42,20 @@ async function exportPacs009(req, res, next) {
   }
 }
 
+async function executeDvp(req, res, next) {
+  try {
+    const result = crossService.executeBilateralDvpSettlement(req.body);
+    return res.status(200).json(result);
+  } catch (err) {
+    next(err);
+  }
+}
+
 module.exports = {
   getFxRates,
   convertFx,
   screenSanctions,
   exportPacs009,
+  executeDvp,
 };
+

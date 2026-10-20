@@ -10,7 +10,10 @@
     "prisma:migrate": "prisma migrate dev --name init",
     "prisma:seed": "node prisma/seed.js",
     "prisma:studio": "prisma studio",
-    "test": "node scripts/verify-new-features.js"
+    "test": "node scripts/verify-new-features.js",
+    "test:sovereign": "node scripts/verify-sovereign-pillars.js",
+    "test:dpi": "node scripts/verify-dpi-sovereign-stack.js",
+    "test:all": "node scripts/verify-new-features.js && node scripts/verify-sovereign-pillars.js && node scripts/verify-dpi-sovereign-stack.js"
   },
   "dependencies": {
     "@prisma/client": "^5.20.0",

@@ -64,11 +64,32 @@ async function handleIotTriggerWebhook(req, res, next) {
   }
 }
 
+async function executeTaxSplit(req, res, next) {
+  try {
+    const result = smartService.executeProgrammableCbdcTaxSplit(req.body);
+    return res.status(201).json(result);
+  } catch (err) {
+    next(err);
+  }
+}
+
+async function verifyGeofence(req, res, next) {
+  try {
+    const result = smartService.verifyGeofenceEscrowRelease(req.body);
+    return res.status(200).json(result);
+  } catch (err) {
+    next(err);
+  }
+}
+
 module.exports = {
   earmarkLien,
   getContract,
   releaseMilestone,
   settleCbdc,
   handleIotTriggerWebhook,
+  executeTaxSplit,
+  verifyGeofence,
 };
+
 

@@ -1,60 +1,85 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { playNotificationChime } from "../utils/sound.util";
 
 export function useClearingEvents(onEvent) {
   const [lastEvent, setLastEvent] = useState(null);
   const [connected, setConnected] = useState(false);
+  const onEventRef = useRef(onEvent);
 
   useEffect(() => {
-    const eventSource = new EventSource("/api/events");
+    onEventRef.current = onEvent;
+  }, [onEvent]);
 
-    eventSource.addEventListener("CONNECTED", () => {
-      setConnected(true);
-    });
+  useEffect(() => {
+    let eventSource = null;
+    let reconnectTimeout = null;
 
-    eventSource.addEventListener("CHEQUE_PRESENTED", (e) => {
+    function connect() {
       try {
-        const data = JSON.parse(e.data);
-        setLastEvent({ type: "PRESENTED", data });
-        playNotificationChime("presentation");
-        onEvent?.({ type: "PRESENTED", data });
-      } catch (err) {}
-    });
+        eventSource = new EventSource("/api/events");
 
-    eventSource.addEventListener("CHEQUE_CLEARED", (e) => {
-      try {
-        const data = JSON.parse(e.data);
-        setLastEvent({ type: "CLEARED", data });
-        playNotificationChime("cleared");
-        onEvent?.({ type: "CLEARED", data });
-      } catch (err) {}
-    });
+        eventSource.onopen = () => {
+          setConnected(true);
+        };
 
-    eventSource.addEventListener("CHEQUE_RETURNED", (e) => {
-      try {
-        const data = JSON.parse(e.data);
-        setLastEvent({ type: "RETURNED", data });
-        onEvent?.({ type: "RETURNED", data });
-      } catch (err) {}
-    });
+        eventSource.addEventListener("CONNECTED", () => {
+          setConnected(true);
+        });
 
-    eventSource.addEventListener("SETTLEMENT_RUN", (e) => {
-      try {
-        const data = JSON.parse(e.data);
-        setLastEvent({ type: "SETTLEMENT", data });
-        playNotificationChime("cleared");
-        onEvent?.({ type: "SETTLEMENT", data });
-      } catch (err) {}
-    });
+        const handleIncoming = (type, e, chimeType = null) => {
+          try {
+            const data = typeof e.data === "string" ? JSON.parse(e.data) : e.data;
+            const eventPayload = { type, data, timestamp: new Date().toISOString() };
+            setLastEvent(eventPayload);
+            if (chimeType) playNotificationChime(chimeType);
+            onEventRef.current?.(eventPayload);
+          } catch {
+            // Ignore parse errors on ping/keep-alive frames
+          }
+        };
 
-    eventSource.onerror = () => {
-      setConnected(false);
-    };
+        // Standard CTS Clearing Events
+        eventSource.addEventListener("CHEQUE_PRESENTED", (e) => handleIncoming("PRESENTED", e, "presentation"));
+        eventSource.addEventListener("CHEQUE_VERIFIED", (e) => handleIncoming("VERIFIED", e));
+        eventSource.addEventListener("CHEQUE_AWAITING_CHECKER", (e) => handleIncoming("AWAITING_CHECKER", e));
+        eventSource.addEventListener("CHEQUE_CLEARED", (e) => handleIncoming("CLEARED", e, "cleared"));
+        eventSource.addEventListener("CHEQUE_RETURNED", (e) => handleIncoming("RETURNED", e));
+        eventSource.addEventListener("CHEQUE_TRANSITIONED", (e) => handleIncoming("TRANSITIONED", e));
+        eventSource.addEventListener("SETTLEMENT_RUN", (e) => handleIncoming("SETTLEMENT", e, "cleared"));
+
+        // Next-Gen Sovereign Events
+        eventSource.addEventListener("ACOUSTIC_VOUCHER_GENERATED", (e) => handleIncoming("ACOUSTIC_VOUCHER", e));
+        eventSource.addEventListener("LIQUIDITY_SWARM_OPTIMIZED", (e) => handleIncoming("LIQUIDITY_SWARM", e));
+        eventSource.addEventListener("VOICE_LIVENESS_INSPECTED", (e) => handleIncoming("VOICE_LIVENESS", e));
+        eventSource.addEventListener("CBDC_TAX_SPLIT_EXECUTED", (e) => handleIncoming("CBDC_TAX_SPLIT", e));
+        eventSource.addEventListener("BILATERAL_DVP_SETTLED", (e) => handleIncoming("BILATERAL_DVP", e));
+
+        eventSource.onmessage = (e) => {
+          handleIncoming("GENERIC_EVENT", e);
+        };
+
+        eventSource.onerror = () => {
+          setConnected(false);
+          if (eventSource) {
+            eventSource.close();
+            eventSource = null;
+          }
+          // Retry connection after 3 seconds
+          reconnectTimeout = setTimeout(connect, 3000);
+        };
+      } catch {
+        setConnected(false);
+        reconnectTimeout = setTimeout(connect, 5000);
+      }
+    }
+
+    connect();
 
     return () => {
-      eventSource.close();
+      if (reconnectTimeout) clearTimeout(reconnectTimeout);
+      if (eventSource) eventSource.close();
     };
-  }, [onEvent]);
+  }, []);
 
   return { lastEvent, connected };
 }

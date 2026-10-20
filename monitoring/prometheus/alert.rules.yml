@@ -1,0 +1,61 @@
+groups:
+  - name: sovereign_clearing_alerts
+    rules:
+      - alert: HighGridlockExposure
+        expr: liquidity_utilization_ratio > 0.85
+        for: 30s
+        labels:
+          severity: critical
+          pillar: "autonomous_liquidity_swarm"
+        annotations:
+          summary: "Participant Bank collateral cap exceeded 85%"
+          description: "Interbank debit exposure has reached critical threshold. Autonomous Tarjan net liquidity optimization recommended."
+
+      - alert: ForensicsAttackSpike
+        expr: rate(fraud_flags_intercepted_total[1m]) > 5
+        for: 15s
+        labels:
+          severity: warning
+          pillar: "deepfake_alteration_interceptor"
+        annotations:
+          summary: "Spike in Deepfake or Micro-alteration intercept flags"
+          description: "The optical forensic radar or acoustic voice-clone analyzer intercepted multiple anomalous instruments."
+
+      - alert: RealizationLatencyBreach
+        expr: histogram_quantile(0.99, rate(ekuber_realization_duration_seconds_bucket[5m])) > 2
+        for: 1m
+        labels:
+          severity: warning
+          pillar: "ekuber_continuous_t0"
+        annotations:
+          summary: "RBI e-Kuber Continuous T+0 Realization P99 SLA > 2000ms"
+          description: "e-Kuber RTGS realization latency is elevated above statutory SLA."
+
+      - alert: CoreSwitchDown
+        expr: up{job="MISDESC-backend"} == 0
+        for: 15s
+        labels:
+          severity: critical
+        annotations:
+          summary: "MISDESC Clearing Core Switch is unreachable"
+          description: "Backend pod has stopped responding to Prometheus scrape."
+
+      - alert: MuleHoldAdvisoryTriggered
+        expr: rate(MISDESC_mulehunter_alerts_total[5m]) > 2
+        for: 30s
+        labels:
+          severity: warning
+          pillar: "rbih_mulehunter"
+        annotations:
+          summary: "Spike in MuleHold Advisories issued"
+          description: "MuleHunter.AI graph radar intercepted high-risk beneficiary cluster nodes requiring 24h ATM freeze."
+
+      - alert: CustomerCreditSlaBreachRisk
+        expr: histogram_quantile(0.95, rate(MISDESC_continuous_clearing_hourly_batches_total[10m])) > 0
+        for: 1m
+        labels:
+          severity: warning
+          pillar: "rbi_continuous_clearing"
+        annotations:
+          summary: "Hourly rolling T+0 batch settlement in progress"
+          description: "Presenting banks must ensure customer account crediting within 60 minutes."

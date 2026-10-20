@@ -6,12 +6,18 @@ const {
   releaseMilestone,
   settleCbdc,
   handleIotTriggerWebhook,
+  executeTaxSplit,
+  verifyGeofence,
 } = require("../controllers/smartcheque.controller");
 
 const router = express.Router();
 
 // Public / Signature-authenticated IoT Telematics Webhook (e-Way Bill / Commercial Delivery Trigger)
 router.post("/webhooks/iot-trigger", handleIotTriggerWebhook);
+
+// Programmable CBDC Tax Split & Geofence (Accessible for simulation / bank auth)
+router.post("/tax-split", executeTaxSplit);
+router.post("/geofence-verify", verifyGeofence);
 
 // Protected routes requiring bank session
 router.use(authenticate);
@@ -27,4 +33,5 @@ router.post("/contraMISDESC/:chequeId/release-milestone", releaseMilestone);
 router.post("/cbdc/settle", settleCbdc);
 
 module.exports = router;
+
 

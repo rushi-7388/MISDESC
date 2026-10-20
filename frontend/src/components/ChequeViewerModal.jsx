@@ -4,6 +4,7 @@ import VerificationPanel from "./VerificationPanel";
 import DisputeModal from "./DisputeModal";
 import ForensicChequeHeatmapCanvas from "./ForensicChequeHeatmapCanvas";
 import SignatureGhostComparator from "./SignatureGhostComparator";
+import WhatsAppBankingModal from "./WhatsAppBankingModal";
 
 export default function ChequeViewerModal({ cheque, onClose, onUpdated }) {
   const [activeTab, setActiveTab] = useState("cheque"); // "cheque", "signature", "forensics"
@@ -12,6 +13,7 @@ export default function ChequeViewerModal({ cheque, onClose, onUpdated }) {
   const [signatureData, setSignatureData] = useState(null);
   const [sigLoading, setSigLoading] = useState(false);
   const [showDisputeModal, setShowDisputeModal] = useState(false);
+  const [showWhatsAppModal, setShowWhatsAppModal] = useState(false);
 
   useEffect(() => {
     if (!cheque) return;
@@ -498,7 +500,14 @@ export default function ChequeViewerModal({ cheque, onClose, onUpdated }) {
             </span>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => setShowWhatsAppModal(true)}
+              className="bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-300 px-3 py-1 rounded-lg font-bold text-[11px] transition-all cursor-pointer flex items-center gap-1 shadow-2xs"
+            >
+              <span>💬 Notify via WhatsApp / SMS</span>
+            </button>
             <button
               type="button"
               onClick={() => setShowDisputeModal(true)}
@@ -520,6 +529,13 @@ export default function ChequeViewerModal({ cheque, onClose, onUpdated }) {
           onSubmitted={() => {
             alert("Dispute claim successfully lodged with Clearing House under NPCI MISDESC DRM Rule 32.");
           }}
+        />
+      )}
+
+      {showWhatsAppModal && (
+        <WhatsAppBankingModal
+          defaultCheque={cheque}
+          onClose={() => setShowWhatsAppModal(false)}
         />
       )}
     </div>

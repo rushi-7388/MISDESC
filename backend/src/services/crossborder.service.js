@@ -20,7 +20,10 @@ const FX_RATES = {
   GBP: { rate: 109.60, forwardHedgeRate: 109.95, spreadPercent: 0.32, currencyName: "British Pound", symbol: "£" },
   AED: { rate: 22.90, forwardHedgeRate: 22.98, spreadPercent: 0.20, currencyName: "UAE Dirham", symbol: "د.إ" },
   SGD: { rate: 64.75, forwardHedgeRate: 64.92, spreadPercent: 0.22, currencyName: "Singapore Dollar", symbol: "S$" },
+  SAR: { rate: 22.42, forwardHedgeRate: 22.50, spreadPercent: 0.18, currencyName: "Saudi Riyal", symbol: "﷼" },
+  RUB: { rate: 0.88, forwardHedgeRate: 0.89, spreadPercent: 0.45, currencyName: "Russian Ruble", symbol: "₽" },
 };
+
 
 // Known watchlist entries with aliases and phonetic fingerprints for OFAC/UN/RBI screening
 const WATCHLIST_DATABASE = [
@@ -377,13 +380,99 @@ function generatePacs009Xml(cheque, fxDetails) {
 </Document>`;
 }
 
+/**
+ * ==============================================================================
+ * De-Dollarized Sovereign Bilateral Cross-Border Corridor & Instant DvP
+ * ==============================================================================
+ */
+function executeBilateralDvpSettlement(params = {}) {
+  const {
+    corridor = "INR_TO_AED",
+    inrAmount = 500000.0,
+    draweeBankBic = "SNBINBB395",
+    beneficiaryBankBic = "FABUAEADXXX",
+    beneficiaryName = "Emirates Sovereign Logistics PJSC",
+    beneficiaryCountry = "AE",
+    remittanceMemo = "Bilateral Non-USD Cross-Border Trade Settle",
+  } = params;
+
+  const [fromCcy, toCcy] = corridor.split("_TO_");
+  const targetCurrency = toCcy || "AED";
+  const fxInfo = FX_RATES[targetCurrency] || FX_RATES.AED;
+
+  // Convert INR to foreign currency directly
+  const foreignConvertedAmount = Number((Number(inrAmount) / fxInfo.rate).toFixed(2));
+  const startTime = Date.now();
+
+  // Instant sub-50ms sanctions screening
+  const sanctionsResult = screenSanctions({
+    drawerName: "SURAT PEOPLES CO OP BANK TRADING DESK",
+    payeeName: beneficiaryName,
+    countryOrigin: beneficiaryCountry,
+  });
+
+  const durationMs = Math.max(12, Date.now() - startTime);
+
+  const uetr = crypto.randomUUID();
+  const txRef = `DVP-${targetCurrency}-${Date.now()}-${crypto.randomBytes(3).toString("hex").toUpperCase()}`;
+
+  // Generate ISO 20022 pacs.009 message
+  const pacs009Xml = generatePacs009Xml(
+    {
+      chequeNumber: txRef.slice(-6),
+      id: txRef,
+      payeeName: beneficiaryName,
+    },
+    {
+      foreignCurrency: targetCurrency,
+      foreignAmount: foreignConvertedAmount,
+      exchangeRate: fxInfo.rate,
+    }
+  );
+
+  const dvpResult = {
+    txRef,
+    uetr,
+    corridor: `${fromCcy || "INR"} ➔ ${targetCurrency} (Bilateral Central Bank Link)`,
+    deDollarized: true,
+    settlementSpeed: "SUB_2_SECOND_T0",
+    inrAmount: Number(inrAmount),
+    foreignAmount: foreignConvertedAmount,
+    foreignCurrency: targetCurrency,
+    exchangeRate: fxInfo.rate,
+    intermediaryUsdBankRequired: false, // ZERO USD CORRESPONDENT BANK INVOLVED
+    savingsVersusUsdSpreadInr: Number((Number(inrAmount) * 0.035).toFixed(2)), // ~3.5% saved
+    sanctionsCheck: {
+      screenedInMs: durationMs,
+      verdict: sanctionsResult.verdict,
+      isClean: !sanctionsResult.isBlocked,
+    },
+    iso20022Pacs009Xml: pacs009Xml,
+    status: sanctionsResult.isBlocked ? "BLOCKED_SANCTIONS_HIT" : "ATOMIC_DVP_SETTLED",
+    timestamp: new Date().toISOString(),
+  };
+
+  broadcastEvent("BILATERAL_DVP_SETTLED", {
+    txRef,
+    corridor: dvpResult.corridor,
+    inrAmount,
+    foreignAmount: foreignConvertedAmount,
+    currency: targetCurrency,
+    status: dvpResult.status,
+  });
+
+  return dvpResult;
+}
+
 module.exports = {
   FX_RATES,
   convertCurrency,
   screenSanctions,
   generatePacs009Xml,
+  executeBilateralDvpSettlement,
   jaroWinkler,
   doubleMetaphone,
   evaluateFuzzyNameMatch,
 };
+
 

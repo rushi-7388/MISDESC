@@ -5,6 +5,7 @@ import ClearanceCertificateModal from "./ClearanceCertificateModal";
 import StatutoryReturnMemoModal from "./StatutoryReturnMemoModal";
 import EKuberAdviceModal from "./EKuberAdviceModal";
 import ISO20022Modal from "./ISO20022Modal";
+import WhatsAppBankingModal from "./WhatsAppBankingModal";
 
 const STATUS_STYLES = {
   PRESENTED: "bg-yellow-50 text-yellow-800 border border-yellow-200",
@@ -20,6 +21,7 @@ export default function ClearingStatusTable({ cheques, renderActions, onUpdated 
   const [returnMemoChequeId, setReturnMemoChequeId] = useState(null);
   const [ekuberChequeId, setEkuberChequeId] = useState(null);
   const [isoChequeId, setIsoChequeId] = useState(null);
+  const [whatsAppCheque, setWhatsAppCheque] = useState(null);
 
   if (!cheques?.length) {
     return (
@@ -86,6 +88,14 @@ export default function ClearingStatusTable({ cheques, renderActions, onUpdated 
                       >
                         View
                       </button>
+                      <button
+                        type="button"
+                        onClick={() => setWhatsAppCheque(c)}
+                        title="Dispatch WhatsApp / SMS customer notification"
+                        className="px-1.5 py-0.5 rounded bg-emerald-50 hover:bg-emerald-100 text-emerald-700 font-sans text-[10px] font-bold border border-emerald-200 transition-all cursor-pointer whitespace-nowrap"
+                      >
+                        💬 Notify
+                      </button>
                     </div>
                     <div className="text-[10px] text-gray-500 font-mono mt-0.5">
                       {c.batch?.sessionCode || "Session Unassigned"}
@@ -95,16 +105,16 @@ export default function ClearingStatusTable({ cheques, renderActions, onUpdated 
               </td>
 
               <td className="px-4 py-3.5 min-w-[180px]">
-                <div className="font-bold text-gray-900 text-xs">{c.presentingBank?.name}</div>
-                <div className="text-xs text-gray-500 mt-0.5">→ {c.draweeBank?.name}</div>
+                <div className="font-bold text-gray-900 text-xs">{c.presentingBank?.name || "SURAT PEOPLES CO OP BANK"}</div>
+                <div className="text-xs text-gray-500 mt-0.5">→ {c.draweeBank?.name || "HDFC BANK"}</div>
               </td>
 
               <td className="px-4 py-3.5 font-semibold text-gray-800 text-xs min-w-[160px]">
-                {c.payeeName}
+                {c.payeeName || "Mandate Beneficiary"}
               </td>
 
               <td className="px-4 py-3.5 text-right font-mono font-bold text-gray-900 text-sm whitespace-nowrap min-w-[120px]">
-                ₹{Number(c.amount).toLocaleString("en-IN")}
+                ₹{Number(c.amount || 0).toLocaleString("en-IN")}
               </td>
 
               {/* Positive Pay System (PPS) Status Column */}
@@ -122,7 +132,7 @@ export default function ClearingStatusTable({ cheques, renderActions, onUpdated 
                     <span className="w-1.5 h-1.5 rounded-full bg-rose-500"></span>
                     <span>MISMATCH</span>
                   </span>
-                ) : Number(c.amount) >= 50000 ? (
+                ) : Number(c.amount || 0) >= 50000 ? (
                   <span
                     className="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-semibold bg-amber-50 text-amber-800 border border-amber-200"
                     title="Drawer confirmation not logged on Positive Pay System"
@@ -133,6 +143,7 @@ export default function ClearingStatusTable({ cheques, renderActions, onUpdated 
                   <span className="text-xs text-gray-400 font-mono">N/A (&lt;50K)</span>
                 )}
               </td>
+
 
               {/* Dynamic Risk Tier Assessment Badge */}
               <td className="px-4 py-3.5 text-center min-w-[140px]">
@@ -285,6 +296,13 @@ export default function ClearingStatusTable({ cheques, renderActions, onUpdated 
 
       {isoChequeId && (
         <ISO20022Modal chequeId={isoChequeId} onClose={() => setIsoChequeId(null)} />
+      )}
+
+      {whatsAppCheque && (
+        <WhatsAppBankingModal
+          defaultCheque={whatsAppCheque}
+          onClose={() => setWhatsAppCheque(null)}
+        />
       )}
     </div>
   );

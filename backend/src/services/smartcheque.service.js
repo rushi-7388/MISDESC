@@ -511,6 +511,131 @@ async function processIotWebhookTrigger(payload = {}) {
   };
 }
 
+/**
+ * ==============================================================================
+ * Programmable e-Rupee (CBDC) Statutory Tax Auto-Splitter & Geofence Escrow
+ * ==============================================================================
+ */
+function executeProgrammableCbdcTaxSplit(params = {}) {
+  const {
+    instrumentRef = `CHQ-${Date.now().toString().slice(-6)}`,
+    grossAmount = 100000.0,
+    gstRatePercent = 18.0,
+    tdsRatePercent = 1.0,
+    vendorName = "Gujarat Steel & Infrastructure Corp",
+    vendorPan = "AABCG1234F",
+    targetGeofence = {
+      locationName: "Surat Hazira Port Logistics Hub",
+      lat: 21.1167,
+      lng: 72.6333,
+      radiusMeters: 500,
+    },
+  } = params;
+
+  const gross = Number(grossAmount);
+  const gstAmount = Number(((gross * gstRatePercent) / 100).toFixed(2));
+  const cgst = Number((gstAmount / 2).toFixed(2));
+  const sgst = Number((gstAmount / 2).toFixed(2));
+  const tdsAmount = Number(((gross * tdsRatePercent) / 100).toFixed(2));
+  const netVendorAmount = Number((gross - gstAmount - tdsAmount).toFixed(2));
+
+  // Generate RBI Wholesale e₹ CBDC token hashes
+  const rbiCbdcBlock = `ERUPEE-BLK-${Date.now()}-${crypto.randomBytes(3).toString("hex").toUpperCase()}`;
+  const gstnWalletTx = `CBDC-GSTN-${crypto.randomBytes(6).toString("hex").toUpperCase()}`;
+  const cbdtWalletTx = `CBDC-TDS-${crypto.randomBytes(6).toString("hex").toUpperCase()}`;
+  const vendorEscrowTx = `CBDC-ESCROW-${crypto.randomBytes(6).toString("hex").toUpperCase()}`;
+
+  const splitResult = {
+    splitId: `CBDC-SPLIT-${Date.now()}`,
+    instrumentRef,
+    grossAmount: gross,
+    currency: "INR_CBDC (RBI Wholesale Digital Rupee e₹-W)",
+    rbiCbdcBlock,
+    taxSovereignRouting: {
+      gstnTreasury: {
+        totalGst: gstAmount,
+        cgst_9pct: cgst,
+        sgst_9pct: sgst,
+        targetWallet: "0xRBI_GOVT_GSTN_TREASURY_ESCROW",
+        challanReference: `GSTN-CHAL-${Date.now()}`,
+        cbdcTokenTxHash: gstnWalletTx,
+        status: "AUTO_TRANSFERRED_IMMEDIATE",
+      },
+      cbdtIncomeTax: {
+        tds_1pct: tdsAmount,
+        targetWallet: "0xRBI_CBDT_DIRECT_TAX_COLLECTION",
+        section: "Section 194C / 194J Contractor Withholding",
+        challanReference: `TDS-CHAL-${Date.now()}`,
+        cbdcTokenTxHash: cbdtWalletTx,
+        status: "AUTO_TRANSFERRED_IMMEDIATE",
+      },
+    },
+    vendorDisbursement: {
+      vendorName,
+      vendorPan,
+      netPayable: netVendorAmount,
+      cbdcEscrowTxHash: vendorEscrowTx,
+      status: "LOCKED_IN_SMART_GEOFENCE_ESCROW",
+      unlockCondition: `Vehicle arrival confirmation within ${targetGeofence.radiusMeters}m of ${targetGeofence.locationName}`,
+      geofence: targetGeofence,
+    },
+    timestamp: new Date().toISOString(),
+  };
+
+  broadcastEvent("CBDC_TAX_SPLIT_EXECUTED", {
+    splitId: splitResult.splitId,
+    grossAmount: gross,
+    gstWithheld: gstAmount,
+    tdsWithheld: tdsAmount,
+    netVendorAmount,
+  });
+
+  return splitResult;
+}
+
+function verifyGeofenceEscrowRelease(params = {}) {
+  const {
+    splitId,
+    currentLat = 21.1168,
+    currentLng = 72.6334,
+    deliveryWaybill = "EWB-GUJ-88492019",
+  } = params;
+
+  // Haversine formula calculation for distance
+  const targetLat = 21.1167;
+  const targetLng = 72.6333;
+  const dLat = (currentLat - targetLat) * (Math.PI / 180);
+  const dLng = (currentLng - targetLng) * (Math.PI / 180);
+  const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+            Math.cos(targetLat * (Math.PI / 180)) * Math.cos(currentLat * (Math.PI / 180)) *
+            Math.sin(dLng / 2) * Math.sin(dLng / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  const distanceMeters = Math.round(6371000 * c);
+
+  const isInsideGeofence = distanceMeters <= 500;
+
+  const result = {
+    splitId: splitId || "CBDC-SPLIT-LATEST",
+    deliveryWaybill,
+    currentCoordinates: { lat: currentLat, lng: currentLng },
+    distanceToDestinationMeters: distanceMeters,
+    geofenceThresholdMeters: 500,
+    isEscrowUnlocked: isInsideGeofence,
+    status: isInsideGeofence ? "ESCROW_UNLOCKED_VENDOR_PAID" : "HELD_IN_TRANSIT",
+    cbdcDisbursementReceipt: isInsideGeofence 
+      ? `e₹-TX-SETTLED-${crypto.randomBytes(6).toString("hex").toUpperCase()}`
+      : null,
+    message: isInsideGeofence
+      ? "GPS Telemetry confirmed delivery within Hazira Port geofence. Vendor CBDC e-Rupee balance released instantaneously."
+      : `Vehicle is ${distanceMeters}m away from delivery geofence. Escrow held.`,
+    timestamp: new Date().toISOString(),
+  };
+
+  broadcastEvent("ESCROW_GEOFENCE_TRIGGERED", result);
+
+  return result;
+}
+
 module.exports = {
   earmarkMicroLien,
   createSmartContract,
@@ -521,6 +646,9 @@ module.exports = {
   fetchSmartContractFromDb,
   fetchMicroLienFromDb,
   processIotWebhookTrigger,
+  executeProgrammableCbdcTaxSplit,
+  verifyGeofenceEscrowRelease,
 };
+
 
 

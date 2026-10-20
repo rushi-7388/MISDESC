@@ -29,8 +29,15 @@ const stressRoutes = require("./routes/stress.routes");
 const webhookRoutes = require("./routes/webhook.routes");
 const reportRoutes = require("./routes/report.routes");
 const forensicRoutes = require("./routes/forensic.routes");
+const messagingRoutes = require("./routes/messaging.routes");
+const innovationRoutes = require("./routes/innovation.routes");
+const acousticRoutes = require("./routes/acoustic.routes");
+const liquiditySwarmRoutes = require("./routes/liquidity-swarm.routes");
+const sdkRoutes = require("./routes/sdk.routes");
+const sovereignDpiRoutes = require("./routes/sovereign-dpi.routes");
 
 const app = express();
+
 
 app.use(cors());
 app.use(express.json());
@@ -88,10 +95,15 @@ app.use("/api/stress", stressRoutes);
 app.use("/api/webhooks", webhookRoutes);
 app.use("/api/reports", reportRoutes);
 app.use("/api/forensics", forensicRoutes);
-
-
+app.use("/api/messaging", messagingRoutes);
+app.use("/api/innovations", innovationRoutes);
+app.use("/api/acoustic", acousticRoutes);
+app.use("/api/liquidity-swarm", liquiditySwarmRoutes);
+app.use("/api/sdk", sdkRoutes);
+app.use("/api/dpi", sovereignDpiRoutes);
 
 app.use((req, res) => res.status(404).json({ error: "Route not found" }));
+
 
 // Global error handler
 // eslint-disable-next-line no-unused-vars

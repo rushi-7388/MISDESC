@@ -5,6 +5,9 @@ const forensicController = require("../controllers/forensic.controller");
 router.post("/analyze-signature", forensicController.analyzeSignature);
 router.post("/uv-spectral", forensicController.analyzeUvSpectral);
 router.post("/payee-integrity", forensicController.analyzePayeeIntegrity);
+router.post("/voice-liveness", forensicController.analyzeVoiceDeepfake);
+router.post("/micro-kerning", forensicController.analyzeMicroKerning);
 router.get("/cheque/:id", forensicController.getChequeDossier);
 
 module.exports = router;
+

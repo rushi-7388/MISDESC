@@ -64,6 +64,14 @@ jobs:
         working-directory: ./backend
         run: npm test
 
+      - name: Run Sovereign 6 Pillars Verification Suite ($1T-$50T FinTech)
+        working-directory: ./backend
+        run: node scripts/verify-sovereign-pillars.js
+
+      - name: Run RBI & DPI Sovereign Stack Verification (MuleHunter, Hourly T+0, NeSL, ULI, Bhashini, SRVA)
+        working-directory: ./backend
+        run: node scripts/verify-dpi-sovereign-stack.js
+
       - name: Execute Standalone DB Health Diagnostic
         env:
           DATABASE_URL: "postgresql://MISDESC:MISDESC_password@localhost:5432/MISDESC_system?schema=public"

@@ -273,6 +273,49 @@ const reportsGeneratedTotal = new client.Counter({
   registers: [register],
 });
 
+// 14. Sovereign DPI & Indian Next-Gen FinTech Metrics
+const mulehunterAlertsTotal = new client.Counter({
+  name: "MISDESC_mulehunter_alerts_total",
+  help: "Total beneficiary mule account advisories issued under RBIH MuleHunter radar",
+  labelNames: ["risk_level", "hold_status"],
+  registers: [register],
+});
+
+const continuousClearingHourlyBatchesTotal = new client.Counter({
+  name: "MISDESC_continuous_clearing_hourly_batches_total",
+  help: "Total hourly T+0 net settlement batches executed under RBI 10AM-7PM directive",
+  labelNames: ["batch_id", "status"],
+  registers: [register],
+});
+
+const neslLegalNoticesGeneratedTotal = new client.Counter({
+  name: "MISDESC_nesl_legal_notices_generated_total",
+  help: "Total Section 138 statutory legal demand notices sealed with NeSL e-Stamp",
+  labelNames: ["status"],
+  registers: [register],
+});
+
+const uliJitOverdraftsDisbursedTotal = new client.Counter({
+  name: "MISDESC_uli_jit_overdrafts_disbursed_total",
+  help: "Total Just-in-Time micro overdrafts disbursed via Account Aggregator GSTN bridge",
+  labelNames: ["status"],
+  registers: [register],
+});
+
+const bhashiniVoiceVerificationsTotal = new client.Counter({
+  name: "MISDESC_bhashini_voice_verifications_total",
+  help: "Total 22-language conversational clearing verifications authenticated via Bhashini",
+  labelNames: ["language", "intent"],
+  registers: [register],
+});
+
+const srvaVostroSettledVolumeInrTotal = new client.Counter({
+  name: "MISDESC_srva_vostro_settled_volume_inr_total",
+  help: "Total bilateral settlement volume cleared in INR via Special Rupee Vostro Accounts",
+  labelNames: ["foreign_currency", "partner_bank"],
+  registers: [register],
+});
+
 module.exports = {
   register,
   getPrometheusMetrics,
@@ -307,4 +350,10 @@ module.exports = {
   crossborderFxVolumeTotal,
   sanctionsScreenedTotal,
   reportsGeneratedTotal,
+  mulehunterAlertsTotal,
+  continuousClearingHourlyBatchesTotal,
+  neslLegalNoticesGeneratedTotal,
+  uliJitOverdraftsDisbursedTotal,
+  bhashiniVoiceVerificationsTotal,
+  srvaVostroSettledVolumeInrTotal,
 };

@@ -4,6 +4,7 @@ import SettlementSummary from "../components/SettlementSummary";
 import ContinuousClearingConsole from "../components/ContinuousClearingConsole";
 import FraudFlagsPanel from "../components/FraudFlagsPanel";
 import client from "../api/client";
+import { useClearingEvents } from "../hooks/useClearingEvents";
 
 const BatchManagementPanel = lazy(() => import("../components/BatchManagementPanel"));
 const DevOpsConsole = lazy(() => import("../components/DevOpsConsole"));
@@ -57,6 +58,10 @@ export default function AdminDashboard() {
   useEffect(() => {
     load();
   }, []);
+
+  useClearingEvents(() => {
+    load();
+  });
 
   return (
     <div className="min-h-screen bg-slate-50 pb-16 text-slate-900">

@@ -10,6 +10,7 @@ services:
       POSTGRES_DB: MISDESC_system
     volumes:
       - MISDESC_db_data:/var/lib/postgresql/data
+      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
     ports:
       - "5432:5432"
     healthcheck:

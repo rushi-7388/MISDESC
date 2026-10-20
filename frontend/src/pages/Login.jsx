@@ -122,14 +122,42 @@ export default function Login() {
               </span>
             </div>
 
-            <div className="p-6 sm:p-8 space-y-5 flex-1 flex flex-col justify-center">
+            <div className="p-6 sm:p-8 space-y-4 flex-1 flex flex-col justify-center">
               {error && (
                 <div className="bg-rose-950/60 border border-rose-800/80 text-rose-300 text-xs rounded-xl p-3.5">
                   <span className="leading-snug">{error}</span>
                 </div>
               )}
 
-              <form onSubmit={handleSubmit} className="space-y-4">
+              {/* Quick Persona Fill */}
+              <div>
+                <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-2">
+                  ⚡ Quick Demo Personas (1-Click Fill)
+                </label>
+                <div className="flex flex-wrap gap-1.5">
+                  {[
+                    { label: "Presenter", email: "presenting@snb.com", role: "SNB" },
+                    { label: "Maker", email: "drawee@hdb.com", role: "HDB" },
+                    { label: "Checker", email: "checker@hdb.com", role: "HDB" },
+                    { label: "Admin", email: "admin@misdesc.com", role: "RBI" },
+                    { label: "Manager", email: "manager@snb.com", role: "Branch" },
+                  ].map((p) => (
+                    <button
+                      key={p.email}
+                      type="button"
+                      onClick={() => {
+                        setEmail(p.email);
+                        setPassword("password123");
+                      }}
+                      className="px-2.5 py-1 rounded-md text-[11px] font-semibold bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition cursor-pointer"
+                    >
+                      {p.label} <span className="text-[9px] text-slate-400 font-mono">({p.role})</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <form onSubmit={handleSubmit} className="space-y-4 pt-1">
                 <div>
                   <label className="block text-xs font-medium text-slate-300 mb-1.5">
                     Bank ID / Email
@@ -138,6 +166,7 @@ export default function Login() {
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
+
                     className="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-xs sm:text-sm text-white placeholder-slate-500 focus:ring-1 focus:ring-brand-500 focus:border-brand-500 outline-none font-mono transition-colors"
                     placeholder="presenting@snb.com"
                     required

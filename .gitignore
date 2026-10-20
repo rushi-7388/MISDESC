@@ -54,9 +54,11 @@ backups/
 *.db-shm
 *.sql
 *.sql.gz
-# Never ignore Prisma schema migrations
+# Never ignore Prisma schema migrations & database init scripts
 !**/prisma/migrations/**
 !**/prisma/migrations/**/*.sql
+!database/*.sql
+!database/**/*.sql
 
 # ------------------------------------------------------------------------------
 # 5. Production Builds & Compiled Output
