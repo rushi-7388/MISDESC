@@ -254,6 +254,8 @@ let inMemoryEvents = [
     toStatus: "CLEARED",
     remarks: "Checker approval confirmed. Atomic RBI e-Kuber gross settlement advice executed.",
     cheque: { chequeNumber: "000103" },
+    actor: { name: "Vikram Malhotra (Checker)" },
+  },
 ];
 
 const inMemorySettlements = [
